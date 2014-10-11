@@ -55,22 +55,30 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1>TweetThrough</h1>
+                        <h1 style="text-shadow: 3px 5px 10px gray;">TweetThrough</h1>
                         <hr class="small">
                         <span class="subheading">Analyze your Tweet Data</span>
                         
                         <form action="" class="navbar-form" role="search" style="margin:auto;position:relative;top:10px;">
 							<h5>Search by:</h5>
+							
 							<div class="btn-group">
 							  	<button type="button" class="btn btn-default">Text</button>
 							  	<button type="button" class="btn btn-default">User</button>
 							</div>
-							<div class="form-group">
+
+							<!--
+							<ul>
+								<input type="radio" name="searchType" value="Text"> Text<br>
+	  							<input type="radio" name="searchType" value="User"> User<br>
+  							</ul>-->
+  							<div class="form-group">
 								<input type="text" class="form-control" placeholder="search">
 							</div>
-							
+							<!--<input type="checkbox" name="download-version" checked data-size="large" data-on-text="3" data-off-text="2.0.1">-->
 							<!--<div style="margin-top:5px;">-->
-								<button type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;">Submit</button>
+							<a class="btn btn-default" href="result" style="background-color:#00aa00; color:white;">Submit</a>
+							<!--<button onclick="location.href='/result'" type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;">Submit</form>-->
 							<!--</div>-->
 						</form>
 

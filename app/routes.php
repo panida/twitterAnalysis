@@ -15,3 +15,7 @@ Route::get('/', function()
 {
 	return View::make('homepage');
 });
+
+Route::get('result', function(){
+	return View::make('result');
+});
