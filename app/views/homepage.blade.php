@@ -1,7 +1,17 @@
 @extends('layouts.default')
 
 @section('header')
-	<title>HomePage</title>
+	<title>TweetThrough</title>
+@stop
+
+@section('customCSS')
+<!-- Custom CSS -->
+	    <link href="css/clean-blog.min.css" rel="stylesheet">
+
+	    <!-- Custom Fonts -->
+	    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 @stop
 
 @section('content')
@@ -16,14 +26,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">TweetStats</a>
+                <a class="navbar-brand" href="index.html">TweetThrough</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="index.php">Home</a>
                     </li>
                     <li>
                         <a href="about.html">About</a>
@@ -45,15 +55,25 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1>TweetStats</h1>
+                        <h1>TweetThrough</h1>
                         <hr class="small">
                         <span class="subheading">Analyze your Tweet Data</span>
+                        
                         <form action="" class="navbar-form" role="search" style="margin:auto;position:relative;top:10px;">
+							<h5>Search by:</h5>
+							<div class="btn-group">
+							  	<button type="button" class="btn btn-default">Text</button>
+							  	<button type="button" class="btn btn-default">User</button>
+							</div>
 							<div class="form-group">
 								<input type="text" class="form-control" placeholder="search">
 							</div>
-							<button type="submit" class="btn btn-default">submit</button>
+							
+							<!--<div style="margin-top:5px;">-->
+								<button type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;">Submit</button>
+							<!--</div>-->
 						</form>
+
                     </div>
                 </div>
             </div>
@@ -64,7 +84,7 @@
 @section('footer')
     <!-- Footer -->
     <footer>
-        <div class="container" style="position:relative; top:-60px;">
+        <div class="container" style="position:relative; top:-50px;">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
@@ -93,7 +113,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted" style="position:relative; top:-25px;">Copyright &copy; TweetStats 2014</p>
+                    <p class="copyright text-muted" style="position:relative; top:-25px;">Copyright &copy; TweetThrough 2014</p>
                 </div>
             </div>
         </div>
