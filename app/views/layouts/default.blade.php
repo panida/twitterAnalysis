@@ -13,6 +13,9 @@
 
 	    <!-- Bootstrap Core CSS -->
 	    <link href="css/bootstrap.min.css" rel="stylesheet">
+	    <link href="bootstrap-switch.css" rel="stylesheet">
+		<script src="jquery.js"></script>
+		<script src="bootstrap-switch.js"></script>
 		@yield('customCSS')
 
 	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
