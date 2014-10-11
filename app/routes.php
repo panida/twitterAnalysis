@@ -17,5 +17,6 @@ Route::get('/', function()
 });
 
 Route::get('result', function(){
-	return View::make('result');
+	$searchText = 'Hello World';
+	return View::make('result')->with('search',$searchText);
 });

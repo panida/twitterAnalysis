@@ -66,14 +66,19 @@
 							  	<button type="button" class="btn btn-default">Text</button>
 							  	<button type="button" class="btn btn-default">User</button>
 							</div>
-
+                            <!--
+                            <?php echo Form::select('searchBy', array('T' => 'Text', 'U' => 'User'), 'T',['class'=>'dropdown','style'=>'color:black; font-size:16px;']);
+                                echo Form::text('searchText');
+                             ?>
+                            -->
+                                
 							<!--
 							<ul>
 								<input type="radio" name="searchType" value="Text"> Text<br>
 	  							<input type="radio" name="searchType" value="User"> User<br>
   							</ul>-->
   							<div class="form-group">
-								<input type="text" class="form-control" placeholder="search">
+								<input type="text" class="form-control" placeholder="search" name="searchText">
 							</div>
 							<!--<input type="checkbox" name="download-version" checked data-size="large" data-on-text="3" data-off-text="2.0.1">-->
 							<!--<div style="margin-top:5px;">-->
