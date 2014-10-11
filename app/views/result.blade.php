@@ -71,6 +71,15 @@
 			</nav>
 		</header>
 
+		<!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+                <h1 class="page-header">
+                    Search: <small>รัฐประหาร</small>
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
 
 		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 			<ul class="nav nav-tabs" role="tablist">
@@ -84,16 +93,6 @@
 			<div id="page-wrapper">
 
 	            <div class="container-fluid">
-
-	                <!-- Page Heading -->
-	                <div class="row">
-	                    <div class="col-lg-12">
-	                        <h1 class="page-header">
-	                            Search: <small>รัฐประหาร</small>
-	                        </h1>
-	                    </div>
-	                </div>
-	                <!-- /.row -->
 
 	                <div class="row">
 	                    <div class="col-lg-12">
