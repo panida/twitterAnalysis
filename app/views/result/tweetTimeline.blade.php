@@ -1,6 +1,6 @@
 @extends('layouts.mainResult')
 
-@section('specialCSS')
+@section('additionalAsset')
 	<link rel="stylesheet" type="text/css" media="screen" href="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
