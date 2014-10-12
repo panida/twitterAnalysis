@@ -1,13 +1,13 @@
 @extends('layouts.default')
 @section('customCSS')
 <!-- Custom CSS -->
-	<link href="../css/sb-admin.css" rel="stylesheet">
+	<link href="{{URL::asset('css/sb-admin.css')}}" rel="stylesheet">
 
 	<!-- Morris Charts CSS -->
-	<link href="../css/plugins/morris.css" rel="stylesheet">
+	<link href="{{URL::asset('css/plugins/morris.css')}}" rel="stylesheet">
 
 	<!-- Custom Fonts -->
-	<link href="../font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="{{URL::asset('font-awesome-4.1.0/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
 @stop
 
 @section('content')
@@ -86,5 +86,16 @@
 
 
 @section('footer')
+ 	<!-- Morris Charts JavaScript -->
+    <script src="{{URL::asset('js/plugins/morris/raphael.min.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/morris/morris.min.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/morris/morris-data.js')}}"></script>
 
+    <!-- Flot Charts JavaScript -->
+    <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
+    <script src="{{URL::asset('js/plugins/flot/jquery.flot.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/flot/jquery.flot.tooltip.min.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/flot/jquery.flot.resize.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/flot/jquery.flot.pie.js')}}"></script>
+    <script src="{{URL::asset('js/plugins/flot/flot-data.js')}}"></script>
 @stop
