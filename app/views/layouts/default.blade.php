@@ -12,10 +12,10 @@
 	    <title>TweetThrough</title>
 
 	    <!-- Bootstrap Core CSS -->
-	    <link href="../css/bootstrap.min.css" rel="stylesheet">
-	    <link href="../css/bootstrap-switch.css" rel="stylesheet">
-		<script src="../js/jquery.js"></script>
-		<script src="../js/bootstrap-switch.js"></script>
+	    <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet">
+	    <link href="{{URL::asset('css/bootstrap-switch.css')}}" rel="stylesheet">
+		<script src="{{URL::asset('js/jquery.js')}}"></script>
+		<script src="{{URL::asset('js/bootstrap-switch.js')}}"></script>
 		@yield('customCSS')
 
 	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
