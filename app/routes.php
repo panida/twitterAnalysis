@@ -18,5 +18,32 @@ Route::get('/', function()
 
 Route::get('result', function(){
 	$searchText = 'Hello World';
-	return View::make('result')->with('search',$searchText);
+	return View::make('result.statistics')->with('search',$searchText);
 });
+
+Route::get('result/statistics', function(){
+	$searchText = 'Hello World';
+	return View::make('result.statistics')->with('search',$searchText);
+});
+
+Route::get('result/speedAndLifeCycle', function(){
+	$searchText = 'Hello World';
+	return View::make('result.speedAndLifeCycle')->with('search',$searchText);
+});
+
+Route::get('result/contributor', function(){
+	$searchText = 'Hello World';
+	return View::make('result.Contributor')->with('search',$searchText);
+});
+
+Route::get('result/tweetTimeline', function(){
+	$searchText = 'Hello World';
+	return View::make('result.tweetTimeline')->with('search',$searchText);
+});
+
+Route::get('result/device', function(){
+	$searchText = 'Hello World';
+	return View::make('result.device')->with('search',$searchText);
+});
+
+

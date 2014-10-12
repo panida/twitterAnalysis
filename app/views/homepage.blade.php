@@ -82,7 +82,7 @@
 							</div>
 							<!--<input type="checkbox" name="download-version" checked data-size="large" data-on-text="3" data-off-text="2.0.1">-->
 							<!--<div style="margin-top:5px;">-->
-							<a class="btn btn-default" href="result" style="background-color:#00aa00; color:white;">Submit</a>
+							<a class="btn btn-default" href="{{URL::to('result/statistics')}}" style="background-color:#00aa00; color:white;">Submit</a>
 							<!--<button onclick="location.href='/result'" type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;">Submit</form>-->
 							<!--</div>-->
 						</form>
