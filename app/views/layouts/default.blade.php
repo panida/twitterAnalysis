@@ -14,8 +14,11 @@
 	    <!-- Bootstrap Core CSS -->
 	    <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet">
 	    <link href="{{URL::asset('css/bootstrap-switch.css')}}" rel="stylesheet">
-		<script src="{{URL::asset('js/jquery.js')}}"></script>
-		<script src="{{URL::asset('js/bootstrap-switch.js')}}"></script>
+	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		
 		@yield('customCSS')
 
 	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -37,12 +40,9 @@
 		@yield('content')
 
 		@yield('footer')
+		
 
-
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		
 		
 
 	</body>
