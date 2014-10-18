@@ -64,20 +64,31 @@ function pieHover(event, pos, obj) {
 		<li><a href="{{URL::to('result/tweetTimeline')}}">Tweet Timeline</a></li>
 		<li class="active"><a href="{{URL::to('result/device')}}">Device</a></li>
 	</ul>
-	<div id="page-wrapper">
+	<br>
+	<div class="col-lg-10 col-lg-offset-1 ">
+		<div class="panel panel-primary">
+	        <div class="panel-heading">
+	            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Devices Proportion</h3>
+	        </div>
+	        <div class="panel-body">
+				<div id="page-wrapper">
 
-		<div class="container-fluid">
+					<div class="container-fluid">
 
-			<div class="col-lg-4 col-lg-offset-4 " style="top:50px">					
-				<div id="pieflot"></div>
-				<div id="pieHover"></div>
+						<div class="col-lg-4 col-lg-offset-4 " style="top:50px">
+												
+									<div id="pieflot"></div>
+									<div id="pieHover"></div>
+								
+						</div>
 
+					</div>
+					<!-- /.container-fluid -->
+
+				</div>
+				<!-- /#page-wrapper -->
 			</div>
-
 		</div>
-		<!-- /.container-fluid -->
-
 	</div>
-	<!-- /#page-wrapper -->
 </div>
 @stop
