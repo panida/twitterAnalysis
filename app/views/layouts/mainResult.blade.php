@@ -58,7 +58,7 @@
 										<!--</div>-->
 									</form></li>
 								</ul>
-								<ul class="nav navbar-nav navbar-right">							
+								<ul class="nav navbar-nav navbar-right">                            
 									<li>
 										<a href="index.php">Home</a>
 									</li>

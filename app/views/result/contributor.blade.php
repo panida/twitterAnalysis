@@ -327,7 +327,11 @@
 	      </table>
   	</div>
 </div>
-
+<style>
+.panel{
+	width: 80%;
+}
+</style>
 <div class="col-lg-3">
 	<h2>Top Contributors</h2>
 	<div class="panel panel-primary">
