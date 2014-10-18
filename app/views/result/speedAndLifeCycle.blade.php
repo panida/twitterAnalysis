@@ -182,10 +182,18 @@ $(function () {
 		<li><a href="{{URL::to('result/device')}}">Device</a></li>
 	</ul>
 </div>
+
 <div id="page-wrapper">
 
 	<div class="container-fluid col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-		<div id="allSpeed" style="min-width: 310px; height: 400px; margin:30px 0px 0px 0px;"></div>
+		<br>
+		<div class="panel panel-green">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Speed and Life Cycle</h3>
+            </div>
+            <div class="panel-body">
+				<div id="allSpeed" style="min-width: 310px; height: 400px; margin:30px 0px 0px 0px;"></div>
+			</div>
 		<!-- <div class="panel panel-default" style="margin:20px 0px 0px 0px">
 			<div class="panel-body form-inline">
 				<div class="form-group">
