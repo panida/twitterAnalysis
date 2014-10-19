@@ -18,21 +18,20 @@
 		<li><a href="{{URL::to('result/tweetTimeline')}}">Tweet Timeline</a></li>
 		<li><a href="{{URL::to('result/device')}}">Device</a></li>
 	</ul>
-</div>
 
-<style>
-.panel{
-	width: 200px;
-}
-</style>
+
 
 <div id="page-wrapper">
-	<div class="container-fluid">
-		<div class="col-lg-9 col-lg-offset-2">
-			<h2 style="font-family:cursive;">Top Contributors</h2>
+
+		<div class="col-lg-10">
+			<div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Posts Proportion</h3>
+                        </div>
+                        <div class="panel-body">
 			<div class="row">
-				<div class="col-lg-3 col-md-6">
-				<div class="panel panel-primary">
+				<div class="col-lg-4 col-md-6">
+				<div class="panel panel-red">
 				    <div class="panel-heading">
 				        <div class="row">
 				            <div class="col-xs-3">
@@ -53,7 +52,7 @@
 				    </a>
 				</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
+				<div class="col-lg-4 col-md-6">
 				<div class="panel panel-green">
 				    <div class="panel-heading">
 				        <div class="row">
@@ -75,7 +74,7 @@
 				    </a>
 				</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
+				<div class="col-lg-4 col-md-6">
 				<div class="panel panel-yellow">
 				    <div class="panel-heading">
 				        <div class="row">
@@ -98,11 +97,10 @@
 				</div>
 				</div>
 			</div>
+			</div>
 		</div>
-	</div>
-</div>
 
-<div class="col-lg-4 col-lg-offset-2">
+<div class="col-lg-6">
     <h2 style="font-family:cursive;">Contributors</h2>
     <div class="table-responsive">
     	
@@ -422,7 +420,7 @@
   	</div>
 </div>
 
-<div class="col-lg-4">
+<div class="col-lg-6">
   	<h2 style="font-family:cursive;">Interesting Contributors</h2>
     <div class="table-responsive">
     	
@@ -631,7 +629,9 @@
   	</div>
 
 </div>
+</div>
 
-   
+</div>
+
 
 @stop
