@@ -65,7 +65,7 @@ function pieHover(event, pos, obj) {
 		<li class="active"><a href="{{URL::to('result/device')}}">Device</a></li>
 	</ul>
 	<br>
-	<div class="col-lg-10 col-lg-offset-1 ">
+	<div class="col-lg-10">
 		<div class="panel panel-primary">
 	        <div class="panel-heading">
 	            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Devices Proportion</h3>
