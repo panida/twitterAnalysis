@@ -33,10 +33,14 @@
 						<form action="" class="navbar-form" role="search">
 
 
-							<div class="btn-group">
-								<button type="button" class="btn btn-default">Text</button>
-								<button type="button" class="btn btn-default">User</button>
-							</div>
+							<div class="btn-group" data-toggle="buttons">
+                               <label class="btn btn-default">
+                                  <input type="radio" name="options" id="option1"> Text
+                               </label>
+                               <label class="btn btn-default">
+                                  <input type="radio" name="options" id="option2"> User
+                               </label>
+                            </div>
 									<!--
 									<?php echo Form::select('searchBy', array('T' => 'Text', 'U' => 'User'), 'T',['class'=>'dropdown','style'=>'color:black; font-size:16px;']);
 										echo Form::text('searchText');
