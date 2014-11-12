@@ -3,9 +3,6 @@
 <!-- Custom CSS -->
 <link href="{{URL::asset('css/sb-admin.css')}}" rel="stylesheet">
 
-<!-- Morris Charts CSS -->
-<link href="{{URL::asset('css/plugins/morris.css')}}" rel="stylesheet">
-
 <!-- Custom Fonts -->
 <link href="{{URL::asset('font-awesome-4.1.0/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
 @yield('additionalAsset')

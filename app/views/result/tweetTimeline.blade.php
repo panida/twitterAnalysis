@@ -13,7 +13,6 @@
 		<li><a href="{{URL::to('result/speedAndLifeCycle')}}">Speed and Life Cycle</a></li>
 		<li><a href="{{URL::to('result/contributor')}}">Contributor</a></li>
 		<li class="active"><a href="{{URL::to('result/tweetTimeline')}}">Tweet Timeline</a></li>
-		<li><a href="{{URL::to('result/device')}}">Device</a></li>
 	</ul>
 </div>
 
