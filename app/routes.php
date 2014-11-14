@@ -33,7 +33,7 @@ Route::get('result/speedAndLifeCycle', function(){
 
 Route::get('result/contributor', function(){
 	$searchText = 'Hello World';
-	return View::make('result.Contributor')->with('search',$searchText);
+	return View::make('result.contributor')->with('search',$searchText);
 });
 
 Route::get('result/tweetTimeline', function(){
