@@ -147,7 +147,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="{{URL::asset('js/clean-blog.min.js')}}"></script>
+    <!-- <script src="{{URL::asset('js/clean-blog.min.js')}}"></script> -->
 
 
 @stop
