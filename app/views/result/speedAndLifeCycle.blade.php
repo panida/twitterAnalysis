@@ -1,6 +1,3 @@
-@extends('layouts.mainResult')
-@section('additionalAsset')
-
 <script type="text/javascript">
 $(function () {
 	var options = {
@@ -158,21 +155,9 @@ $(function () {
 });
 </script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
-<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
-@stop
-@section('TabContent')
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-	<ul class="nav nav-tabs" role="tablist">
-		<li><a href="{{URL::to('result/statistics')}}">Statistics</a></li>
-		<li class="active"><a href="{{URL::to('result/speedAndLifeCycle')}}">Speed and Life Cycle</a></li>
-		<li><a href="{{URL::to('result/contributor')}}">Contributor</a></li>
-		<li><a href="{{URL::to('result/tweetTimeline')}}">Tweet Timeline</a></li>
-	</ul>
-</div>
 
 <div id="page-wrapper">
-
 	<div class="container-fluid col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 		<br>
 		<div class="panel panel-green">
@@ -180,11 +165,8 @@ $(function () {
 				<h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Speed and Life Cycle</h3>
 			</div>
 			<div class="panel-body">
-
-				<div id="allChart" style="margin:0 auto"></div>
-				
+				<div id="allChart" style="margin:0 auto"></div>				
 			</div>
-
 		</div>
 	</div>
-	@stop
+</div>
