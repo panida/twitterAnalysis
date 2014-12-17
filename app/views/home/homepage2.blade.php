@@ -49,14 +49,28 @@
                     <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">วันที่เริ่มต้น</label>
                         <div class="col-lg-6 col-md-6 col-sm-6">                                       
-                            {{ Form::text('startDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่เริ่มต้น', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                            {{Form::text('startDate', null, [
+                                "required" => "required", 
+                                "class" => "form-control", 
+                                "id" => "datepicker1",
+                                "placeholder" => "วันที่เริ่มต้น",
+                                'style'=>'font-family:tahoma;'
+                            ])}} 
+                            <!-- {{ Form::text('startDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่เริ่มต้น', 'required' => 'required', 'style'=>'font-family:tahoma;']) }} -->
                         </div>
                     </div>
 
                     <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">วันที่สิ้นสุด</label>
-                        <div class="col-lg-6 col-md-6 col-sm-6">                                       
-                            {{ Form::text('endDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่สิ้นสุด', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                        <div class="col-lg-6 col-md-6 col-sm-6">  
+                            {{Form::text('endDate', null, [
+                                "required" => "required", 
+                                "class" => "form-control", 
+                                "id" => "datepicker2",
+                                "placeholder" => "วันที่สิ้นสุด",
+                                'style'=>'font-family:tahoma;'
+                            ])}}                                     
+                            <!-- {{ Form::text('endDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่สิ้นสุด', 'required' => 'required', 'style'=>'font-family:tahoma;']) }} -->
                         </div>
                     </div>
                     <div class="form-group top-buffer">
@@ -125,6 +139,30 @@
         <!-- /.row -->
 
         <hr>
+        <style>
+        .input-group .form-control{
+            z-index: 0;
+        }
+        </style>
+        {{ HTML::style('css/jquery-ui.css'); }}
+        {{ HTML::script('js/jquery-ui-1.10.4.min.js'); }}
+       
+        <script>
+        $(function() {
+            $("#datepicker1").datepicker({
+                dateFormat: "yy-mm-dd",
+                // minDate: "+1d",
+                dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
+                monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
+            });
+            $("#datepicker2").datepicker({
+                dateFormat: "yy-mm-dd",
+                // minDate: "+1d",
+                dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
+                monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
+            });
+        });
+        </script>
 @stop
 
 @section('footer')
