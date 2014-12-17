@@ -57,6 +57,31 @@
             </form>
 		</div>
     </div>
+    
+    <style>
+    .input-group .form-control{
+        z-index: 0;
+    }
+    </style>
+    {{ HTML::style('css/jquery-ui.css'); }}
+    {{ HTML::script('js/jquery-ui-1.10.4.min.js'); }}
+   
+    <script>
+    $(function() {
+        $("#datepicker1").datepicker({
+            dateFormat: "yy-mm-dd",
+            // minDate: "+1d",
+            dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
+            monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
+        });
+        $("#datepicker2").datepicker({
+            dateFormat: "yy-mm-dd",
+            // minDate: "+1d",
+            dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
+            monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
+        });
+    });
+    </script>
 
 	<div class="row">
 		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
@@ -95,30 +120,7 @@
 
 
 @section('footer')
-	<style>
-    .input-group .form-control{
-        z-index: 0;
-    }
-    </style>
-    {{ HTML::style('css/jquery-ui.css'); }}
-    {{ HTML::script('js/jquery-ui-1.10.4.min.js'); }}
-   
-    <script>
-    $(function() {
-        $("#datepicker1").datepicker({
-            dateFormat: "yy-mm-dd",
-            // minDate: "+1d",
-            dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
-            monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
-        });
-        $("#datepicker2").datepicker({
-            dateFormat: "yy-mm-dd",
-            // minDate: "+1d",
-            dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
-            monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
-        });
-    });
-    </script>
+
 
 
 @stop
