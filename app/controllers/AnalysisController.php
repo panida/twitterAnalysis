@@ -6,7 +6,8 @@ class AnalysisController extends BaseController {
 	{
 		$input = Input::all();
 		$result = $input;
-		return Redirect::to('result/statistics')->with('result',$result);
+		return View::make('layouts.mainResult',$result);
+		// return Redirect::to('result/statistics')->with('result',$result);
 		// return View::make('result.statistics',$result);
 	}
 
