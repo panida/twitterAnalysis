@@ -11,39 +11,15 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home/homepage');
-});
+Route::get('/', 'HomeController@showWelcome');
 
-Route::get('result', function(){
-	$searchText = 'Hello World';
-	return View::make('result.statistics')->with('search',$searchText);
-});
+Route::post('result', 'AnalysisController@analyse');
 
-Route::get('result/statistics', function(){
-	$searchText = 'Hello World';
-	return View::make('result.statistics')->with('search',$searchText);
-});
+Route::get('result/statistics', 'AnalysisController@showStatistics');
 
-Route::get('result/speedAndLifeCycle', function(){
-	$searchText = 'Hello World';
-	return View::make('result.speedAndLifeCycle')->with('search',$searchText);
-});
+Route::get('result/speedAndLifeCycle', 'AnalysisController@showSpeedAndLifeCycle');
 
-Route::get('result/contributor', function(){
-	$searchText = 'Hello World';
-	return View::make('result.contributor')->with('search',$searchText);
-});
+Route::get('result/contributor', 'AnalysisController@showContributor');
 
-Route::get('result/tweetTimeline', function(){
-	$searchText = 'Hello World';
-	return View::make('result.tweetTimeline')->with('search',$searchText);
-});
-
-Route::get('result/device', function(){
-	$searchText = 'Hello World';
-	return View::make('result.device')->with('search',$searchText);
-});
-
+Route::get('result/tweetTimeline', 'AnalysisController@showTweetTimeline');
 

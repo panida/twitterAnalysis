@@ -35,7 +35,11 @@
     height: 350px;
     overflow-y: scroll;
 }
+
+
 </style>
+
+
 <script type="text/javascript">
 $(function () {
     $('#device').highcharts({

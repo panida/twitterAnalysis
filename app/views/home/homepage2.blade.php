@@ -1,0 +1,142 @@
+@extends('layouts.default')
+@section('customCSS')
+    <!-- Custom CSS -->
+    <link href="css/heroic-features.css" rel="stylesheet">
+    <style>
+        
+        .jumbotron{
+            min-height:480px;
+            background-color:rgba(200,210,250,0.5);
+        }
+
+    </style>
+@stop
+
+@section('content')
+    
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Jumbotron Header -->
+        <div class="col-lg-6">
+            <header class="jumbotron hero-spacer">
+                <h1>TweetThrough</h1>
+                <p class="thaibold" style="font-size:30px;">
+                    เว็บไซต์ที่คุณสามารถวิเคราะห์การกระจายตัวของทวีตได้อย่างละเอียดรอบด้าน ภายใต้ฐานข้อมูลทวิตเตอร์ที่มี</p>
+                <p><a class="btn btn-primary btn-large">เกี่ยวกับเรา</a>
+                </p>
+            </header>
+        </div>
+
+        <div class="col-lg-6">
+            <header class="jumbotron hero-spacer">
+                <h1 class="thaibold">เริ่มค้นหา</h1>
+                <form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 col-sm-4 control-label">ค้นหาโดย</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), 'text', ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group top-buffer">
+                        <label class="col-lg-4 col-md-4 col-sm-4 control-label">คำค้นหา</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6">                                        
+                            {{ Form::text('searchText', null, ['class' => 'form-control', 'placeholder' => 'คำที่ต้องการค้นหา', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group top-buffer">
+                        <label class="col-lg-4 col-md-4 col-sm-4 control-label">วันที่เริ่มต้น</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6">                                       
+                            {{ Form::text('startDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่เริ่มต้น', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group top-buffer">
+                        <label class="col-lg-4 col-md-4 col-sm-4 control-label">วันที่สิ้นสุด</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6">                                       
+                            {{ Form::text('endDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่สิ้นสุด', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                        </div>
+                    </div>
+                    <div class="form-group top-buffer">
+                        <div class="col-sm-offset-4 col-sm-4">
+                            {{Form::submit("ค้นหา",array("class"=>"btn btn-default","style"=>"background-color:#00aa00; color:white; font-size:23px;"))}}
+                        </div>
+                    </div>
+                </form>
+            </header>
+        </div>
+
+        <hr>
+
+        <!-- Title -->
+        <div class="row">
+            <div class="col-lg-12 thaibold">
+                <h2>ทำความรู้จักกับเว็บของเรา</h2>
+            </div>
+        </div>
+        <hr>
+        <!-- /.row -->
+
+        <!-- Page Features -->
+        <div class="row text-center col-md-10 col-md-offset-1 thaibold">
+
+            <div class="col-md-4 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img class="top-buffer" src="http://assets3.tweetreach.com/images/home_search.png?1418759198" alt="">
+                    <div class="caption">
+                        <h2>ค้นหา</h2>
+                        <h4 style="font-family:thaisansneue;">สามารถค้นหาได้ทั้งข้อความ ชื่อผู้ใช้ Hashtag หรือแม้กระทั่ง URL ใช้งานง่าย คล่องตัว</h4>
+                        <p>
+                            <a href="#" class="btn btn-primary">อ่านต่อ</a> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img class="top-buffer" src="http://assets1.tweetreach.com/images/home_analyze.png?1418759198" alt="">
+                    <div class="caption">
+                        <h2>วิเคราะห์</h2>
+                        <h4 style="font-family:thaisansneue;">วิเคราะห์ค่าทางสถิติ อัตราการแพร่กระจายของทวีต เครื่องมือที่ใช้ รวมถึงบุคคลที่มีอิทธิพลจากการค้นหาครั้งนั้นๆ</h4>
+                        <p>
+                            <a href="#" class="btn btn-primary">อ่านต่อ</a> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img class="top-buffer" src="http://assets0.tweetreach.com/images/home_report.png?1418759198" alt="">
+                    <div class="caption">
+                        <h2>รายงานผล</h2>
+                        <h4 style="font-family:thaisansneue;">แสดงผลด้วยกราฟและแผนภูมิแบบ Interactive ง่ายต่อการเข้าใจ อีกทั้งสามารถ export รายงานออกเป็นไฟล์ pdf ได้อีกด้วย</h4>
+                        <p>
+                            <a href="#" class="btn btn-primary">อ่านต่อ</a> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+@stop
+
+@section('footer')
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; TweetThrough 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+@stop

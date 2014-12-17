@@ -19,18 +19,113 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script src="{{URL::asset('js/Chart.js')}}"></script>
-		@yield('customCSS')
+		<style>
+			.navbar-default {
+	            background-color: #056ae4;
+	            border-color: #7094cf;
+	        }
+	        .navbar-default .navbar-brand {
+	            color: #eaeaea;
+	        }
+	        .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+	            color: #cbc7fe;
+	        }
+	        .navbar-default .navbar-text {
+	            color: #eaeaea;
+	        }
+	        .navbar-default .navbar-nav > li > a {
+	            color: #eaeaea;
+	        }
+	        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+	            color: #cbc7fe;
+	        }
+	        .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+	            color: #cbc7fe;
+	            background-color: #7094cf;
+	        }
+	        .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+	            color: #cbc7fe;
+	            background-color: #7094cf;
+	        }
+	        .navbar-default .navbar-toggle {
+	            border-color: #7094cf;
+	        }
+	        .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+	            background-color: #7094cf;
+	        }
+	        .navbar-default .navbar-toggle .icon-bar {
+	            background-color: #eaeaea;
+	        }
+	        .navbar-default .navbar-collapse,
+	        .navbar-default .navbar-form {
+	            border-color: #eaeaea;
+	        }
+	        .navbar-default .navbar-link {
+	            color: #eaeaea;
+	        }
+	        .navbar-default .navbar-link:hover {
+	            color: #cbc7fe;
+	        }
 
-	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	    <!--[if lt IE 9]>
-	        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	    <![endif]-->
+	        @media (max-width: 767px) {
+	            .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+	                color: #eaeaea;
+	            }
+	            .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+	                color: #cbc7fe;
+	            }
+	            .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+	                color: #cbc7fe;
+	                background-color: #7094cf;
+	            }
+	        }
+
+	        .thaibold{
+	            font-family:sans-serif,thaisansneue;
+	        }
+
+	        .top-buffer{
+	            margin-top:10px;
+	        }
+
+		</style>
+		@yield('customCSS')
 
 	</head>
 	<body>
 		<!-- check for flash notification message -->
+		<!-- Navigation -->
+	    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	        <div class="container">
+	            <!-- Brand and toggle get grouped for better mobile display -->
+	            <div class="navbar-header">
+	                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	                    <span class="sr-only">Toggle navigation</span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                </button>
+	                <a class="navbar-brand" href="{{URL::to('/')}}">TweetThrough</a>
+	            </div>
+	            <!-- Collect the nav links, forms, and other content for toggling -->
+	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	                <ul class="nav navbar-nav">
+	                    <li>
+	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">หน้าแรก</a>
+	                    </li>
+	                    <li>
+	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">เกี่ยวกับเรา</a>
+	                    </li>
+	                    <li>
+	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">ติดต่อ</a>
+	                    </li>
+	                </ul>
+	            </div>
+	            <!-- /.navbar-collapse -->
+	        </div>
+	        <!-- /.container -->
+	    </nav>
+
 		<div class="container">
         @if(Session::has('flash_notice'))
             <div class="alert alert-info">{{ Session::get('flash_notice') }}</div>
