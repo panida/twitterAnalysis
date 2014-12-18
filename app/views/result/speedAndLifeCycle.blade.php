@@ -3,7 +3,7 @@
 		var options = {
 			chart: {
 				renderTo: 'allChart',
-				width: 1100,
+				width: 950,
 				height: 1000,
 				zoomType: 'x'
 			},
@@ -52,7 +52,7 @@
 					x: -3
 				},
 				title: {
-					text: 'Number of activity'
+					text: 'จำนวนทวีต'
 				},
 				height: '45%',
 				lineWidth: 2,
@@ -66,7 +66,7 @@
 					x: -3
 				},
 				title: {
-					text: 'Number of activity'
+					text: 'จำนวนทวีต'
 				},
 				top: '55%',
 				height: '45%',
@@ -154,15 +154,14 @@
 		var chart = new Highcharts.StockChart(options);
 	});
 </script>
-<script src="http://code.highcharts.com/stock/highstock.js"></script>
-<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+
 
 <div id="page-wrapper">
-	<div class="container-fluid col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+	<div class="container-fluid col-lg-12">
 		<br>
 		<div class="panel panel-green">
 			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Speed and Life Cycle</h3>
+				<h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
 			</div>
 			<div class="panel-body">
 				<div id="allChart" style="margin:0 auto"></div>				

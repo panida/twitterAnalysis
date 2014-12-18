@@ -72,10 +72,10 @@
 	            type: 'pie',
 	            name: 'Application',
 	            data: [
-	                ['web',   45.0],
-	                ['android',       26.8],
-	                ['iphone',    8.5],
-	                ['black berry',     6.2],
+	                ['Web',   45.0],
+	                ['Android',       26.8],
+	                ['iPhone',    8.5],
+	                ['Blackberry',     6.2],
 	                ['Others',   0.7]
 	            ]
 	        }]
@@ -117,12 +117,9 @@
 	            data: [
 	                ['Tweets',   272.0],
 	                ['Retweets',       171.0],
-	                ['replies',    43.0],
+	                ['Replies',    43.0],
 	            ]
 	        }]
 	    });
 	});
 </script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/highcharts-3d.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
