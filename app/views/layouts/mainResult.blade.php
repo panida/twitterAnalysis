@@ -21,15 +21,15 @@
 			<form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
                 <div class="form-group" style="margin-left: 10px">
                     <div class="col-lg-2 col-md-6 col-sm-6">
-                        {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), 'text', ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                        {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), $type, ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
                     </div>
                 
                     <div class="col-lg-5 col-md-6 col-sm-6">                                        
-                        {{ Form::text('searchText', null, ['class' => 'form-control', 'placeholder' => 'คำที่ต้องการค้นหา', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
+                        {{ Form::text('searchText', $searchText, ['class' => 'form-control', 'placeholder' => 'คำที่ต้องการค้นหา', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
                     </div>
                 
                     <div class="col-lg-2 col-md-6 col-sm-6">                                       
-                        {{Form::text('startDate', null, [
+                        {{Form::text('startDate', $startDate, [
                             "required" => "required", 
                             "class" => "form-control", 
                             "id" => "datepicker1",
@@ -40,7 +40,7 @@
                     </div>
                 
                     <div class="col-lg-2 col-md-6 col-sm-6">  
-                        {{Form::text('endDate', null, [
+                        {{Form::text('endDate', $endDate, [
                             "required" => "required", 
                             "class" => "form-control", 
                             "id" => "datepicker2",
@@ -85,18 +85,26 @@
 
 	<div class="row">
 		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-			<h1 class="page-header thaibold">
-				Search: {{$searchText}}
-			</h1>
+			@if($type=='text')
+                <h1 class="page-header onlythaibold">
+    				ค้นหาข้อความ: {{$searchText}}
+    			</h1>
+            @else
+                <h1 class="page-header onlythaibold">
+                    ค้นหาผู้ใช้: {{$searchText}}
+                </h1>
+            @endif
 		</div>
 	</div>
+
 	<!-- /.row -->
 	<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-	<ul id="tabMenu" class="nav nav-tabs" role="tablist">
-		<li class="active"><a href="#statistics" data-toggle="tab">Statistics</a></li>
-		<li><a href="#speedAndLifeCycle" data-toggle="tab">Speed and Life Cycle</a></li>
-		<li><a href="#contributor" data-toggle="tab">Contributor</a></li>
-		<li><a href="#tweetTimeline" data-toggle="tab">Tweet Timeline</a></li>
+	<ul id="tabMenu" class="nav nav-tabs onlythaibold" role="tablist" style="font-size:20px;">
+		<li class="active"><a href="#statistics" data-toggle="tab">ค่าสถิติเบื้องต้น</a></li>
+		<li><a href="#speedAndLifeCycle" data-toggle="tab">การแพร่กระจายของทวีต</a></li>
+		<li><a href="#contributor" data-toggle="tab">บุคคลที่เกี่ยวข้อง</a></li>
+        <li><a href="#interestingContributor" data-toggle="tab">กลุ่มบุคคลที่สนใจ</a></li>
+		<li><a href="#tweetTimeline" data-toggle="tab">รายการทวีตทั้งหมด</a></li>
 	</ul>
 
 
@@ -110,6 +118,9 @@
 	   	<div class="tab-pane fade" id="contributor">
 	   		@include('result.contributor')
 	   	</div>
+        <div class="tab-pane fade" id="interestingContributor">
+            @include('result.interestingContributor')
+        </div>
 	   	<div class="tab-pane fade" id="tweetTimeline">
 	      	@include('result.tweetTimeline')
 	   	</div>
@@ -120,6 +131,15 @@
 
 
 @section('footer')
+
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<!-- <script src="http://code.highcharts.com/highcharts.js"></script> -->
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
+<script src="http://code.highcharts.com/modules/drilldown.js"></script>
+
+
 
 
 

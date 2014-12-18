@@ -18,7 +18,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="{{URL::asset('js/Chart.js')}}"></script>
+		
 		<style>
 			.navbar-default {
 	            background-color: #056ae4;
@@ -82,6 +82,10 @@
 
 	        .thaibold{
 	            font-family:sans-serif,thaisansneue;
+	        }
+
+	        .onlythaibold{
+	            font-family:thaisansneue;
 	        }
 
 	        .top-buffer{
