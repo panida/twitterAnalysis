@@ -15,11 +15,3 @@ Route::get('/', 'HomeController@showWelcome');
 
 Route::post('result', 'AnalysisController@analyse');
 
-Route::get('result/statistics', 'AnalysisController@showStatistics');
-
-Route::get('result/speedAndLifeCycle', 'AnalysisController@showSpeedAndLifeCycle');
-
-Route::get('result/contributor', 'AnalysisController@showContributor');
-
-Route::get('result/tweetTimeline', 'AnalysisController@showTweetTimeline');
-

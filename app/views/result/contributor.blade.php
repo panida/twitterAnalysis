@@ -49,7 +49,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-6">
-					<h3 class="onlythaibold" style="text-align:center;">ถูก mention มากที่สุด</h3>
+					<h3 class="onlythaibold" style="text-align:center;">มีส่วนร่วมมากที่สุด</h3>
 					<div class="panel panel-yellow">
 					    <div class="panel-heading">
 					        <div class="row">
@@ -58,7 +58,7 @@
 					            </div>
 					            <div class="col-xs-9 text-right">
 					            	<div class="huge">15</div>
-					                <div>mentions</div>
+					                <div>tweets</div>
 					            </div>
 					        </div>
 					    </div>
