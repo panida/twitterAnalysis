@@ -5,12 +5,12 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <h3>จำนวนทวีตทั้งหมด</h3>
                     <div class="col-lg-6"><span class="glyphicon glyphicon-comment" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6"><h2>486</h2><h3>ทวีต</h3></div>
+                    <div class="col-lg-6"><h2>{{$countAllTweet}}</h2><h3>ทวีต</h3></div>
                 </div> 
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <h3>จำนวนผู้ใช้ทั้งหมด</h3>
                     <div class="col-lg-6"><span class="glyphicon glyphicon-user" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6"><h2>472</h2><h3>คน</h3></div>
+                    <div class="col-lg-6"><h2>{{$countAllContributor}}</h2><h3>คน</h3></div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <h3>จำนวนครั้งการเข้าถึง</h3>
