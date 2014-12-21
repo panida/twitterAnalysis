@@ -15,6 +15,15 @@ class AnalysisController extends BaseController {
 			$tweetResultList = TwitterAnalysisFact::searchByUser($searchText,$startDate,$endDate);
 		}
 		$tweetResult = $tweetResultList->get();
+		$countAllTweet = sizeof($tweetResult);
+		if($countAllTweet==0){
+			$result = ['type'=>$input['type'],
+					'searchText'=>$searchText,
+					'startDate'=>$startDate,
+					'endDate'=>$endDate,
+					'countAllTweet'=>$countAllTweet];
+			return View::make('layouts.notFound',$result);
+		}
 		$countAllImpression = $tweetResultList->sum('TwitterAnalysisFact.numberOfFollower');
 		$tweetOriginalKeyList = $tweetResultList->select('TwitterAnalysisFact.TweetKey')->distinct()->get();
 		$contributorKeyList = $tweetResultList->select('TwitterAnalysisFact.UserStatisticsKey')->distinct()->get();
@@ -23,6 +32,7 @@ class AnalysisController extends BaseController {
                  ->select('TwitterAnalysisFact.TweetKey', DB::raw('count(*) as totalRetweet'))
                  ->groupBy('TwitterAnalysisFact.TweetKey')
                  ->get();
+
   //       var_dump($countAllActivity);
 		// return View::make('blank_page');
         //cannot join itself -- duplicate field
@@ -143,7 +153,7 @@ class AnalysisController extends BaseController {
 		// }
 
 		// ----- Statistics Tab -----
-		$countAllTweet = sizeof($tweetResult);
+		
 		$countAllContributor = sizeof($contributorList);
 		
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
