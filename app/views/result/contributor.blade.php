@@ -31,17 +31,17 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/{{$top10RetweetedList[0]['user']->screenname}}" class="avatar" target="_blank"><img alt="{{$top10RetweetedList[0]['user']->screenname}}" src="{{$top10RetweetedList[0]['user']->ProfilePicURL}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
+					                <a href="http://twitter.com/{{$maxRetweetedUser['screenname']}}" class="avatar" target="_blank"><img src="{{$maxRetweetedUser['pic']}}" alt="{{$maxRetweetedUser['screenname']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
-					            	<div class="huge">{{$top10RetweetedList[0]['retweetCount']}}</div>
+					            	<div class="huge">{{$maxRetweetedUser['count']}}</div>
 					                <div>retweets</div>
 					            </div>
 					        </div>
 					    </div>
 					    <a href="http://twitter.com/mmppz">
 					        <div class="panel-footer">
-					            <span class="pull-left">{{"@".$top10RetweetedList[0]['user']->screenname}}</a></span>
+					            <span class="pull-left">{{"@".$maxRetweetedUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 					            <div class="clearfix"></div>
 					        </div>
