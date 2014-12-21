@@ -55,7 +55,7 @@
 	            enabled: false
 	        },
 	        tooltip: {
-	            pointFormat: '<b>{point.percentage:.1f}%</b>'
+	            pointFormat: '<b>{point.y:,.0f} tweets</b><br><b>({point.percentage:.1f}%)</b>'
 	        },
 	        plotOptions: {
 	            pie: {
@@ -64,7 +64,8 @@
 	                depth: 35,
 	                dataLabels: {
 	                    enabled: true,
-	                    format: '{point.name}: {point.percentage:.1f}%'
+	                    // format: '{point.name}: {point.percentage:.1f}%'
+	                    format: '{point.name}<br>:{point.y:,.0f}'
 	                }
 	            }
 	        },
@@ -72,11 +73,15 @@
 	            type: 'pie',
 	            name: 'Application',
 	            data: [
-	                ['Web',   45.0],
-	                ['Android',       26.8],
-	                ['iPhone',    8.5],
-	                ['Blackberry',     6.2],
-	                ['Others',   0.7]
+	                <?php 
+	                	foreach($sourceProportion as $aSource){
+	                		echo "['".$aSource['sourceName']."',".$aSource['count']."],";
+	                	}
+	                ?>
+	                // ['Android',       26.8],
+	                // ['iPhone',    8.5],
+	                // ['Blackberry',     6.2],
+	                // ['Others',   0.7]
 	            ]
 	        }]
 	    });
@@ -98,7 +103,7 @@
 	            enabled: false
 	        },
 	        tooltip: {
-	            pointFormat: '<b>{point.y:.0f}</b>'
+	            pointFormat: '<b>{point.y:.0f} ({point.percentage:.1f}%)</b>'
 	        },
 	        plotOptions: {
 	            pie: {
@@ -107,7 +112,7 @@
 	                depth: 35,
 	                dataLabels: {
 	                    enabled: true,
-	                    format: '{point.name}: {point.y:.0f}'
+	                    format: '{point.name}: {point.y:,.0f}'
 	                }
 	            }
 	        },
@@ -115,9 +120,9 @@
 	            type: 'pie',
 	            name: 'Posts',
 	            data: [
-	                ['Tweets',   272.0],
-	                ['Retweets',       171.0],
-	                ['Replies',    43.0],
+	                ['Tweets',   {{$countAct['tweet']}}],
+	                ['Retweets',       {{$countAct['retweet']}}],
+	                ['Replies',    {{$countAct['reply']}}],
 	            ]
 	        }]
 	    });
