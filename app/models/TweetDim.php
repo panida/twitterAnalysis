@@ -8,14 +8,7 @@ class TweetDim extends Eloquent
 
 	public $errors;
 
-	public function scopeAvailableItem($query){
-		return $query->where('quantity','>','0')
-			->where(function ($query) {
-				$query->where('endDateTime', '>', new DateTime('now'))
-					->orWhere('endDateTime', '=', null);
-				})
-			->orderBy('id', 'desc');
-	}
+	protected $primaryKey = "TweetKey";
 
 
 	public function scopeSearchByText($query,$searchText){

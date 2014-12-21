@@ -49,10 +49,11 @@ class TwitterAnalysisFact extends Eloquent
 		// 			})
 		// 			->get();
 	} 
-	public static function findOriginalTweet($TweetKey){
+	public static function scopeFindOriginalTweet($query,$TweetKey){
    //      	var_dump($TweetKey);
 			// return View::make('blank_page');
-		return DB::table('TwitterAnalysisFact')->where('TweetKey',$TweetKey)->where('ActivityTypeKey',1)->first();
+		return $query->where('TweetKey',$TweetKey)->where('ActivityTypeKey',1)->orWhere('ActivityTypeKey',2)->first();
+		// return DB::table('TwitterAnalysisFact')->where('TweetKey',$TweetKey)->where('ActivityTypeKey',1)->first();
 	}
 
 	//$this->belongsTo(table,local_key,parent_key);
