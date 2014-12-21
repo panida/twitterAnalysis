@@ -31,35 +31,41 @@ class AnalysisController extends BaseController {
 		$countRetweetTime = $tweetResultList->where('TwitterAnalysisFact.ActivityTypeKey','=','3')
                  ->select('TwitterAnalysisFact.TweetKey', DB::raw('count(*) as totalRetweet'))
                  ->groupBy('TwitterAnalysisFact.TweetKey')
+                 ->orderBy('totalRetweet','desc')
                  ->get();
 
   //       var_dump($countAllActivity);
 		// return View::make('blank_page');
         //cannot join itself -- duplicate field
-                /*
+
         $topRetweetedList = array();
         $i = 0;
         foreach($countRetweetTime as $aTweet){
    //      	var_dump($aTweet->TweetKey);
 			// return View::make('blank_page');
         	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->TweetKey);
-        	var_dump($originalTweetFact->TweetKey);
-			return View::make('blank_page');
-        	$user = $originalTweetFact->user();
-        	$date = $originalTweetFact->date();
-        	$time = $originalTweetFact->time();
-        	$source = $originalTweetFact->source()->SourceName;
+        	if(get_class($originalTweetFact)!=='TwitterAnalysisFact'){
+        	var_dump($aTweet->TweetKey);
+			return View::make('blank_page');}
+        	$user = $originalTweetFact->user;
+        	$date = $originalTweetFact->date;
+        	$time = $originalTweetFact->time;
+        	$source = $originalTweetFact->source->SourceName;
         	$text = TweetDim::find($aTweet->TweetKey)->text;
         	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->TweetKey,
         								'text'=>$text,
         								'date'=>$date,
         								'time'=>$time,
+        								'source'=>$source,
         								'user'=>$user,
         								'retweetCount' => $aTweet->totalRetweet
 									];
 			$i++;
-        }*/
-  		
+        }
+  	// 				var_dump($topRetweetedList);
+			// return View::make('blank_page');
+        if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
+        else $top10RetweetedList = array_slice($topRetweetedList, 0,10);
 		// $countRetweetTime = array();
 		$contributorList = array();
 		$maxFol = -1;
@@ -177,7 +183,8 @@ class AnalysisController extends BaseController {
 					'countAllImpression'=>$countAllImpression,
 					'countAct'=> $countAct,
 					'sourceProportion'=>$sourceProportion,
-					// 'topRetweetedList'=>$topRetweetedList,
+					'topRetweetedList'=>$topRetweetedList,
+					'top10RetweetedList'=>$top10RetweetedList,
 					'maxFollowerUser'=>$maxFollowerUser,
 					'maxActivityUser'=>$maxActivityUser
 				];

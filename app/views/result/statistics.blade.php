@@ -49,30 +49,31 @@
                 </div>
                 <div class="panel-body" style="min-height: 825px; max-height: 825px; overflow-y: scroll;">
                     <ul class="chat">
-
+                        @foreach($top10RetweetedList as $anOriginalTweet)
                             <li class="left clearfix">
                                 <span class="chat-img pull-left">
-                                    <a href="http://twitter.com/ipd69" class="tweet_avatar2">
-                                        <img src="http://pbs.twimg.com/profile_images/521337632169553921/A8IMmV6E_normal.jpeg" alt="ipd69" class="avatar">
+                                    <a href="http://twitter.com/{{$anOriginalTweet['user']->screenname}}" target="blank" class="tweet_avatar2">
+                                        <img src="{{$anOriginalTweet['user']->ProfilePicURL}}" alt="{{$anOriginalTweet['user']->screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
                                     </a>
                                 </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
-                                        <strong class="primary-font"><a href="http://twitter.com/ipd69" class="tweet_screen_name2 screen_name">พี่ดี้ลำเอียง</a></strong> 
-                                        <span style="color:#AAAAAA;">@ipd69</span>
+                                        <strong class="primary-font"><a href="http://twitter.com/{{$anOriginalTweet['user']->screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$anOriginalTweet['user']->name}}</a></strong> 
+                                        <span style="color:#AAAAAA;">{{"@".$anOriginalTweet['user']->screenname}}</span>
                                         <small class="pull-right text-muted">
-                                            <i class="fa fa-retweet fa-fw"></i> 10 retweets                                        
+                                            <i class="fa fa-retweet fa-fw"></i> {{$anOriginalTweet['retweetCount']. " retweets"}}                                      
                                         </small>
                                     </div>
                                     <p>
-                                        กูไม่เคยเห็นการทำ "รัฐประหาร" แบบนี้ในโลกนี้! #นี่กูพูดจริงๆ  <a href="http://t.co/qu0RcBP7IJ" rel="nofollow">http://t.co/qu0RcBP7IJ</a>
+                                        {{$anOriginalTweet['text']}}
                                     </p>
                                     <small class="text-muted">
-                                        <i class="fa fa-clock-o fa-fw"></i> 4 months ago
+                                        <span class="glyphicon glyphicon-send"></span> {{$anOriginalTweet['source']}}
+                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet['date']->TheDate."--".$anOriginalTweet['time']->Time}}
                                     </small>
                                 </div>
                             </li>
-
+                        @endforeach
                     </ul>
                     <!-- /.panel .chat-panel -->
                     <div class="text-right">
