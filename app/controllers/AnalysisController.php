@@ -40,6 +40,7 @@ class AnalysisController extends BaseController {
 
         $topRetweetedList = array();
         $i = 0;
+        $retweetedCountOfUser = array();
         foreach($countRetweetTime as $aTweet){
    //      	var_dump($aTweet->TweetKey);
 			// return View::make('blank_page');
@@ -60,8 +61,18 @@ class AnalysisController extends BaseController {
         								'user'=>$user,
         								'retweetCount' => $aTweet->totalRetweet
 									];
+			if(array_key_exists($user->userID,$retweetedCountOfUser)) $retweetedCountOfUser[$user->userID]['count'] += $aTweet->totalRetweet;
+			else $retweetedCountOfUser[$user->userID] = ['count'=>$aTweet->totalRetweet,'screenname'=>$user->screenname,'pic'=>$user->ProfilePicURL];
 			$i++;
         }
+        $maxRTCount = -1;
+        $maxRetweetedUser = NULL;
+        foreach($retweetedCountOfUser as $aUser){
+        	if($aUser['count']>$maxRTCount){
+        		$maxRTCount = $aUser['count'];
+        		$maxRetweetedUser = $aUser;
+        	}
+    	}
   	// 				var_dump($topRetweetedList);
 			// return View::make('blank_page');
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
@@ -186,6 +197,7 @@ class AnalysisController extends BaseController {
 					'topRetweetedList'=>$topRetweetedList,
 					'top10RetweetedList'=>$top10RetweetedList,
 					'maxFollowerUser'=>$maxFollowerUser,
+					'maxRetweetedUser' =>$maxRetweetedUser,
 					'maxActivityUser'=>$maxActivityUser
 				];
 		// $result = $input;
