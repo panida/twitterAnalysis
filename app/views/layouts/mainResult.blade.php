@@ -97,6 +97,7 @@
 		</div>
 	</div>
 
+    @if($countAllTweet>0)
 	<!-- /.row -->
 	<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 	<ul id="tabMenu" class="nav nav-tabs onlythaibold" role="tablist" style="font-size:20px;">
@@ -125,7 +126,12 @@
 	      	@include('result.tweetTimeline')
 	   	</div>
 	</div>
-
+    
+    @else
+        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+            <p class="thaibold" style="font-size:25px;">ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา</p>
+        </div>
+    @endif
 
 @stop
 

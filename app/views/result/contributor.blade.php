@@ -8,17 +8,17 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/Prasong_lert" class="avatar" target="_blank"><img alt="Prasong_lert" src="http://pbs.twimg.com/profile_images/467959978716692481/fcU2IIey_normal.jpeg" /></a>
+					                <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}" class="avatar" target="_blank"><img alt="{{$maxFollowerUser['screenname']}}" src="{{$maxFollowerUser['pic']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
-					            	<div class="huge">32.4k</div>
+					            	<div class="huge">{{number_format($maxFollowerUser['count'])}}</div>
 					                <div>followers</div>
 					            </div>
 					        </div>
 					    </div>				 
-					    <a href="http://twitter.com/Prasong_lert">
+					    <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}">
 					        <div class="panel-footer">
-					            <span class="pull-left">@Prasong_lert</a></span>
+					            <span class="pull-left">{{"@".$maxFollowerUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 					            <div class="clearfix"></div>
 					        </div>
@@ -31,7 +31,7 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/mmppz" class="avatar" target="_blank"><img alt="mmppz" src="http://pbs.twimg.com/profile_images/482577002927366144/xUB3iuIF_normal.jpeg" /></a>
+					                <a href="http://twitter.com/mmppz" class="avatar" target="_blank"><img alt="mmppz" src="http://pbs.twimg.com/profile_images/482577002927366144/xUB3iuIF_normal.jpeg" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
 					            	<div class="huge">12</div>
@@ -54,17 +54,17 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/Tlezwinyu" class="avatar" target="_blank"><img src="http://pbs.twimg.com/profile_images/353858022/sopon_normal.jpg" alt="iiDudes" class="avatar"></a>
+					                <a href="http://twitter.com/{{$maxActivityUser['screenname']}}" class="avatar" target="_blank"><img src="{{$maxActivityUser['pic']}}" alt="{{$maxActivityUser['screenname']}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png';"></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
-					            	<div class="huge">15</div>
+					            	<div class="huge">{{number_format($maxActivityUser['count'])}}</div>
 					                <div>tweets</div>
 					            </div>
 					        </div>
 					    </div>
-					    <a href="http://twitter.com/Tlezwinyu">
+					    <a href="http://twitter.com/{{$maxActivityUser['screenname']}}">
 					        <div class="panel-footer">
-					            <span class="pull-left">@Tlezwinyu</a></span>
+					            <span class="pull-left">{{"@".$maxActivityUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 					            <div class="clearfix"></div>
 					        </div>
