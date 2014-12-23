@@ -2,13 +2,13 @@
 
 class TweetDim extends Eloquent
 {
-	protected $table = 'TweetDim';
+	protected $table = 'tweet_dim';
 	
 	public $timestamps = false;
 
 	public $errors;
 
-	protected $primaryKey = "TweetKey";
+	protected $primaryKey = "tweetkey";
 
 
 	public function scopeSearchByText($query,$searchText){

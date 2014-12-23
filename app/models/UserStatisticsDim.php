@@ -2,13 +2,13 @@
 
 class UserStatisticsDim extends Eloquent
 {
-	protected $table = 'UserStatisticsDim';
+	protected $table = 'user_statistics_dim';
 	
 	public $timestamps = false;
 
 	public $errors;
 
-	protected $primaryKey = "UserStatisticsKey";
+	protected $primaryKey = "userstatisticskey";
 
 
 
