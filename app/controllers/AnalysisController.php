@@ -24,13 +24,13 @@ class AnalysisController extends BaseController {
 					'countAllTweet'=>$countAllTweet];
 			return View::make('layouts.notFound',$result);
 		}
-		$countAllImpression = $tweetResultList->sum('TwitterAnalysisFact.numberOfFollower');
-		$tweetOriginalKeyList = $tweetResultList->select('TwitterAnalysisFact.TweetKey')->distinct()->get();
-		$contributorKeyList = $tweetResultList->select('TwitterAnalysisFact.UserStatisticsKey')->distinct()->get();
-		$sourceKeyList = $tweetResultList->select('TwitterAnalysisFact.SourceKey')->distinct()->get();
-		$countRetweetTime = $tweetResultList->where('TwitterAnalysisFact.ActivityTypeKey','=','3')
-                 ->select('TwitterAnalysisFact.TweetKey', DB::raw('count(*) as totalRetweet'))
-                 ->groupBy('TwitterAnalysisFact.TweetKey')
+		$countAllImpression = $tweetResultList->sum('twitter_analysis_fact.number_of_follower');
+		$tweetOriginalKeyList = $tweetResultList->select('twitter_analysis_fact.tweetkey')->distinct()->get();
+		$contributorKeyList = $tweetResultList->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
+		$sourceKeyList = $tweetResultList->select('twitter_analysis_fact.sourcekey')->distinct()->get();
+		$countRetweetTime = $tweetResultList->where('twitter_analysis_fact.activitytypekey','=','3')
+                 ->select('twitter_analysis_fact.tweetkey', DB::raw('count(*) as totalRetweet'))
+                 ->groupBy('twitter_analysis_fact.tweetkey')
                  ->orderBy('totalRetweet','desc')
                  ->get();
 
@@ -42,18 +42,18 @@ class AnalysisController extends BaseController {
         $i = 0;
         $retweetedCountOfUser = array();
         foreach($countRetweetTime as $aTweet){
-   //      	var_dump($aTweet->TweetKey);
+   //      	var_dump($aTweet->Tweetkey);
 			// return View::make('blank_page');
-        	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->TweetKey);
+        	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->tweetkey);
         	if(get_class($originalTweetFact)!=='TwitterAnalysisFact'){
-        	var_dump($aTweet->TweetKey);
+        	var_dump($aTweet->tweetkey);
 			return View::make('blank_page');}
         	$user = $originalTweetFact->user;
         	$date = $originalTweetFact->date;
         	$time = $originalTweetFact->time;
-        	$source = $originalTweetFact->source->SourceName;
-        	$text = TweetDim::find($aTweet->TweetKey)->text;
-        	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->TweetKey,
+        	$source = $originalTweetFact->source->sourcename;
+        	$text = TweetDim::find($aTweet->tweetkey)->text;
+        	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->tweetkey,
         								'text'=>$text,
         								'date'=>$date,
         								'time'=>$time,
@@ -61,8 +61,8 @@ class AnalysisController extends BaseController {
         								'user'=>$user,
         								'retweetCount' => $aTweet->totalRetweet
 									];
-			if(array_key_exists($user->userID,$retweetedCountOfUser)) $retweetedCountOfUser[$user->userID]['count'] += $aTweet->totalRetweet;
-			else $retweetedCountOfUser[$user->userID] = ['count'=>$aTweet->totalRetweet,'screenname'=>$user->screenname,'pic'=>$user->ProfilePicURL];
+			if(array_key_exists($user->userid,$retweetedCountOfUser)) $retweetedCountOfUser[$user->userid]['count'] += $aTweet->totalRetweet;
+			else $retweetedCountOfUser[$user->userid] = ['count'=>$aTweet->totalRetweet,'screenname'=>$user->screenname,'pic'=>$user->profile_pic_url];
 			$i++;
         }
         $maxRTCount = -1;
@@ -82,35 +82,35 @@ class AnalysisController extends BaseController {
 		$maxFol = -1;
 		$maxUSKey = 0;
 		foreach($contributorKeyList as $aKey){
-			$contributorList[$aKey->UserStatisticsKey] = new ContributorData();	
-			$contributorList[$aKey->UserStatisticsKey]->userStatisticsKey = $aKey->UserStatisticsKey;
-			$followerCount = UserStatisticsDim::find($aKey->UserStatisticsKey)->followers_count;
-			$contributorList[$aKey->UserStatisticsKey]->followerCount = $followerCount;
+			$contributorList[$aKey->userstatisticskey] = new ContributorData();	
+			$contributorList[$aKey->userstatisticskey]->userstatisticskey = $aKey->userstatisticskey;
+			$followerCount = UserStatisticsDim::find($aKey->userstatisticskey)->followers_count;
+			$contributorList[$aKey->userstatisticskey]->followerCount = $followerCount;
 			if($followerCount>$maxFol){
 				$maxFol = $followerCount;
-				$maxUSKey = $aKey->UserStatisticsKey;
+				$maxUSKey = $aKey->userstatisticskey;
 			}
 		}
-		$maxFolUser = DB::table('UserStatisticsDim')->where('UserStatisticsKey',$maxUSKey)
-						->join('UserDim','UserDim.userID','=','UserStatisticsDim.userID')
+		$maxFolUser = DB::table('user_statistics_dim')->where('userstatisticskey',$maxUSKey)
+						->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
 						->first();
-		$maxFollowerUser = ['count'=>$maxFol,'screenname'=>$maxFolUser->screenname,'pic'=>$maxFolUser->ProfilePicURL];
+		$maxFollowerUser = ['count'=>$maxFol,'screenname'=>$maxFolUser->screenname,'pic'=>$maxFolUser->profile_pic_url];
 		// var_dump($topFollower);
 		// return View::make('blank_page');
 		$sourceList = array();
 		foreach($sourceKeyList as $aKey){
-			$sourceList[$aKey->SourceKey] = 0;
+			$sourceList[$aKey->sourcekey] = 0;
 		}
 		$countActTweet = 0;
 		$countActRetweet = 0;
 		$countActReply = 0;
 		foreach($tweetResult as $tweet){
-			$aKey = $tweet->UserStatisticsKey;
-			if($tweet->ActivityTypeKey==1){//tweet
+			$aKey = $tweet->userstatisticskey;
+			if($tweet->activitytypekey==1){//tweet
 				$contributorList[$aKey]->tweetCount+=1; 
 				$countActTweet+=1;
 			} 
-			else if($tweet->ActivityTypeKey==2){//reply
+			else if($tweet->activitytypekey==2){//reply
 				$contributorList[$aKey]->replyCount+=1; 
 				$countActReply+=1;
 			} 
@@ -122,7 +122,7 @@ class AnalysisController extends BaseController {
 				// else $countRetweetTime[$tweet->TweetKey] = 1;
 			}  
 			$contributorList[$aKey]->allActivityCount+=1;
-			$sourceList[$tweet->SourceKey]+=1; 
+			$sourceList[$tweet->sourcekey]+=1; 
 		}
 		// var_dump($contributorList);
 		// return View::make('blank_page');
@@ -130,16 +130,16 @@ class AnalysisController extends BaseController {
 		reset($contributorList);
 		// var_dump($contributorList);
 		// return View::make('blank_page');
-		$maxActUser = DB::table('UserStatisticsDim')->where('UserStatisticsKey',$contributorList[0]->userStatisticsKey)
-						->join('UserDim','UserDim.userID','=','UserStatisticsDim.userID')
+		$maxActUser = DB::table('user_statistics_dim')->where('userstatisticskey',$contributorList[0]->userstatisticskey)
+						->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
 						->first();
-		$maxActivityUser = ['count'=>$contributorList[0]->allActivityCount,'screenname'=>$maxActUser->screenname,'pic'=>$maxActUser->ProfilePicURL];
+		$maxActivityUser = ['count'=>$contributorList[0]->allActivityCount,'screenname'=>$maxActUser->screenname,'pic'=>$maxActUser->profile_pic_url];
 
 		$sourceProportion = array();
 		for($i = 1;$i<=5;$i+=1){
 			if(sizeof($sourceList)==0) break;
 			$maxs = array_keys($sourceList, max($sourceList));
-			$sourceProportion[$i] = ['sourceName'=>SourceDim::find($maxs[0])->SourceName,
+			$sourceProportion[$i] = ['sourceName'=>SourceDim::find($maxs[0])->sourcename,
 									'count'=>max($sourceList)];
 			unset($sourceList[$maxs[0]]);
 		}
@@ -150,41 +150,12 @@ class AnalysisController extends BaseController {
 		// var_dump($tweetResult);
 		// return View::make('blank_page');
 
-		// $tweetInRange = DateDim::searchTweetInRange($input['startDate'],$input['endDate']);
-		// $tweetResultList = array();
-		// if($input['type']=='text'){
-		// 	for($tweetInRange as $tweet){
-		// 		$pos = strpos($tweet->text()->text,$searchText);
-		// 		if($pos!==false) array_push($tweetResultList,$tweet);
-		// 	}
-		// }
-		// else{
-		// 	for($tweetInRange as $tweet){
-		// 		$pos1 = strpos($tweet->user()->name,$searchText);
-		// 		if($pos1!==false) array_push($tweetResultList,$tweet);
-		// 		else{
-		// 			$pos2 = strpos($tweet->user()->screenname,$searchText);
-		// 			if($pos2!==false) array_push($tweetResultList,$tweet);
-		// 		}
-		// 	}
-		// }
-
 		// ----- Statistics Tab -----
 		
 		$countAllContributor = sizeof($contributorList);
 		
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
-		// arsort($countRetweetTime);
-		// $topRetweetedList = array();
-		// foreach($countRetweetTime as $anOriginalTweet){
-		// 	$topRetweetedList[]
-		// }
-  		// var_dump($sourceProportion);
-		// return View::make('blank_page');
-		// var_dump($countActTweet);
-		// var_dump($countActRetweet);
-		// var_dump($countActReply);
-		// return View::make('blank_page');
+
 		$result = ['type'=>$input['type'],
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
