@@ -44,7 +44,7 @@
 	            type: 'pie',
 	            options3d: {
 	                enabled: true,
-	                alpha: 45,
+	                alpha: 0,
 	                beta: 0
 	            }
 	        },
@@ -54,6 +54,12 @@
 	        credits: {
 	            enabled: false
 	        },
+	        labels:{
+	        	style: {
+					left: '100px',
+					top: '100px'
+				}
+	        },
 	        tooltip: {
 	            pointFormat: '<b>{point.y:,.0f} tweets</b><br><b>({point.percentage:.1f}%)</b>'
 	        },
@@ -62,8 +68,12 @@
 	                allowPointSelect: true,
 	                cursor: 'pointer',
 	                depth: 35,
+	                size: '75%',
 	                dataLabels: {
 	                    enabled: true,
+	                    distance: 10,
+	                    x: 0,
+	                    y: 0,
 	                    // format: '{point.name}: {point.percentage:.1f}%'
 	                    format: '{point.name}<br>:{point.y:,.0f}'
 	                }
@@ -92,7 +102,7 @@
 	            type: 'pie',
 	            options3d: {
 	                enabled: true,
-	                alpha: 45,
+	                alpha: 0,
 	                beta: 0
 	            }
 	        },

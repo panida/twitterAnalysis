@@ -2,7 +2,7 @@
 
 class UserDim extends Eloquent
 {
-	protected $table = 'UserDim';
+	protected $table = 'user_dim';
 	
 	public $timestamps = false;
 

@@ -27,7 +27,7 @@
 				                text: null
 				            }
 				        },
-				        yAxis: {
+				        yAxis: [{
 				            min: 0,
 				            title: {
 				                text: 'จำนวนทวีต',
@@ -36,7 +36,17 @@
 				            labels: {
 				                overflow: 'justify'
 				            }
-				        },
+				        },{
+				            min: 0,
+				            title: {
+				                text: 'จำนวนทวีต',
+				                align: 'high'
+				            },
+				            labels: {
+				                overflow: 'justify'
+				            },
+				            opposite: true
+				        }],
 				        tooltip: {
 				            valueSuffix: ' ทวีต'
 				        },

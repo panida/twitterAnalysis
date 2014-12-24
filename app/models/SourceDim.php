@@ -2,13 +2,13 @@
 
 class SourceDim extends Eloquent
 {
-	protected $table = 'SourceDim';
+	protected $table = 'source_dim';
 	
 	public $timestamps = false;
 
 	public $errors;
 
-	protected $primaryKey = "SourceKey";
+	protected $primaryKey = "sourcekey";
 
 
 

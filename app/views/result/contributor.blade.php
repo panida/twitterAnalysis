@@ -8,7 +8,7 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}" class="avatar" target="_blank"><img alt="{{$maxFollowerUser['screenname']}}" src="{{$maxFollowerUser['pic']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';"/></a>
+					                <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}" target="blank" class="avatar" target="_blank"><img alt="{{$maxFollowerUser['screenname']}}" src="{{$maxFollowerUser['pic']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
 					            	<div class="huge">{{number_format($maxFollowerUser['count'])}}</div>
@@ -16,7 +16,7 @@
 					            </div>
 					        </div>
 					    </div>				 
-					    <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}">
+					    <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxFollowerUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -31,7 +31,7 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/{{$maxRetweetedUser['screenname']}}" class="avatar" target="_blank"><img src="{{$maxRetweetedUser['pic']}}" alt="{{$maxRetweetedUser['screenname']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
+					                <a href="http://twitter.com/{{$maxRetweetedUser['screenname']}}" target="blank" class="avatar" target="_blank"><img src="{{$maxRetweetedUser['pic']}}" alt="{{$maxRetweetedUser['screenname']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
 					            	<div class="huge">{{$maxRetweetedUser['count']}}</div>
@@ -39,7 +39,7 @@
 					            </div>
 					        </div>
 					    </div>
-					    <a href="http://twitter.com/mmppz">
+					    <a href="http://twitter.com/mmppz" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxRetweetedUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -54,7 +54,7 @@
 					    <div class="panel-heading">
 					        <div class="row">
 					            <div class="col-xs-3">
-					                <a href="http://twitter.com/{{$maxActivityUser['screenname']}}" class="avatar" target="_blank"><img src="{{$maxActivityUser['pic']}}" alt="{{$maxActivityUser['screenname']}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png';"></a>
+					                <a href="http://twitter.com/{{$maxActivityUser['screenname']}}" target="blank" class="avatar" target="_blank"><img src="{{$maxActivityUser['pic']}}" alt="{{$maxActivityUser['screenname']}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png';"></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
 					            	<div class="huge">{{number_format($maxActivityUser['count'])}}</div>
@@ -62,7 +62,7 @@
 					            </div>
 					        </div>
 					    </div>
-					    <a href="http://twitter.com/{{$maxActivityUser['screenname']}}">
+					    <a href="http://twitter.com/{{$maxActivityUser['screenname']}}" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxActivityUser['screenname']}}</a></span>
 					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

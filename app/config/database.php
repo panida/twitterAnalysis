@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'twitterAnalysis',
+			'database'  => 'twitter_analysis',
 			'username'  => 'root',
 			'password'  => 'root',
 			'charset'   => 'utf8',
