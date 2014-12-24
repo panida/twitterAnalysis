@@ -69,7 +69,7 @@
                                     </p>
                                     <small class="text-muted">
                                         <span class="glyphicon glyphicon-send"></span> {{$anOriginalTweet['source']}}
-                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet['date']->thedate."--".$anOriginalTweet['time']->Time}}
+                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet['detail']->created_at}}
                                     </small>
                                 </div>
                             </li>

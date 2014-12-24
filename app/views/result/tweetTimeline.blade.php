@@ -2,12 +2,13 @@
     <div class="container-fluid top-buffer">
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			
-			<p class="col-lg-2 col-md-2 col-sm-2 thaibold" style="font-size:23px;">แสดงผลเรียงตาม </p>
-            <div class="col-lg-6 col-md-6 col-sm-6">                                
+			
+            <div class="col-lg-8 col-md-8 col-sm-8">                 
+            	<p class="col-lg-3 col-md-3 col-sm-3 thaibold" style="font-size:22px;">แสดงผลเรียงตาม </p>               
                 <ul id="pillMenu" class="nav nav-pills" style="font-family:thaisansneue; font-size:20px;">
-				  	<li class="active"><a href="#time" data-toggle="tab">เวลา</a></li>
-				  	<li><a href="#retweet" data-toggle="tab">จำนวน Retweet</a></li>
-				  	<li><a href="#follower" data-toggle="tab">จำนวน Follower</a></li>
+				  	<li class="active"><a href="#time" data-toggle="tab">Timeline</a></li>
+				  	<li><a href="#retweet" data-toggle="tab">Total Retweets</a></li>
+				  	<li><a href="#follower" data-toggle="tab">Total Follower</a></li>
 				</ul>
             </div>
 
