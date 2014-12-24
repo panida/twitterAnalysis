@@ -2,79 +2,83 @@
 
 class TwitterAnalysisFact extends Eloquent
 {
-	protected $table = 'TwitterAnalysisFact';
+	protected $table = 'twitter_analysis_fact';
 	
 	public $timestamps = false;
 
 	public $errors;
 
 	public static function searchByText($searchText,$startDate,$endDate){
-		return DB::table('TweetDim')
-					->where('TweetDim.text','LIKE','%'.$searchText.'%')
-					->join('TwitterAnalysisFact','TwitterAnalysisFact.TweetKey','=','TweetDim.TweetKey')
-					->join('DateDim','TwitterAnalysisFact.DateKey','=','DateDim.DateKey')
-					->where('DateDim.TheDate','>=',new DateTime($startDate))
-					->where('DateDim.TheDate','<=',new DateTime($endDate));
+		return DB::table('tweet_dim')
+					->where('tweet_dim.text','LIKE','%'.$searchText.'%')
+					->join('twitter_analysis_fact','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')
+					->join('date_dim','twitter_analysis_fact.datekey','=','date_dim.datekey')
+					->where('date_dim.thedate','>=',new DateTime($startDate))
+					->where('date_dim.thedate','<=',new DateTime($endDate));
 
-		// $desiredDate = DB::table('DateDim')
-		// 					->where('DateDim.TheDate','>=',new DateTime($startDate))
-		// 					->where('DateDim.TheDate','<=',new DateTime($endDate));
-		// $desiredTweet= DB::table('TweetDim')
-		// 					->where('TweetDim.text','LIKE','%'.$searchText.'%');
+		// $desiredDate = DB::table('date_dim')
+		// 					->where('date_dim.thedate','>=',new DateTime($startDate))
+		// 					->where('date_dim.thedate','<=',new DateTime($endDate));
+		// $desiredTweet= DB::table('tweet_dim')
+		// 					->where('tweet_dim.text','LIKE','%'.$searchText.'%');
 		// // return $desiredTweet;
-		// return DB::table('TwitterAnalysisFact')
-		// 			->join($desiredTweet,'TwitterAnalysisFact.TweetKey','=','TweetDim.TweetKey')
-		// 			->join($desiredDate,'TwitterAnalysisFact.DateKey','=','DateDim.DateKey');
+		// return DB::table('twitter_analysis_fact')
+		// 			->join($desiredTweet,'twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')
+		// 			->join($desiredDate,'twitter_analysis_fact.datekey','=','date_dim.datekey');
 
 	} 
 
 	public static function searchByUser($searchText,$startDate,$endDate){
-		return DB::table('UserDim')
-					->where('UserDim.name','LIKE','%'.$searchText.'%')
-					->orWhere('UserDim.screenname','LIKE','%'.$searchText.'%')
-					->join('TwitterAnalysisFact','TwitterAnalysisFact.UserKey','=','UserDim.UserKey')
-					->join('DateDim','TwitterAnalysisFact.DateKey','=','DateDim.DateKey')
-					->where('DateDim.TheDate','>=',new DateTime($startDate))
-					->where('DateDim.TheDate','<=',new DateTime($endDate));
-		// return DB::table('TwitterAnalysisFact')
-		// 			->join('UserDim',function($join){
-		// 				$join->on('TwitterAnalysisFact.UserKey','=','UserDim.UserKey')
-		// 					->where('UserDim.name','LIKE','%'.$searchText.'%')
-		// 					->orWhere('UserDim.screenname','LIKE','%'.$searchText.'%');
+		return DB::table('user_dim')
+					->where('user_dim.name','LIKE','%'.$searchText.'%')
+					->orWhere('user_dim.screenname','LIKE','%'.$searchText.'%')
+					->join('twitter_analysis_fact','twitter_analysis_fact.userkey','=','user_dim.userkey')
+					->join('date_dim','twitter_analysis_fact.datekey','=','date_dim.datekey')
+					->where('date_dim.thedate','>=',new DateTime($startDate))
+					->where('date_dim.thedate','<=',new DateTime($endDate));
+		// return DB::table('twitter_analysis_fact')
+		// 			->join('user_dim',function($join){
+		// 				$join->on('twitter_analysis_fact.userkey','=','user_dim.userkey')
+		// 					->where('user_dim.name','LIKE','%'.$searchText.'%')
+		// 					->orWhere('user_dim.screenname','LIKE','%'.$searchText.'%');
 		// 			})
-		// 			->join('DateDim',function($join){
-		// 				$join->on('TwitterAnalysisFact.DateKey','=','DateDim.DateKey')
-		// 					->where('DateDim.TheDate','>=',new DateTime($startDate))
-		// 					->where('DateDim.TheDate','<=',new DateTime($endDate));
+		// 			->join('date_dim',function($join){
+		// 				$join->on('twitter_analysis_fact.datekey','=','date_dim.datekey')
+		// 					->where('date_dim.thedate','>=',new DateTime($startDate))
+		// 					->where('date_dim.thedate','<=',new DateTime($endDate));
 		// 			})
 		// 			->get();
 	} 
-	public static function scopeFindOriginalTweet($query,$TweetKey){
-   //      	var_dump($TweetKey);
+	public static function scopeFindOriginalTweet($query,$tweetkey){
+   //      	var_dump($tweetkey);
 			// return View::make('blank_page');
-		return $query->where('TweetKey',$TweetKey)->where('ActivityTypeKey',1)->orWhere('ActivityTypeKey',2)->first();
-		// return DB::table('TwitterAnalysisFact')->where('TweetKey',$TweetKey)->where('ActivityTypeKey',1)->first();
+		return $query->where('tweetkey',$tweetkey)->where('activitytypekey',1)->orWhere('activitytypekey',2)->first();
+		// return DB::table('twitter_analysis_fact')->where('tweetkey',$tweetkey)->where('activitytypekey',1)->first();
 	}
 
 	//$this->belongsTo(table,local_key,parent_key);
 	public function text(){
-		return $this->belongsTo('TweetDim','TweetKey','TweetKey');
+		return $this->belongsTo('TweetDim','tweetkey','tweetkey');
 	}
 
 	public function user(){
-		return $this->belongsTo('UserDim','UserKey','UserKey');
+		return $this->belongsTo('UserDim','userkey','userkey');
 	}
 
 	public function date(){
-		return $this->belongsTo('DateDim','DateKey','DateKey');
+		return $this->belongsTo('DateDim','datekey','datekey');
 	}
 
 	public function time(){
-		return $this->belongsTo('TimeDim','TimeKey','TimeKey');
+		return $this->belongsTo('TimeDim','timekey','timekey');
+	}
+
+	public function tweetdetail(){
+		return $this->belongsTo('TweetDetailDim','tweetdetailkey','tweetdetailkey');
 	}
 
 	public function source(){
-		return $this->belongsTo('SourceDim','SourceKey','SourceKey');
+		return $this->belongsTo('SourceDim','sourcekey','sourcekey');
 	}
 
 

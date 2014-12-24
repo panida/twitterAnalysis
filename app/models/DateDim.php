@@ -2,7 +2,7 @@
 
 class DateDim extends Eloquent
 {
-	protected $table = 'DateDim';
+	protected $table = 'date_dim';
 	
 	public $timestamps = false;
 
@@ -12,22 +12,17 @@ class DateDim extends Eloquent
 	// AND order_date <= TO_DATE('2003/12/31','yyyy/mm/dd');
 
 	public function scopeSearchTweetInRange($query,$startDate,$endDate){
-		return $query->where('TheDate','>=', date('Y-m-d',$startDate))->where('TheDate','<=', date('Y-m-d',$endDate))->twitterFact();
+		return $query->where('thedate','>=', date('Y-m-d',$startDate))->where('thedate','<=', date('Y-m-d',$endDate))->twitterFact();
 	}
 
 	public function scopeSearchOriginalTweetInRange($query,$startDate,$endDate){
-		return $query->where('TheDate','>=', date('Y-m-d',$startDate))->where('TheDate','<=', date('Y-m-d',$endDate))->originalTwitterFact();
+		return $query->where('thedate','>=', date('Y-m-d',$startDate))->where('thedate','<=', date('Y-m-d',$endDate))->originalTwitterFact();
 	}
 
 	//$this->hasMany('Comment', 'foreign_key', 'local_key');
 	public function twitterFact(){
-		return $this->hasMany('TwitterAnalysisFact','DateKey','DateKey');
+		return $this->hasMany('TwitterAnalysisFact','datekey','datekey');
 	}
-
-	public function originalTwitterFact(){
-		return $this->hasMany('AggOriginalTweetFact','DateKey','DateKey');
-	}
-
 
 
 }
