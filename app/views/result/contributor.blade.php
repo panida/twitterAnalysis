@@ -3,7 +3,9 @@
 		<div class="row thaibold">
             <div class="col-lg-10 col-lg-offset-1">
             	<div class="col-lg-4 col-md-6 col-sm-6">
-            		<h3 style="text-align:center;">มีผู้ติดตามมากที่สุด</h3>
+            		<h3 style="text-align:center;">มีผู้ติดตามมากที่สุด&nbsp;
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                    </h3>
 					<div class="panel panel-red">
 					    <div class="panel-heading">
 					        <div class="row">
@@ -19,14 +21,16 @@
 					    <a href="http://twitter.com/{{$maxFollowerUser['screenname']}}" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxFollowerUser['screenname']}}</a></span>
-					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					            <!-- <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
 					            <div class="clearfix"></div>
 					        </div>
 					    </a>
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-6">
-					<h3 style="text-align:center;">ถูกรีทวีตมากที่สุด</h3>
+					<h3 style="text-align:center;">ถูกรีทวีตมากที่สุด&nbsp;
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                    </h3>
 					<div class="panel panel-primary">
 					    <div class="panel-heading">
 					        <div class="row">
@@ -42,14 +46,16 @@
 					    <a href="http://twitter.com/mmppz" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxRetweetedUser['screenname']}}</a></span>
-					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					            <!-- <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
 					            <div class="clearfix"></div>
 					        </div>
 					    </a>
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-6">
-					<h3 class="onlythaibold" style="text-align:center;">มีส่วนร่วมมากที่สุด</h3>
+					<h3 class="onlythaibold" style="text-align:center;">มีส่วนร่วมมากที่สุด&nbsp;
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                    </h3>
 					<div class="panel panel-yellow">
 					    <div class="panel-heading">
 					        <div class="row">
@@ -65,7 +71,7 @@
 					    <a href="http://twitter.com/{{$maxActivityUser['screenname']}}" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxActivityUser['screenname']}}</a></span>
-					            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					            <!-- <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
 					            <div class="clearfix"></div>
 					        </div>
 					    </a>
@@ -94,7 +100,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด</h3>
                 </div>
-                <div class="panel-body" style="min-height: 425px; max-height: 425px; overflow-y: scroll;">
+                <div class="panel-body" style="min-height: 570px; max-height: 570px; overflow-y: scroll;">
                     <div class="row onlythaibold" style="font-size:20px;">
                     	<p style="margin-left:20px;">เลือกดูผู้ใช้ที่&nbsp;
 	                   		<input id="cb1" type="checkbox" value="1" onchange="valueChanged()" checked /> Tweet&nbsp;
@@ -107,6 +113,7 @@
 					<script type="text/javascript">
 						function valueChanged()
 						{
+							$(window).resize();
 						    var x=0;
 						    if($('#cb1').is(":checked")) x+=1;
 						    x*=2;
@@ -125,521 +132,314 @@
 					</div>
 
 					<div class="table-responsive contributorTable" id="table1" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show only reply</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu1" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#RP0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($RpUserList);$i++)
+								<li role="presentation"><a href="{{'#RP'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($RpUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'RP'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'RP'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
 					<div class="table-responsive contributorTable" id="table2" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show only retweet</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu2" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#RT0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($RtUserList);$i++)
+								<li role="presentation"><a href="{{'#RT'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($RtUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'RT'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'RT'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
 					<div class="table-responsive contributorTable" id="table3" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show retweet and reply</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu3" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#RTRP0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($RtRpUserList);$i++)
+								<li role="presentation"><a href="{{'#RTRP'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($RtRpUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'RTRP'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'RTRP'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
 					<div class="table-responsive contributorTable" id="table4" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show only tweet</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu4" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#TW0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($TwUserList);$i++)
+								<li role="presentation"><a href="{{'#TW'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($TwUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'TW'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'TW'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
 					<div class="table-responsive contributorTable" id="table5" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show tweet and reply</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu5" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#TWRP0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($TwRpUserList);$i++)
+								<li role="presentation"><a href="{{'#TWRP'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($TwRpUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'TWRP'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'TWRP'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
 					<div class="table-responsive contributorTable" id="table6" style="display: none;">
-						<table class="table table-hover table-striped">
-					        <thead>
-					          	<th>&nbsp;</th>
-					          	<th>Tweets</th>
-					          	<th>RTs</th>
-					          	<th>Followers</th>
-					        </thead>
-					        <tbody>					          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/thailand_jp">show tweet and retweet</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>8.5k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-						            <td>2</td>
-						            <td>0</td>
-						            <td>6.6k</td>
-						          </tr>
-						          
-						        <tr>
-						            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-						            <td>1</td>
-						            <td>0</td>
-						            <td>5.1k</td>
-						          </tr>
-						    </tbody>
-						</table>
+						<div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu6" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#TWRT0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($TwRtUserList);$i++)
+								<li role="presentation"><a href="{{'#TWRT'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($TwRtUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'TWRT'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'TWRT'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 					</div>
 
-                    <div class="table-responsive contributorTable" id="table7">
-    	
-				        <table class="table table-hover table-striped">
-					        <thead>
-					          <th>&nbsp;</th>
-					          <th>Tweets</th>
-					          <th>RTs</th>
-					          <th>Followers</th>
-					        </thead>
-					        <tbody>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/thailand_jp">thailand_jp</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>8.5k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/JBGOT7_Thailand">JBGOT7_Thailand</a></td>
-					            <td>2</td>
-					            <td>0</td>
-					            <td>6.6k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/CollectedN">CollectedN</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>5.1k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/weyoyeyo">weyoyeyo</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>2.8k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/iTravel_Channel">iTravel_Channel</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>2.5k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/MINO_THAILAND">MINO_THAILAND</a></td>
-					            <td>4</td>
-					            <td>0</td>
-					            <td>2.3k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/unctadwif">unctadwif</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>2k</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/NEY_Sulli94">NEY_Sulli94</a></td>
-					            <td>4</td>
-					            <td>0</td>
-					            <td>628</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/9af0f531e5684db">9af0f531e5684db</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>603</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/ytrehcod">ytrehcod</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>557</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/PaPinn_z">PaPinn_z</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>490</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/JMinFa_BF">JMinFa_BF</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>484</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/asiapiamrak">asiapiamrak</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>441</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/JRMUKYOOK">JRMUKYOOK</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>381</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/pawind">pawind</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>370</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/aninafatini">aninafatini</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>313</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/pangram_felton">pangram_felton</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>312</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/Esterlify">Esterlify</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>267</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/YalindaL">YalindaL</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>255</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/theOther04">theOther04</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>252</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/ployypkt">ployypkt</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>251</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/NooLekMeePooH">NooLekMeePooH</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>238</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/xxludae">xxludae</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>219</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/viewrinrada">viewrinrada</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>197</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/bun_lucila">bun_lucila</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>153</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/Nnowzs">Nnowzs</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>149</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/Jomjam_XH">Jomjam_XH</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>143</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/Zhinzilla">Zhinzilla</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>139</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/LinneaLarsson16">LinneaLarsson16</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>132</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/curvesinth">curvesinth</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>124</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/KwanMasuda">KwanMasuda</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>121</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/aum_aomam">aum_aomam</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>89</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/goodn_ess">goodn_ess</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>86</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/thetravellers1">thetravellers1</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>85</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/noie_Ruk_bilarn">noie_Ruk_bilarn</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>77</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/Kameyamafuko">Kameyamafuko</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>74</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/NATT0830">NATT0830</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>70</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/ShearinPHR">ShearinPHR</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>36</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/44Melodyth">44Melodyth</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>15</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/be_sugarlove2">be_sugarlove2</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>14</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/chunchow2407">chunchow2407</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>1</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/ventique199">ventique199</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>1</td>
-					          </tr>
-					          
-					        <tr>
-					            <td class="screen_name"><a href="http://twitter.com/RBandhukiul">RBandhukiul</a></td>
-					            <td>1</td>
-					            <td>0</td>
-					            <td>0</td>
-					          </tr>
-					          
-					        </tbody>
-					      </table>
+                    <div class="table-responsive contributorTable" id="table7">    	
+				        <div class="col-lg-12 col-md-12 col-sm-12"> 
+							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<ul id="pillMenu7" class="nav nav-pills" style="position: relative;">
+							  	<li role="presentation" class="active"><a href="#TWRTRP0" data-toggle="tab">1</a></li>
+							  	@for($i=2;$i<=count($TwRtRpUserList);$i++)
+								<li role="presentation"><a href="{{'#TWRTRP'.($i-1)}}" data-toggle="tab">{{$i}}</a></li>
+								@endfor
+							</ul>
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div id="myPillContent" class="tab-content top-buffer">          
+								@foreach($TwRtRpUserList as $key=>$aSmallList)								
+									@if($key==0)
+						        	<div class="tab-pane fade in active" id="{{'TWRTRP'.$key}}">
+						        	@else
+						        	<div class="tab-pane fade" id="{{'TWRTRP'.$key}}">
+							        @endif
+										<table class="table table-hover table-striped">
+									        <thead>
+									          	<th>&nbsp;</th>
+									          	<th>Tweets</th>
+									          	<th>Retweets</th>
+									          	<th>Replies</th>
+									          	<th>Followers</th>
+									        </thead>
+							        		<tbody>		
+									        	@foreach($aSmallList as $aUser)
+										        <tr>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
+										            <td>{{number_format($aUser['tweetCount'])}}</td>
+										            <td>{{number_format($aUser['retweetCount'])}}</td>
+										            <td>{{number_format($aUser['replyCount'])}}</td>
+										            <td>{{number_format($aUser['followerCount'])}}</td>
+										        </tr> 
+										    	@endforeach	  	
+								    		</tbody>
+										</table>
+									</div>								
+								@endforeach
+							</div>
+						</div>
 		  			</div>
                 </div>
             </div>
         </div>
 	</div>
 </div>
-

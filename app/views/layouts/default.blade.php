@@ -9,15 +9,18 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="">
 
-	    <title>TweetThrough</title>
+	    <title>CU.Tweet</title>
 
 	    <!-- Bootstrap Core CSS -->
 	    <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet">
 	    <link href="{{URL::asset('css/bootstrap-switch.css')}}" rel="stylesheet">
+	    <link href="{{URL::asset('css/tabdrop.css')}}" rel="stylesheet">
 	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+		<link href="{{URL::asset('font-awesome-4.1.0/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
 		
 		<style>
 			.navbar-default {
@@ -109,7 +112,11 @@
 	                    <span class="icon-bar"></span>
 	                    <span class="icon-bar"></span>
 	                </button>
-	                <a class="navbar-brand" href="{{URL::to('/')}}">TweetThrough</a>
+	                <a class="navbar-brand" href="{{URL::to('/')}}">
+	                	<!-- <img src="{{URL::to('../img/CUTweet2.png')}}"></img> -->
+	                	<i class="fa fa-twitter fa-fw"></i>
+	                	CU.Tweet
+	                </a>
 	            </div>
 	            <!-- Collect the nav links, forms, and other content for toggling -->
 	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -119,6 +126,12 @@
 	                    </li>
 	                    <li>
 	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">เกี่ยวกับเรา</a>
+	                    </li>
+	                    <li>
+	                        <a href="{{URL::to('/databaseDetail')}}" class="thaibold" style="font-size:20px;">ชุดฐานข้อมูล</a>
+	                    </li>
+	                    <li>
+	                        <a href="{{URL::to('/groupManagement')}}" class="thaibold" style="font-size:20px;">จัดการกลุ่มตัวอย่างวิจัย</a>
 	                    </li>
 	                    <li>
 	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">ติดต่อ</a>
