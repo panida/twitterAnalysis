@@ -15,3 +15,12 @@ Route::get('/', 'HomeController@showWelcome');
 
 Route::post('result', 'AnalysisController@analyse');
 
+Route::get('/databaseDetail', function(){
+	return View::make('management.databaseDetail');
+});
+
+Route::get('/groupManagement', function(){
+	return View::make('management.groupManagement');
+});
+
+

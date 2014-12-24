@@ -20,10 +20,10 @@
         <!-- Jumbotron Header -->
         <div class="col-lg-6">
             <header class="jumbotron hero-spacer">
-                <h1>TweetThrough</h1>
+                <h1>CU.Tweet</h1>
                 <p class="thaibold" style="font-size:30px;">
                     เว็บไซต์ที่คุณสามารถวิเคราะห์การกระจายตัวของทวีตได้อย่างละเอียดรอบด้าน ภายใต้ฐานข้อมูลทวิตเตอร์ที่มี</p>
-                <p><a class="btn btn-primary btn-large">เกี่ยวกับเรา</a>
+                <p><a class="btn btn-primary btn-large" href="{{URL::to('/databaseDetail')}}">ดูชุดฐานข้อมูล</a>
                 </p>
             </header>
         </div>
