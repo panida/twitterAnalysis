@@ -51,12 +51,14 @@ class AnalysisController extends BaseController {
         	$user = $originalTweetFact->user;
         	$date = $originalTweetFact->date;
         	$time = $originalTweetFact->time;
+        	$detail = $originalTweetFact->tweetdetail;
         	$source = $originalTweetFact->source->sourcename;
         	$text = TweetDim::find($aTweet->tweetkey)->text;
         	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->tweetkey,
         								'text'=>$text,
         								'date'=>$date,
         								'time'=>$time,
+        								'detail' =>$detail,
         								'source'=>$source,
         								'user'=>$user,
         								'retweetCount' => $aTweet->totalRetweet

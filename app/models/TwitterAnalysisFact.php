@@ -73,6 +73,10 @@ class TwitterAnalysisFact extends Eloquent
 		return $this->belongsTo('TimeDim','timekey','timekey');
 	}
 
+	public function tweetdetail(){
+		return $this->belongsTo('TweetDetailDim','tweetdetailkey','tweetdetailkey');
+	}
+
 	public function source(){
 		return $this->belongsTo('SourceDim','sourcekey','sourcekey');
 	}

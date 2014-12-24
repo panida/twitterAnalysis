@@ -102,9 +102,10 @@
 	<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 	<ul id="tabMenu" class="nav nav-tabs onlythaibold" role="tablist" style="font-size:20px;">
 		<li class="active"><a href="#statistics" data-toggle="tab">ค่าสถิติเบื้องต้น</a></li>
-		<li><a href="#speedAndLifeCycle" data-toggle="tab">การแพร่กระจายของทวีต</a></li>
+		<li><a href="#speedAndLifeCycle" data-toggle="tab">กราฟข้อมูลทวีต</a></li>
 		<li><a href="#contributor" data-toggle="tab">บุคคลที่เกี่ยวข้อง</a></li>
-        <li><a href="#interestingContributor" data-toggle="tab">กลุ่มบุคคลที่สนใจ</a></li>
+        <li><a href="#interestingContributor" data-toggle="tab">กลุ่มตัวอย่างวิจัย</a></li>
+        <li><a href="#twitterSocialGraph" data-toggle="tab">การแพร่กระจายของทวีต</a></li>
 		<li><a href="#tweetTimeline" data-toggle="tab">รายการทวีตทั้งหมด</a></li>
 	</ul>
 
@@ -121,6 +122,9 @@
 	   	</div>
         <div class="tab-pane fade" id="interestingContributor">
             @include('result.interestingContributor')
+        </div>
+        <div class="tab-pane fade" id="twitterSocialGraph">
+            @include('result.twitterSocialGraph')
         </div>
 	   	<div class="tab-pane fade" id="tweetTimeline">
 	      	@include('result.tweetTimeline')
