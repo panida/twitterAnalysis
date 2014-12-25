@@ -115,30 +115,6 @@ class AnalysisController extends BaseController {
 		}
 	}
 
-	public static function paginateArray($data, $perPage, $page = null)
-	{
-	    $page = $page ? (int) $page * 1 : (isset($_REQUEST['page']) ? (int) $_REQUEST['page'] * 1 : 1);
-	    $offset = ($page * $perPage) - $perPage;
-	    return Paginator::make(array_slice($data, $offset, $perPage, true), count($data), $perPage);
-	}
-
-	protected function paginateResults(array $results, $perPage = 0, $page = 0)
-	{
-		$page = ($page) ? $page : Input::get('page');
-		$perPage = ($perPage) ? $perPage : $this->perPage;
-		$pagedResults = array_chunk($results, $perPage);
-		return Paginator::make($resultPages[$thisPage], count($results), $perPage);
-	}
-
-	public static function paginateData(){
-		$perPage = 10;
-		$currentPage = Input::get('page') - 1;
-		$pagedData = array_slice($TwUserList, $currentPage * $perPage, $perPage);
-		$TwUserListPaginate = Paginator::make($pagedData, count($TwUserList), $perPage);
-	}
-
-
-
 	public function analyse()
 	{
 		$input = Input::all();
@@ -172,26 +148,61 @@ class AnalysisController extends BaseController {
 					'countAllTweet'=>$countAllTweet];
 			return View::make('layouts.notFound',$result);
 		}
-		$countAllImpression = $tweetResultList->sum('twitter_analysis_fact.number_of_follower');
-		$tweetOriginalKeyList = $tweetResultList->select('twitter_analysis_fact.tweetkey')->distinct()->get();
-		$contributorKeyList = $tweetResultList->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
-		$sourceKeyList = $tweetResultList->select('twitter_analysis_fact.sourcekey')->distinct()->get();
-		$countRetweetTime = $tweetResultList->where('twitter_analysis_fact.activitytypekey','=','3')
+
+        						// ->get();
+  //       var_dump($topFollowerList);
+		// return View::make('blank_page');
+		$tweetResultListTemp = clone $tweetResultList; 
+		$tweetResultList = array();
+		for($i=0;$i<=10;$i++) $tweetResultList[$i] = clone $tweetResultListTemp;   
+        
+
+		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
+		$tweetOriginalKeyList = $tweetResultList[2]->select('twitter_analysis_fact.tweetkey')->distinct()->get();
+		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
+		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
+		$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
                  ->select('twitter_analysis_fact.tweetkey', DB::raw('count(*) as totalRetweet'))
                  ->groupBy('twitter_analysis_fact.tweetkey')
                  ->orderBy('totalRetweet','desc')
                  ->get();
+ //                 	var_dump($tweetResultList->get());
+	// return View::make('blank_page');
+        $topFollowerList = $tweetResultList[6]
+        		->orderBy('twitter_analysis_fact.number_of_follower','desc')
+        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
+        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
+        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
+        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
+        		->where('original_fact.activitytypekey','<',3)        		
+        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+        		->select('user_dim.screenname as real_screenname',
+        			'source_dim.sourcename as real_sourcename',
+        			'tweet_detail_dim.created_at as real_created_at',
+        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
+        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
+        			'twitter_analysis_fact.tweetkey as real_tweetkey',
+        			'tweet_original.text as original_text',
+        			'tweet_detail_original.created_at as original_created_at',
+        			'source_original.sourcename as original_sourcename',
+        			'user_original.name as original_name',
+        			'user_original.screenname as original_screenname',
+        			'user_original.profile_pic_url as original_pic')
+        		->get();
 
-  //       var_dump($countAllActivity);
-		// return View::make('blank_page');
-        //cannot join itself -- duplicate field
+
+   //      		        		        		;echo "<pre>";
+   //   		var_dump($topFollowerList->get());
+			// echo "</pre>";
+			// return View::make('blank_page');
 
         $topRetweetedList = array();
         $i = 0;
         $retweetedCountOfUser = array();
         foreach($countRetweetTime as $aTweet){
-   //      	var_dump($aTweet->Tweetkey);
-			// return View::make('blank_page');
         	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->tweetkey);
         	if(get_class($originalTweetFact)!=='TwitterAnalysisFact'){
         	var_dump($aTweet->tweetkey);
@@ -267,9 +278,6 @@ class AnalysisController extends BaseController {
 			else{//retweet
 				$contributorList[$aKey]->retweetCount+=1;
 				$countActRetweet+=1;
-				// if(array_key_exists($tweet->TweetKey, $countRetweetTime))
-				// 	$countRetweetTime[$tweet->TweetKey]+=1;
-				// else $countRetweetTime[$tweet->TweetKey] = 1;
 			}  
 			$contributorList[$aKey]->allActivityCount+=1;
 			$sourceList[$tweet->sourcekey]+=1; 
@@ -348,8 +356,6 @@ class AnalysisController extends BaseController {
 			$sourceProportion[6] = ['sourceName'=>'Others',
 									'count'=>array_sum($sourceList)];
 		}
-		// var_dump($tweetResult);
-		// return View::make('blank_page');
 
 		// ----- Statistics Tab -----
 		
@@ -368,6 +374,7 @@ class AnalysisController extends BaseController {
 					'sourceProportion'=>$sourceProportion,
 					'topRetweetedList'=>$topRetweetedList,
 					'top10RetweetedList'=>$top10RetweetedList,
+					'topFollowerList'=>$topFollowerList,
 					'maxFollowerUser'=>$maxFollowerUser,
 					'maxRetweetedUser' =>$maxRetweetedUser,
 					'maxActivityUser'=>$maxActivityUser,
