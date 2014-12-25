@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'ActivityTypeDim' => $baseDir . '/app/models/ActivityTypeDim.php',
-    'AggOriginalTweetFact' => $baseDir . '/app/models/AggOriginalTweetFact.php',
     'AnalysisController' => $baseDir . '/app/controllers/AnalysisController.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
@@ -1136,6 +1135,7 @@ return array(
     'Symfony\\Component\\Filesystem\\Exception\\IOException' => $vendorDir . '/symfony/filesystem/Symfony/Component/Filesystem/Exception/IOException.php',
     'Symfony\\Component\\Filesystem\\Exception\\IOExceptionInterface' => $vendorDir . '/symfony/filesystem/Symfony/Component/Filesystem/Exception/IOExceptionInterface.php',
     'Symfony\\Component\\Filesystem\\Filesystem' => $vendorDir . '/symfony/filesystem/Symfony/Component/Filesystem/Filesystem.php',
+    'Symfony\\Component\\Filesystem\\LockHandler' => $vendorDir . '/symfony/filesystem/Symfony/Component/Filesystem/LockHandler.php',
     'Symfony\\Component\\Filesystem\\Tests\\FilesystemTestCase' => $vendorDir . '/symfony/filesystem/Symfony/Component/Filesystem/Tests/FilesystemTestCase.php',
     'Symfony\\Component\\Finder\\Adapter\\AbstractAdapter' => $vendorDir . '/symfony/finder/Symfony/Component/Finder/Adapter/AbstractAdapter.php',
     'Symfony\\Component\\Finder\\Adapter\\AbstractFindAdapter' => $vendorDir . '/symfony/finder/Symfony/Component/Finder/Adapter/AbstractFindAdapter.php',
@@ -1290,6 +1290,7 @@ return array(
     'Symfony\\Component\\HttpKernel\\EventListener\\ProfilerListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/ProfilerListener.php',
     'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/ResponseListener.php',
     'Symfony\\Component\\HttpKernel\\EventListener\\RouterListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/RouterListener.php',
+    'Symfony\\Component\\HttpKernel\\EventListener\\SaveSessionListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/SaveSessionListener.php',
     'Symfony\\Component\\HttpKernel\\EventListener\\SessionListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/SessionListener.php',
     'Symfony\\Component\\HttpKernel\\EventListener\\StreamedResponseListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/StreamedResponseListener.php',
     'Symfony\\Component\\HttpKernel\\EventListener\\TestSessionListener' => $vendorDir . '/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/TestSessionListener.php',
@@ -1573,6 +1574,7 @@ return array(
     'System_SSH_Agent_Identity' => $vendorDir . '/phpseclib/phpseclib/phpseclib/System/SSH/Agent.php',
     'TestCase' => $baseDir . '/app/tests/TestCase.php',
     'TimeDim' => $baseDir . '/app/models/TimeDim.php',
+    'TweetDetailDim' => $baseDir . '/app/models/TweetDetailDim.php',
     'TweetDim' => $baseDir . '/app/models/TweetDim.php',
     'TwitterAnalysisFact' => $baseDir . '/app/models/TwitterAnalysisFact.php',
     'User' => $baseDir . '/app/models/User.php',
