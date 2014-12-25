@@ -13,7 +13,7 @@
 
 Route::get('/', 'HomeController@showWelcome');
 
-Route::post('result', 'AnalysisController@analyse');
+Route::any('result', 'AnalysisController@analyse');
 
 Route::get('/databaseDetail', function(){
 	return View::make('management.databaseDetail');
