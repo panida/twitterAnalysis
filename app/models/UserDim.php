@@ -8,6 +8,10 @@ class UserDim extends Eloquent
 
 	public $errors;
 
+	public function groups(){
+		return $this->belongsToMany('UserGroup','GroupUserMapping','userkey','groupid');
+	}
+
 
 
 
