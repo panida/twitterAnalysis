@@ -26,7 +26,12 @@
 				            text: ''
 				        },
 				        xAxis: {
-				            categories: ['นักการเมือง', 'สื่อมวลชน', 'นักวิชาการ', 'สำนักข่าว', 'บุคคลทั่วไป'],
+				            categories: [
+				            	@foreach($totalGroupDetail as $aGroup)
+				            		{{"'".$aGroup['groupname']."',"}}
+				            	@endforeach
+				            	],
+				            	// ['นักการเมือง', 'สื่อมวลชน', 'นักวิชาการ', 'สำนักข่าว', 'บุคคลทั่วไป'],
 				            title: {
 				                text: null
 				            }
@@ -67,17 +72,34 @@
 				        },
 				        series: [{
 				            name: 'Tweet',
-				            data: [2507, 331, 405, 203, 2]
+				            data: [
+				            	@foreach($totalGroupDetail as $aGroup)
+				            		{{$aGroup['tweetCount'].","}}
+				            	@endforeach
+				            ]
+				            // [2507, 331, 405, 203, 2]
 				        }, {
 				            name: 'Retweet',
-				            data: [133, 156, 947, 408, 6]
+				            data: [
+				            	@foreach($totalGroupDetail as $aGroup)
+				            		{{$aGroup['retweetCount'].","}}
+				            	@endforeach
+				            ]
+				            // [133, 156, 947, 408, 6]
 				        }, {
 				            name: 'Reply',
-				            data: [973, 914, 312, 732, 34]
-				        }, {
-				            name: 'Retweeted',
-				            data: [1204, 166, 512, 321, 12]
-				        }]
+				            data: [
+				            	@foreach($totalGroupDetail as $aGroup)
+				            		{{$aGroup['replyCount'].","}}
+				            	@endforeach
+				            ]
+				            // [973, 914, 312, 732, 34]
+				        }
+				        // , {
+				        //     name: 'Retweeted',
+				        //     data: [1204, 166, 512, 321, 12]
+				        // }
+				        ]
 				    });
 				});
 			</script>
@@ -147,22 +169,30 @@
 				        credits: {
 				            enabled: false
 				        },
-				        series: [{
-				            name: 'นักการเมือง',
-				            data: [2507, 331, 405]
-				        }, {
-				            name: 'สื่อมวลชน',
-				            data: [133, 156, 947]
-				        }, {
-				            name: 'นักวิชาการ',
-				            data: [973, 914, 312]
-				        }, {
-				            name: 'สำนักข่าว',
-				            data: [1204, 166, 512]
-				        }, {
-				            name: 'บุคคลทั่วไป',
-				            data: [12, 111, 432]
-				        }]
+				        series: [
+				        @foreach($totalGroupDetail as $aGroup)
+				        	{
+				        		name: {{"'".$aGroup['groupname']."',"}}
+				        		data: [{{$aGroup['tweetCount']}},{{$aGroup['retweetCount']}},{{$aGroup['replyCount']}}]
+				        	},
+				        @endforeach
+				        // {
+				        //     name: 'นักการเมือง',
+				        //     data: [2507, 331, 405]
+				        // }, {
+				        //     name: 'สื่อมวลชน',
+				        //     data: [133, 156, 947]
+				        // }, {
+				        //     name: 'นักวิชาการ',
+				        //     data: [973, 914, 312]
+				        // }, {
+				        //     name: 'สำนักข่าว',
+				        //     data: [1204, 166, 512]
+				        // }, {
+				        //     name: 'บุคคลทั่วไป',
+				        //     data: [12, 111, 432]
+				        // }
+				        ]
 				    });
 				});
 			</script>

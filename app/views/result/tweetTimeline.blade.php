@@ -22,265 +22,46 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-
-			                    	<li class="left clearfix">
-			                    		<p style="font-family:thaisansneue; color:rgb(50,150,50); font-size:18px;"><i class="glyphicon glyphicon-calendar"></i>พฤหัสบดีที่ 18 ธันวาคม 2557</p>
-			                    	</li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/ipd69" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/521337632169553921/A8IMmV6E_normal.jpeg" alt="ipd69" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/ipd69" class="tweet_screen_name2 screen_name">พี่ดี้ลำเอียง</a></strong> 
-			                                    <span style="color:#AAAAAA;">@ipd69</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 10 retweets                                        
+			                    	{{-- */$nowdate = NULL;/* --}}
+			                		@foreach($timelineList as $key=>$aTweet)
+			                			@if($key==0 or $nowdate!==$aTweet->thedate)
+			                			{{-- */$nowdate = $aTweet->thedate;/* --}}
+			                			<li class="left clearfix">
+			                    			<p style="font-family:thaisansneue; color:rgb(50,150,50); font-size:18px;"><i class="glyphicon glyphicon-calendar"></i>{{$aTweet->nameday." ".$aTweet->date." ".$aTweet->month." ".$aTweet->year}}</p>
+			                    		</li>
+			                    		@endif
+			                            <li class="left clearfix">
+			                                <span class="chat-img pull-left">
+			                                    <a href="http://twitter.com/{{$aTweet->original_screenname}}" target="blank" class="tweet_avatar2">
+			                                        <img src="{{$aTweet->original_pic}}" alt="{{$aTweet->original_screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
+			                                    </a>
+			                                </span>
+			                                <div class="chat-body clearfix">
+			                                    <div class="header">
+			                                        <strong class="primary-font"><a href="http://twitter.com/{{$aTweet->original_screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$aTweet->original_name}}</a></strong> 
+			                                        <span style="color:#AAAAAA;">{{"@".$aTweet->original_screenname}}</span>
+			                                    </div>
+			                                    <p>
+			                                        {{$aTweet->original_text}}
+			                                    </p>
+			                                    <small class="text-muted">
+			                                        <span class="glyphicon glyphicon-send"></span> {{$aTweet->original_sourcename}}
+			                                        <i class="fa fa-clock-o fa-fw"></i> {{$aTweet->original_created_at}}
 			                                    </small>
+			                                    @if($aTweet->real_activitytypekey==3)
+			                                    <br>
+			                                    <small class="text-muted">
+			                                    	<i class="fa fa-retweet fa-fw"></i> Retweeted by <a href="http://twitter.com/{{$aTweet->real_screenname}}" target="blank" class="tweet_screen_name2 screen_name" style="color:rgb(100,100,100)">{{$aTweet->real_screenname}}</a>
+				                                	<span class="glyphicon glyphicon-send"></span> {{$aTweet->real_sourcename}}
+				                                    <i class="fa fa-clock-o fa-fw"></i> {{$aTweet->real_created_at}}                                 
+					                            </small>
+					                            @endif
 			                                </div>
-			                                <p>
-			                                    กูไม่เคยเห็นการทำ "รัฐประหาร" แบบนี้ในโลกนี้! #นี่กูพูดจริงๆ  <a href="http://t.co/qu0RcBP7IJ" rel="nofollow">http://t.co/qu0RcBP7IJ</a>
-			                                </p>
-			                                <small class="text-muted">
-			                                	<span class="glyphicon glyphicon-send"></span> Android
-			                                    <i class="fa fa-clock-o fa-fw"></i> 4 months ago
-			                                </small>
-			                            </div>
-			                        </li>
-			                        <li class="left clearfix">            	
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                            	<div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                	<span class="glyphicon glyphicon-send"></span> Web
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>                          
-			                                <br>
-			                                <small class="text-muted">
-		                                    	<i class="fa fa-retweet fa-fw"></i> Retweeted by CpPanida
-			                                	<span class="glyphicon glyphicon-send"></span> iPhone
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 2 hours ago                                    
-				                            </small>
-			                            </div>
-			                        </li>
+			                            </li>
+			                        @endforeach	
 
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/iiDudes" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/470578977975709696/mW4CDI7S_normal.jpeg" alt="iiDudes" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"> <a href="http://twitter.com/iiDudes" class="tweet_screen_name2 screen_name">นป.นักดมกาวในตำนาน</a></strong>
-			                                    <span style="color:#AAAAAA;">@iiDudes</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 7 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    เค้าไม่ได้รังเกียจไทย
-
-			                                    แงงงงงงงงง
-
-			                                    เค้าเกลียดการยึดอำนาจ เค้าเกลียดการรัฐประหาร เค้าเกลียดเผด็จการ แงงงงงง
-			                                </p>
-			                                <small class="text-muted">
-			                                	<span class="glyphicon glyphicon-send"></span> iPhone
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-			                        
-			                        <li class="left clearfix">
-			                    		<p style="font-family:thaisansneue; color:rgb(50,150,50); font-size:18px;"><i class="glyphicon glyphicon-calendar"></i>พุธที่ 17 ธันวาคม 2557</p>
-			                    	</li>
-			                    	
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">			                        	
-			                    		<p style="font-family:thaisansneue; color:rgb(50,150,50); font-size:18px;"><i class="glyphicon glyphicon-calendar"></i>อังคารที่ 16 ธันวาคม 2557</p>
-			                    	</li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
-
-			                        <li class="left clearfix">
-			                            <span class="chat-img pull-left">
-			                                <a href="http://twitter.com/Khunpone" class="tweet_avatar2">
-			                                    <img src="http://pbs.twimg.com/profile_images/948274723/as015069_normal.jpg" alt="Khunpone" class="avatar">
-			                                </a>
-			                            </span>
-			                            <div class="chat-body clearfix">
-			                                <div class="header">
-			                                    <strong class="primary-font"><a href="http://twitter.com/Khunpone" class="tweet_screen_name2 screen_name">Teerapong Ponesiri</a></strong>
-			                                    <span style="color:#AAAAAA;">@Khunpone</span>
-			                                    <small class="pull-right text-muted">
-			                                        <i class="fa fa-retweet fa-fw"></i> 9 retweets
-			                                    </small>
-			                                </div>
-			                                <p>
-			                                    สื่อเยอรมันเรียกลุงว่าผู้นำรัฐประหาร EUไม่ยอมจัดประชุมทวิภาคีด้วย สรุป รัฐประหารไทยทำเศรษฐกิจทรุด และจะเลวร้ายลงอีก ..หลอกกันได้ไม่นานหรอก
-			                                </p>
-			                                <small class="text-muted">
-			                                    <i class="fa fa-clock-o fa-fw"></i> about 9 hours ago                                    
-			                                </small>
-			                            </div>
-			                        </li>
 			                    </ul>
-			                    <!-- /.panel .chat-panel -->
-			                    <div class="text-right">
-			                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-			                    </div>
+			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
 			            </div>
 			        </div>
@@ -323,10 +104,7 @@
 			                            </li>
 			                        @endforeach
 			                    </ul>
-			                    <!-- /.panel .chat-panel -->
-			                    <div class="text-right">
-			                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-			                    </div>
+			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
 			            </div>
 			        </div>
@@ -379,10 +157,7 @@
 			                            </li>
 			                        @endforeach			                        
 			                    </ul>
-			                    <!-- /.panel .chat-panel -->
-			                    <div class="text-right">
-			                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-			                    </div>
+			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
 			            </div>
 			        </div>
