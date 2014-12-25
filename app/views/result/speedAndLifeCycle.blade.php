@@ -27,7 +27,6 @@ $(function() {
 		
 		function computeTickInterval(xMin, xMax) {
 			var zoomRange = xMax - xMin;
-			
 			if (zoomRange <= 2)
 				currentTickInterval = 0.5;
 			if (zoomRange < 20)
@@ -64,12 +63,395 @@ $(function() {
 			chart3.xAxis[0].setExtremes(null, null);
 		}
 
+		function createAllactivityOption(dataForSerie, tickIntervalInput){
+			var option = {
+				chart: {
+					renderTo: 'allActivityGraph',
+					type: 'area',
+					zoomType: 'x',
+					isZoomed: false,
+					width: 1000,
+					height: 550
+				},
+				credits: {
+					enabled : false
+				},
+				title: {
+					text: 'กิจกรรมทั้งหมด'
+				},
+				scrollbar: {
+					enabled: false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'วัน-เวลา'
+					},
+					tickInterval: tickIntervalInput,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true,
+					events:{
+						afterSetExtremes:function(){
+
+							if (!this.chart.options.chart.isZoomed)
+							{                                         
+								var xMin = this.chart.xAxis[0].min;
+								var xMax = this.chart.xAxis[0].max;
+
+								chart2.options.chart.isZoomed = true;
+								chart3.options.chart.isZoomed = true;
+								chart2.xAxis[0].setExtremes(xMin, xMax, true);
+
+								chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								chart2.options.chart.isZoomed = false;
+								chart3.options.chart.isZoomed = false;
+							}
+						}
+					}
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'จำนวนทวีต'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				tooltip: {
+					formatter: function() {
+						return '' + this.x + ' km, ' + this.y + ' km';
+					}
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: "horizontal",
+					verticalAlign: "top",
+					borderWidth: 1,
+					y: 30
+					
+				},
+				plotOptions: {
+					scatter: {
+						marker: {
+							radius: 5,
+							states: {
+								hover: {
+									enabled: true,
+									lineColor: 'rgb(100,100,100)'
+								}
+							}
+						},
+						states: {
+							hover: {
+								marker: {
+									enabled: false
+								}
+							}
+						}
+					}
+				},
+				series: [{
+					name: 'Group 1',
+					color: 'rgba(150, 150, 255, 0.5)',
+					data: dataForSerie,
+					fillColor : {
+						linearGradient : {
+							x1: 0,
+							y1: 0,
+							x2: 0,
+							y2: 1
+						},
+						stops : [
+							[0, Highcharts.getOptions().colors[0]],
+							[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+						]
+					}
+				}]
+			}
+			return option;
+		}
+
+		function createTypeActivityOption(dataForSerie, tickIntervalInput){
+			var option = {
+				chart: {
+					renderTo: 'eachActivityGraph',
+					type: 'line',
+					zoomType: 'x',
+					isZoomed: false,
+					width: 1000,
+					height: 550
+				},
+				credits: {
+					enabled : false
+				},
+				title: {
+					text: 'ประเภทของการทวีต'
+				},
+				scrollbar: {
+					enabled: false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'วัน-เวลา'
+					},
+					tickInterval: tickIntervalInput,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true,
+					events:{
+						afterSetExtremes:function(){
+
+							if (!this.chart.options.chart.isZoomed)
+							{                                         
+								var xMin = this.chart.xAxis[0].min;
+								var xMax = this.chart.xAxis[0].max;
+
+								chart1.options.chart.isZoomed = true;
+								chart3.options.chart.isZoomed = true;
+								chart1.xAxis[0].setExtremes(xMin, xMax, true);
+
+								chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								chart1.options.chart.isZoomed = false;
+								chart3.options.chart.isZoomed = false;
+							}
+						}
+					}
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'จำนวนทวีต'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				tooltip: {
+					formatter: function() {
+						return '' + this.x + ' km, ' + this.y + ' km';
+					}
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: "horizontal",
+					verticalAlign: "top",
+					borderWidth: 1,
+					y: 30
+					
+				},
+				plotOptions: {
+					scatter: {
+						marker: {
+							radius: 5,
+							states: {
+								hover: {
+									enabled: true,
+									lineColor: 'rgb(100,100,100)'
+								}
+							}
+						},
+						states: {
+							hover: {
+								marker: {
+									enabled: false
+								}
+							}
+						}
+					}
+				},
+				series: [{
+						name: 'Tweet',
+						data: dataForSerie[0],
+					},
+					{
+						name: 'Reply',
+						data: dataForSerie[1],
+					},
+					{
+						name: 'Retweet',
+						data: dataForSerie[2],
+					}
+				]
+			}
+			return option;
+		}
+
+		function createTypeApplicationOption(dataForSerie, tickIntervalInput){
+			var option = {
+				chart: {
+					renderTo: 'applicationGraph',
+					type: 'line',
+					zoomType: 'x',
+					isZoomed: false,
+					width: 1000,
+					height: 550
+				},
+				credits: {
+					enabled : false
+				},
+				title: {
+					text: 'ประเภทของแอพพลิเคชั่น'
+				},
+				scrollbar: {
+					enabled: false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'วัน-เวลา'
+					},
+					tickInterval: tickIntervalInput,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true,
+					events:{
+						afterSetExtremes:function(){
+
+							if (!this.chart.options.chart.isZoomed)
+							{                                         
+								var xMin = this.chart.xAxis[0].min;
+								var xMax = this.chart.xAxis[0].max;
+
+								chart1.options.chart.isZoomed = true;
+								chart3.options.chart.isZoomed = true;
+								chart1.xAxis[0].setExtremes(xMin, xMax, true);
+
+								chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								chart1.options.chart.isZoomed = false;
+								chart3.options.chart.isZoomed = false;
+							}
+						}
+					}
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'จำนวนทวีต'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				tooltip: {
+					formatter: function() {
+						return '' + this.x + ' km, ' + this.y + ' km';
+					}
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: "horizontal",
+					verticalAlign: "top",
+					borderWidth: 1,
+					y: 30
+					
+				},
+				plotOptions: {
+					scatter: {
+						marker: {
+							radius: 5,
+							states: {
+								hover: {
+									enabled: true,
+									lineColor: 'rgb(100,100,100)'
+								}
+							}
+						},
+						states: {
+							hover: {
+								marker: {
+									enabled: false
+								}
+							}
+						}
+					}
+				},
+				series: [{
+						name: 'Web',
+						data: dataForSerie[0],
+					},
+					{
+						name: 'Mobile',
+						data: dataForSerie[1],
+					}
+				]
+			}
+			return option;
+		}
+
 		function prepareHourData(){
 
 		}
 
 		function prepareDayData(){
+			//----------------------------------- All ------------------------------------------------------
+			var dayDataForAll = [];
+			@foreach($tweetDay[0] as $tweetByDay)
+				dayDataForAll.push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			dayData.push(dayDataForAll);
+			
+			//----------------------------------- ActivityType ------------------------------------------------------
+			var dayDataForType = [[],[],[]];
+			
+			@foreach($tweetDay[1][0] as $tweetByDay)
+				dayDataForType[0].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetDay[1][1] as $tweetByDay)
+				dayDataForType[1].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetDay[1][2] as $tweetByDay)
+				dayDataForType[2].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			dayData.push(dayDataForType);
 
+			//----------------------------------- Application ------------------------------------------------------
+			var dayDataForApplication = [[],[]];
+			@foreach($tweetDay[2][0] as $tweetByDay)
+				dayDataForApplication[0].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetDay[2][1] as $tweetByDay)
+				dayDataForApplication[1].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			dayData.push(dayDataForApplication);
 		}
 
 		function prepareWeekData(){
@@ -85,413 +467,24 @@ $(function() {
 			prepareDayData();
 			prepareWeekData();
 			prepareMonthData();
+			dayOptions.push(createAllactivityOption(dayData[0], 1000*3600*24));
+			dayOptions.push(createTypeActivityOption(dayData[1], 1000*3600*24));
+			dayOptions.push(createTypeApplicationOption(dayData[2], 1000*3600*24));
+
 		}
 
 		$(document).ready(function() {
+			var option1;
+			var option2;
+			var option3;
 			prepareData();
 
 			var myPlotLineId = "myPlotLine";
-			chart1 = new Highcharts.StockChart(
-				{
-					chart: {
-						renderTo: 'allActivityGraph',
-						type: 'line',
-						zoomType: 'x',
-						isZoomed: false,
-						width: 1000 ,
-						height: 500 
+			chart1 = new Highcharts.StockChart(dayOptions[0]);
 
-					},
-					credits: {
-						enabled : false
-					},
-					title: {
-						text: 'Height Versus Weight'
-					},
-					subtitle: {
-						text: 'Source: Notional Test Data'
-					},
-					xAxis: {
-						type: 'datetime',
-							dateTimeLabelFormats: { // don't display the dummy year
-							month: '%e. %b',
-							year: '%b'
-						},
-						title: {
-							text: 'Date'
-						},
-						
-						startOnTick: true,
-						endOnTick: true,
-						showLastLabel: true,
-						events:{
+			chart2 = new Highcharts.StockChart(dayOptions[1]);
 
-							afterSetExtremes:function(){
-
-								if (!this.chart.options.chart.isZoomed)
-								{                                         
-									var xMin = this.chart.xAxis[0].min;
-									var xMax = this.chart.xAxis[0].max;
-
-									var zmRange = computeTickInterval(xMin, xMax);
-									chart1.xAxis[0].options.tickInterval =zmRange;
-									chart1.xAxis[0].isDirty = true;
-									chart2.xAxis[0].options.tickInterval = zmRange;
-									chart2.xAxis[0].isDirty = true;
-									chart3.xAxis[0].options.tickInterval = zmRange;
-									chart3.xAxis[0].isDirty = true;
-
-									chart2.options.chart.isZoomed = true;
-									chart3.options.chart.isZoomed = true;
-									chart2.xAxis[0].setExtremes(xMin, xMax, true);
-
-									chart3.xAxis[0].setExtremes(xMin, xMax, true);
-									chart2.options.chart.isZoomed = false;
-									chart3.options.chart.isZoomed = false;
-								}
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							text: 'Weight (kg)'
-						}
-					},
-					tooltip: {
-						formatter: function() {
-							return '' + this.x + ' km, ' + this.y + ' km';
-						}
-					},
-					legend: {
-						enabled: true,
-						floating:true,
-						align: 'center',
-						layout: "horizontal",
-						verticalAlign: "bottom"
-					},
-					plotOptions: {
-						scatter: {
-							marker: {
-								radius: 5,
-								states: {
-									hover: {
-										enabled: true,
-										lineColor: 'rgb(100,100,100)'
-									}
-								}
-							},
-							states: {
-								hover: {
-									marker: {
-										enabled: false
-									}
-								}
-							}
-						}
-					},
-					series: [{
-						name: 'Group 1',
-						color: 'rgba(223, 83, 83, .5)',
-						data: [[Date.UTC(1970,  9, 27), 0   ],
-						[Date.UTC(1970, 10, 10), 0.6 ],
-						[Date.UTC(1970, 10, 18), 0.7 ],
-						[Date.UTC(1970, 11,  2), 0.8 ],
-						[Date.UTC(1970, 11,  9), 0.6 ],
-						[Date.UTC(1970, 11, 16), 0.6 ],
-						[Date.UTC(1970, 11, 28), 0.67],
-						[Date.UTC(1971,  0,  1), 0.81],
-						[Date.UTC(1971,  0,  8), 0.78],
-						[Date.UTC(1971,  0, 12), 0.98],
-						[Date.UTC(1971,  0, 27), 1.84],
-						[Date.UTC(1971,  1, 10), 1.80],
-						[Date.UTC(1971,  1, 18), 1.80],
-						[Date.UTC(1971,  1, 24), 1.92],
-						[Date.UTC(1971,  2,  4), 2.49],
-						[Date.UTC(1971,  2, 11), 2.79],
-						[Date.UTC(1971,  2, 15), 2.73],
-						[Date.UTC(1971,  2, 25), 2.61],
-						[Date.UTC(1971,  3,  2), 2.76],
-						[Date.UTC(1971,  3,  6), 2.82],
-						[Date.UTC(1971,  3, 13), 2.8 ],
-						[Date.UTC(1971,  4,  3), 2.1 ],
-						[Date.UTC(1971,  4, 26), 1.1 ],
-						[Date.UTC(1971,  5,  9), 0.25],
-						[Date.UTC(1971,  5, 12), 0   ]]
-
-					}]
-
-				}
-				
-			);
-
-			chart2 = new Highcharts.StockChart(
-				{
-					chart: {
-						renderTo: 'eachActivityGraph',
-						type: 'line',
-						zoomType: 'x',
-							//x axis only
-						isZoomed:false,
-						width: 1000 ,
-						height: 500 
-							/*events: {
-								selection: function(event) { //this function should zoom chart1, chart2, chart3 according to selected range
-									controllingChart = "chart2";
-									setTickInterval(event);
-								}
-							}*/
-					},
-					credits: {
-						enabled : false
-					},
-					title: {
-						text: 'Height Versus Weight'
-					},
-					subtitle: {
-						text: 'Source: Notional Test Data'
-					},
-					xAxis: {
-						type: 'datetime',
-							dateTimeLabelFormats: { // don't display the dummy year
-							month: '%e. %b',
-							year: '%b'
-						},
-						title: {
-							text: 'Date'
-						},
-						startOnTick: true,
-						endOnTick: true,
-						showLastLabel: true,
-						events: {
-							afterSetExtremes: function() {
-								if (!this.chart.options.chart.isZoomed) 
-								{
-									var xMin = this.chart.xAxis[0].min;
-									var xMax = this.chart.xAxis[0].max;
-									var zmRange = computeTickInterval(xMin, xMax);
-									chart1.xAxis[0].options.tickInterval =zmRange;
-									chart1.xAxis[0].isDirty = true;
-									chart2.xAxis[0].options.tickInterval = zmRange;
-									chart2.xAxis[0].isDirty = true;
-									chart3.xAxis[0].options.tickInterval = zmRange;
-									chart3.xAxis[0].isDirty = true;
-
-
-									chart1.options.chart.isZoomed = true;
-									chart3.options.chart.isZoomed = true;
-									chart1.xAxis[0].setExtremes(xMin, xMax, true);
-
-									chart3.xAxis[0].setExtremes(xMin, xMax, true);
-									chart1.options.chart.isZoomed = false;
-									chart3.options.chart.isZoomed = false;
-
-								}
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							text: 'Weight (kg)'
-						}
-					},
-					tooltip: {
-						formatter: function() {
-							return '' + this.x + ' km, ' + this.y + ' km';
-						}
-					},
-					legend: {
-						enabled: true,
-						floating:true,
-						align: 'center',
-						layout: "horizontal",
-						verticalAlign: "bottom"
-					},
-					plotOptions: {
-						scatter: {
-							marker: {
-								radius: 5,
-								states: {
-									hover: {
-										enabled: true,
-										lineColor: 'rgb(100,100,100)'
-									}
-								}
-							},
-							states: {
-								hover: {
-									marker: {
-										enabled: false
-									}
-								}
-							}
-						}
-					},
-					series: [
-					{
-						name: 'Group 2',
-						color: 'rgba(119, 152, 191, .5)',
-						data: [[Date.UTC(1970,  9, 27), 0],
-						[Date.UTC(1970, 10, 10), 0.6 ],
-						[Date.UTC(1970, 10, 18), 0.7 ],
-						[Date.UTC(1970, 11,  2), 0.8 ],
-						[Date.UTC(1970, 11,  9), 0.6 ],
-						[Date.UTC(1970, 11, 16), 0.6 ],
-						[Date.UTC(1970, 11, 28), 0.67],
-						[Date.UTC(1971,  0,  1), 0.81],
-						[Date.UTC(1971,  0,  8), 0.78],
-						[Date.UTC(1971,  0, 12), 0.98],
-						[Date.UTC(1971,  0, 27), 1.84],
-						[Date.UTC(1971,  1, 10), 1.80],
-						[Date.UTC(1971,  1, 18), 1.80],
-						[Date.UTC(1971,  1, 24), 1.92],
-						[Date.UTC(1971,  2,  4), 2.49],
-						[Date.UTC(1971,  2, 11), 2.79],
-						[Date.UTC(1971,  2, 15), 2.73],
-						[Date.UTC(1971,  2, 25), 2.61],
-						[Date.UTC(1971,  3,  2), 2.76],
-						[Date.UTC(1971,  3,  6), 2.82],
-						[Date.UTC(1971,  3, 13), 2.8 ],
-						[Date.UTC(1971,  4,  3), 2.1 ],
-						[Date.UTC(1971,  4, 26), 1.1 ],
-						[Date.UTC(1971,  5,  9), 0.25],
-						[Date.UTC(1971,  5, 12), 0   ]]
-					}]
-				}
-				
-			);
-
-			chart3 = new Highcharts.StockChart(
-				{
-					chart: {
-						renderTo: 'applicationGraph',
-						type: 'line',
-						zoomType: 'x',
-						isZoomed:false,
-						width: 1000 ,
-						height: 500 
-						/*events: {
-							selection: function(event) { //this function should zoom chart1, chart2, chart3
-								controllingChart = "chart3";
-								setTickInterval(event);
-							}
-						}*/
-					},
-					credits: {
-						enabled : false
-					},
-					title: {
-						text: 'Height Versus Weight'
-					},
-					subtitle: {
-						text: 'Source: Notional Test Data'
-					},
-					xAxis: {
-						type: 'datetime',
-							dateTimeLabelFormats: { // don't display the dummy year
-							month: '%e. %b',
-							year: '%b'
-						},
-						title: {
-							text: 'Date'
-						},
-						
-						startOnTick: true,
-						endOnTick: true,
-						showLastLabel: true,
-						events: {
-							afterSetExtremes: function() {
-								if (!this.chart.options.chart.isZoomed) {
-									var xMin = this.chart.xAxis[0].min;
-									var xMax = this.chart.xAxis[0].max;
-									var zmRange = computeTickInterval(xMin, xMax);
-									chart1.xAxis[0].options.tickInterval =zmRange;
-									chart1.xAxis[0].isDirty = true;
-									chart2.xAxis[0].options.tickInterval = zmRange;
-									chart2.xAxis[0].isDirty = true;
-									chart3.xAxis[0].options.tickInterval = zmRange;
-									chart3.xAxis[0].isDirty = true; 
-
-									chart1.options.chart.isZoomed = true;
-									chart2.options.chart.isZoomed = true;
-									chart1.xAxis[0].setExtremes(xMin, xMax, true);
-
-									chart2.xAxis[0].setExtremes(xMin, xMax, true);
-									chart1.options.chart.isZoomed = false;
-									chart2.options.chart.isZoomed = false;
-
-								}
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							text: 'Weight (kg)'
-						}
-					},
-					tooltip: {
-						formatter: function() {
-							return '' + this.x + ' km, ' + this.y + ' km';
-						}
-					},
-					legend: {
-						enabled: true,
-						floating:true,
-						align: 'center',
-						layout: "horizontal",
-						verticalAlign: "bottom"
-					},
-					plotOptions: {
-						scatter: {
-							marker: {
-								radius: 5,
-								states: {
-									hover: {
-										enabled: true,
-										lineColor: 'rgb(100,100,100)'
-									}
-								}
-							},
-							states: {
-								hover: {
-									marker: {
-										enabled: false
-									}
-								}
-							}
-						}
-					},
-					series: [{
-						name: 'Group 3',
-						color: 'rgba(119, 152, 191, .5)',
-						data: [[Date.UTC(1970,  9, 27), 0   ],
-						[Date.UTC(1970, 10, 10), 0.6 ],
-						[Date.UTC(1970, 10, 18), 0.7 ],
-						[Date.UTC(1970, 11,  2), 0.8 ],
-						[Date.UTC(1970, 11,  9), 0.6 ],
-						[Date.UTC(1970, 11, 16), 0.6 ],
-						[Date.UTC(1970, 11, 28), 0.67],
-						[Date.UTC(1971,  0,  1), 0.81],
-						[Date.UTC(1971,  0,  8), 0.78],
-						[Date.UTC(1971,  0, 12), 0.98],
-						[Date.UTC(1971,  0, 27), 1.84],
-						[Date.UTC(1971,  1, 10), 1.80],
-						[Date.UTC(1971,  1, 18), 1.80],
-						[Date.UTC(1971,  1, 24), 1.92],
-						[Date.UTC(1971,  2,  4), 2.49],
-						[Date.UTC(1971,  2, 11), 2.79],
-						[Date.UTC(1971,  2, 15), 2.73],
-						[Date.UTC(1971,  2, 25), 2.61],
-						[Date.UTC(1971,  3,  2), 2.76],
-						[Date.UTC(1971,  3,  6), 2.82],
-						[Date.UTC(1971,  3, 13), 2.8 ],
-						[Date.UTC(1971,  4,  3), 2.1 ],
-						[Date.UTC(1971,  4, 26), 1.1 ],
-						[Date.UTC(1971,  5,  9), 0.25],
-						[Date.UTC(1971,  5, 12), 0   ]]
-					}]
-				}
-				
-			);
+			chart3 = new Highcharts.StockChart(dayOptions[2]);
 		});
 	});
 });
@@ -507,7 +500,7 @@ $(function() {
 			</div>
 			<div class="panel-body">
 				
-				<div id="allActivityGraph" style="margin:10px 50px;"></div>
+				<div id="allActivityGraph" style="margin:20px 50px;"></div>
 				<div id="eachActivityGraph" style="margin:10px 50px;"></div>
 				<div id="applicationGraph" style="margin:10px 50px;"></div>
 

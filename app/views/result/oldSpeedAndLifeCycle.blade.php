@@ -58,6 +58,7 @@
 				lineWidth: 2,
 				opposite: false,
 				offset: 0
+				
 
 			}, {
 				floor: 0,
