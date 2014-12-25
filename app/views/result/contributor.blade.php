@@ -95,6 +95,11 @@
             </div>
         </div>
 
+        <style type="text/css">
+        	.center-align{
+        		text-align:center;
+        	}
+        </style>
         <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
@@ -152,19 +157,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -196,19 +201,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -240,19 +245,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -284,19 +289,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -328,19 +333,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -372,19 +377,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
@@ -416,19 +421,19 @@
 										<table class="table table-hover table-striped">
 									        <thead>
 									          	<th>&nbsp;</th>
-									          	<th>Tweets</th>
-									          	<th>Retweets</th>
-									          	<th>Replies</th>
-									          	<th>Followers</th>
+									          	<th class="center-align">Tweets</th>
+									          	<th class="center-align">Retweets</th>
+									          	<th class="center-align">Replies</th>
+									          	<th class="center-align">Followers</th>
 									        </thead>
 							        		<tbody>		
 									        	@foreach($aSmallList as $aUser)
 										        <tr>
-										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}">{{"@".$aUser['screenname']}}</a></td>
-										            <td>{{number_format($aUser['tweetCount'])}}</td>
-										            <td>{{number_format($aUser['retweetCount'])}}</td>
-										            <td>{{number_format($aUser['replyCount'])}}</td>
-										            <td>{{number_format($aUser['followerCount'])}}</td>
+										            <td class="screen_name"><a href="http://twitter.com/{{$aUser['screenname']}}" target="blank">{{"@".$aUser['screenname']}}</a></td>
+										            <td class="center-align">{{number_format($aUser['tweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['retweetCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['replyCount'])}}</td>
+										            <td class="center-align">{{number_format($aUser['followerCount'])}}</td>
 										        </tr> 
 										    	@endforeach	  	
 								    		</tbody>
