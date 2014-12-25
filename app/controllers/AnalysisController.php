@@ -115,6 +115,14 @@ class AnalysisController extends BaseController {
 		}
 	}
 
+	public static function cmpByGroupidAscTimeDesc($a, $b){
+		if($a->groupid<$b->groupid) return -1;
+		else if($a->groupid>$b->groupid) return 1;
+		else {
+			if($a->real_created_at==$b->real_created_at) return 0;
+		} return ($a->real_created_at<$b->real_created_at)? 1:-1; 
+	} 
+
 	public function analyse()
 	{
 		$input = Input::all();
@@ -242,7 +250,12 @@ class AnalysisController extends BaseController {
         			'twitter_analysis_fact.tweetkey as real_tweetkey',
         			'tweet_dim.text as original_text',
         			'usergroup.groupid as groupid',
-        			'usergroup.groupname as groupname'
+        			'usergroup.groupname as groupname',
+        			'date_dim.abbr_nameofday as nameday',
+        			'date_dim.date as date',
+        			'date_dim.abbr_nameofmonth as month',
+        			'date_dim.year as year',
+        			'date_dim.thedate as thedate'
         			);        		
         $tweetInterestDetailList = $tweetInterestList->get();
         $tweetInterestCountList = $tweetInterestList
@@ -269,7 +282,12 @@ class AnalysisController extends BaseController {
         			'twitter_analysis_fact.tweetkey as real_tweetkey',
         			'tweet_dim.text as original_text',
         			'usergroup.groupid as groupid',
-        			'usergroup.groupname as groupname'
+        			'usergroup.groupname as groupname',
+        			'date_dim.abbr_nameofday as nameday',
+        			'date_dim.date as date',
+        			'date_dim.abbr_nameofmonth as month',
+        			'date_dim.year as year',
+        			'date_dim.thedate as thedate'
         			);        		
         $replyInterestDetailList = $replyInterestList->get();
         $replyInterestCountList = $replyInterestList
@@ -306,15 +324,23 @@ class AnalysisController extends BaseController {
         			'user_original.screenname as original_screenname',
         			'user_original.profile_pic_url as original_pic',
         			'usergroup.groupid as groupid',
-        			'usergroup.groupname as groupname');
+        			'usergroup.groupname as groupname',
+        			'date_dim.abbr_nameofday as nameday',
+        			'date_dim.date as date',
+        			'date_dim.abbr_nameofmonth as month',
+        			'date_dim.year as year',
+        			'date_dim.thedate as thedate');
         		
         $retweetInterestDetailList = $retweetInterestList->get();
         $retweetInterestCountList = $retweetInterestList
         							->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalRetweet'))
 					                ->groupBy('usergroup.groupid')
 					        		->get();
+		usort($tweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
+		usort($retweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
+		usort($replyInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
 			// echo "<pre>";
-   //   		var_dump($retweetInterestCountList);
+   //   		var_dump($tweetInterestDetailList);
 			// echo "</pre>";
 			// return View::make('blank_page');
 		$totalGroup = array();
@@ -574,7 +600,9 @@ class AnalysisController extends BaseController {
 					'TwRpUserList'=>$TwRpUserList, 
 					'TwRtRpUserList'=>$TwRtRpUserList,
 					'perPage'=>$perPage,
-					'tweetInterestList'=>$tweetInterestList,
+					'tweetInterestDetailList'=>$tweetInterestDetailList,
+					'retweetInterestDetailList'=>$retweetInterestDetailList,
+					'replyInterestDetailList'=>$replyInterestDetailList,
 					'totalGroupDetail'=>$totalGroup
 				];
 		// $result = $input;
