@@ -5,11 +5,6 @@ $(function() {
 	var chart3;
 	var controllingChart;
 
-	var hourOptions = [];
-	var dayOptions = [];
-	var weekOptions = [];
-	var monthOptions = [];
-
 	var hourData = [];
 	var dayData = [];
 	var weekData = [];
@@ -18,49 +13,44 @@ $(function() {
 	var defaultTickInterval = 5;
 	var currentTickInterval = defaultTickInterval;
 
+
 	$(document).ready(function() {
 
-		 //compute a reasonable tick interval given the zoom range -
-		//have to compute this since we set the tickIntervals in order
-		//to get predictable synchronization between 3 charts with
-		//different data.
-		
-		function computeTickInterval(xMin, xMax) {
-			var zoomRange = xMax - xMin;
-			if (zoomRange <= 2)
-				currentTickInterval = 0.5;
-			if (zoomRange < 20)
-				currentTickInterval = 1;
-			else if (zoomRange < 100)
-				currentTickInterval = 5;
-		}
-		//explicitly set the tickInterval for the 3 charts - based on
-		//selected range
-		function setTickInterval(event) {
-			var xMin = event.xAxis[0].min;
-			var xMax = event.xAxis[0].max;
-			computeTickInterval(xMin, xMax);
+		$('.MonthScale').click(function(e) {  
+      		changeScale("MonthScale");
+    	});
+    	$('.WeekScale').click(function(e) {  
+      		changeScale("WeekScale");
+    	});
+    	$('.DayScale').click(function(e) {  
+      		changeScale("DayScale");
+    	});
+    	$('.HourScale').click(function(e) {  
+      		changeScale("HourScale");
+    	});
 
-			chart1.xAxis[0].options.tickInterval = currentTickInterval;
-			chart1.xAxis[0].isDirty = true;
-			chart2.xAxis[0].options.tickInterval = currentTickInterval;
-			chart2.xAxis[0].isDirty = true;
-			chart3.xAxis[0].options.tickInterval = currentTickInterval;
-			chart3.xAxis[0].isDirty = true;
-		}
-
-		//reset the extremes and the tickInterval to default values
-		function unzoom() {
-			chart1.xAxis[0].options.tickInterval = defaultTickInterval;
-			chart1.xAxis[0].isDirty = true;
-			chart2.xAxis[0].options.tickInterval = defaultTickInterval;
-			chart2.xAxis[0].isDirty = true;
-			chart3.xAxis[0].options.tickInterval = defaultTickInterval;
-			chart3.xAxis[0].isDirty = true;
-
-			chart1.xAxis[0].setExtremes(null, null);
-			chart2.xAxis[0].setExtremes(null, null);
-			chart3.xAxis[0].setExtremes(null, null);
+		function changeScale(id)
+		{
+		    if (id == "MonthScale"){
+		    	chart1 = new Highcharts.StockChart(createAllactivityOption(monthData[0], 1000*3600*24*30));
+				chart2 = new Highcharts.StockChart(createTypeActivityOption(monthData[1], 1000*3600*24*30));
+				chart3 = new Highcharts.StockChart(createTypeApplicationOption(monthData[2], 1000*3600*24*30));
+		    }
+		    else if(id == "WeekScale"){
+		    	chart3 = new Highcharts.StockChart(createAllactivityOption(weekData[0], 1000*3600*24*7));
+				chart2 = new Highcharts.StockChart(createTypeActivityOption(weekData[1], 1000*3600*24*7));
+				chart1 = new Highcharts.StockChart(createTypeApplicationOption(weekData[2], 1000*3600*24*7));
+		    }
+		    else if(id == "DayScale"){
+		    	chart1 = new Highcharts.StockChart(createAllactivityOption(dayData[0], 1000*3600*24));
+				chart2 = new Highcharts.StockChart(createTypeActivityOption(dayData[1], 1000*3600*24));
+				chart3 = new Highcharts.StockChart(createTypeApplicationOption(dayData[2], 1000*3600*24));
+		    }
+		    else if(id == "HourScale"){
+		    	chart1 = new Highcharts.StockChart(createAllactivityOption(hourData[0], 1000*3600));
+				chart2 = new Highcharts.StockChart(createTypeActivityOption(hourData[1], 1000*3600));
+				chart3 = new Highcharts.StockChart(createTypeApplicationOption(hourData[2], 1000*3600));
+		    }
 		}
 
 		function createAllactivityOption(dataForSerie, tickIntervalInput){
@@ -76,9 +66,6 @@ $(function() {
 				credits: {
 					enabled : false
 				},
-				title: {
-					text: 'กิจกรรมทั้งหมด'
-				},
 				scrollbar: {
 					enabled: false
 				},
@@ -90,7 +77,7 @@ $(function() {
 					title: {
 						text: 'วัน-เวลา'
 					},
-					tickInterval: tickIntervalInput,
+					minTickInterval: tickIntervalInput,
 					
 					startOnTick: true,
 					endOnTick: true,
@@ -106,7 +93,6 @@ $(function() {
 								chart2.options.chart.isZoomed = true;
 								chart3.options.chart.isZoomed = true;
 								chart2.xAxis[0].setExtremes(xMin, xMax, true);
-
 								chart3.xAxis[0].setExtremes(xMin, xMax, true);
 								chart2.options.chart.isZoomed = false;
 								chart3.options.chart.isZoomed = false;
@@ -129,10 +115,15 @@ $(function() {
 					offset: 0
 					
 				},
-				tooltip: {
-					formatter: function() {
-						return '' + this.x + ' km, ' + this.y + ' km';
-					}
+				rangeSelector:{
+					buttons : [{
+						type : 'all',
+						count : 1,
+						text : 'All'
+					}],
+					selected : 0,
+					inputEnabled : true,
+					inputEditDateFormat: '%Y-%m-%d'
 				},
 				legend: {
 					enabled: true,
@@ -141,31 +132,18 @@ $(function() {
 					layout: "horizontal",
 					verticalAlign: "top",
 					borderWidth: 1,
-					y: 30
 					
 				},
 				plotOptions: {
-					scatter: {
+					area: {
 						marker: {
-							radius: 5,
-							states: {
-								hover: {
-									enabled: true,
-									lineColor: 'rgb(100,100,100)'
-								}
-							}
-						},
-						states: {
-							hover: {
-								marker: {
-									enabled: false
-								}
-							}
+							radius: 3,
+							//enabled: true
 						}
 					}
 				},
 				series: [{
-					name: 'Group 1',
+					name: 'All',
 					color: 'rgba(150, 150, 255, 0.5)',
 					data: dataForSerie,
 					fillColor : {
@@ -198,9 +176,6 @@ $(function() {
 				credits: {
 					enabled : false
 				},
-				title: {
-					text: 'ประเภทของการทวีต'
-				},
 				scrollbar: {
 					enabled: false
 				},
@@ -212,7 +187,7 @@ $(function() {
 					title: {
 						text: 'วัน-เวลา'
 					},
-					tickInterval: tickIntervalInput,
+					minTickInterval: tickIntervalInput,
 					
 					startOnTick: true,
 					endOnTick: true,
@@ -251,10 +226,15 @@ $(function() {
 					offset: 0
 					
 				},
-				tooltip: {
-					formatter: function() {
-						return '' + this.x + ' km, ' + this.y + ' km';
-					}
+				rangeSelector:{
+					buttons : [{
+						type : 'all',
+						count : 1,
+						text : 'All'
+					}],
+					selected : 0,
+					inputEnabled : true,
+					inputEditDateFormat: '%Y-%m-%d'
 				},
 				legend: {
 					enabled: true,
@@ -262,27 +242,14 @@ $(function() {
 					align: 'center',
 					layout: "horizontal",
 					verticalAlign: "top",
-					borderWidth: 1,
-					y: 30
+					borderWidth: 1
 					
 				},
 				plotOptions: {
-					scatter: {
+					line: {
 						marker: {
-							radius: 5,
-							states: {
-								hover: {
-									enabled: true,
-									lineColor: 'rgb(100,100,100)'
-								}
-							}
-						},
-						states: {
-							hover: {
-								marker: {
-									enabled: false
-								}
-							}
+							radius: 3,
+							//enabled: true
 						}
 					}
 				},
@@ -316,21 +283,27 @@ $(function() {
 				credits: {
 					enabled : false
 				},
-				title: {
-					text: 'ประเภทของแอพพลิเคชั่น'
-				},
 				scrollbar: {
 					enabled: false
 				},
 				navigator: {
 		            margin: 10
 		        },
+		        rangeSelector:{
+					buttons : [{
+						type : 'all',
+						text : 'All'
+					}],
+					selected : 0,
+					inputDateFormat:"%Y-%m-%d",
+					inputEditDateFormat:"%Y-%m-%d"
+				},
 				xAxis: {
 					type: 'datetime',
 					title: {
 						text: 'วัน-เวลา'
 					},
-					tickInterval: tickIntervalInput,
+					minTickInterval: tickIntervalInput,
 					
 					startOnTick: true,
 					endOnTick: true,
@@ -344,12 +317,11 @@ $(function() {
 								var xMax = this.chart.xAxis[0].max;
 
 								chart1.options.chart.isZoomed = true;
-								chart3.options.chart.isZoomed = true;
+								chart2.options.chart.isZoomed = true;
 								chart1.xAxis[0].setExtremes(xMin, xMax, true);
-
-								chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								chart2.xAxis[0].setExtremes(xMin, xMax, true);
 								chart1.options.chart.isZoomed = false;
-								chart3.options.chart.isZoomed = false;
+								chart2.options.chart.isZoomed = false;
 							}
 						}
 					}
@@ -369,38 +341,20 @@ $(function() {
 					offset: 0
 					
 				},
-				tooltip: {
-					formatter: function() {
-						return '' + this.x + ' km, ' + this.y + ' km';
-					}
-				},
 				legend: {
 					enabled: true,
 					floating:true,
 					align: 'center',
 					layout: "horizontal",
 					verticalAlign: "top",
-					borderWidth: 1,
-					y: 30
+					borderWidth: 1
 					
 				},
 				plotOptions: {
-					scatter: {
+					line: {
 						marker: {
-							radius: 5,
-							states: {
-								hover: {
-									enabled: true,
-									lineColor: 'rgb(100,100,100)'
-								}
-							}
-						},
-						states: {
-							hover: {
-								marker: {
-									enabled: false
-								}
-							}
+							radius: 3,
+							//enabled: true
 						}
 					}
 				},
@@ -418,7 +372,36 @@ $(function() {
 		}
 
 		function prepareHourData(){
+			//----------------------------------- All ------------------------------------------------------
+			var hourDataForAll = [];
+			@foreach($tweetHour[0] as $tweetByHour)
+				hourDataForAll.push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			hourData.push(hourDataForAll);
+			
+			//----------------------------------- ActivityType ------------------------------------------------------
+			var hourDataForType = [[],[],[]];
+			
+			@foreach($tweetHour[1][0] as $tweetByHour)
+				hourDataForType[0].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetHour[1][1] as $tweetByHour)
+				hourDataForType[1].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetHour[1][2] as $tweetByHour)
+				hourDataForType[2].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			hourData.push(hourDataForType);
 
+			//----------------------------------- Application ------------------------------------------------------
+			var hourDataForApplication = [[],[]];
+			@foreach($tweetHour[2][0] as $tweetByHour)
+				hourDataForApplication[0].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetHour[2][1] as $tweetByHour)
+				hourDataForApplication[1].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			hourData.push(hourDataForApplication);
 		}
 
 		function prepareDayData(){
@@ -455,11 +438,69 @@ $(function() {
 		}
 
 		function prepareWeekData(){
+			//----------------------------------- All ------------------------------------------------------
+			var weekDataForAll = [];
+			@foreach($tweetWeek[0] as $tweetByWeek)
+				weekDataForAll.push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			weekData.push(weekDataForAll);
+			
+			//----------------------------------- ActivityType ------------------------------------------------------
+			var weekDataForType = [[],[],[]];
+			
+			@foreach($tweetWeek[1][0] as $tweetByWeek)
+				weekDataForType[0].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetWeek[1][1] as $tweetByWeek)
+				weekDataForType[1].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetWeek[1][2] as $tweetByWeek)
+				weekDataForType[2].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			weekData.push(weekDataForType);
 
+			//----------------------------------- Application ------------------------------------------------------
+			var weekDataForApplication = [[],[]];
+			@foreach($tweetWeek[2][0] as $tweetByWeek)
+				weekDataForApplication[0].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetWeek[2][1] as $tweetByWeek)
+				weekDataForApplication[1].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			weekData.push(weekDataForApplication);
 		}
 
 		function prepareMonthData(){
+			//----------------------------------- All ------------------------------------------------------
+			var monthDataForAll = [];
+			@foreach($tweetMonth[0] as $tweetByMonth)
+				monthDataForAll.push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			monthData.push(monthDataForAll);
+			
+			//----------------------------------- ActivityType ------------------------------------------------------
+			var monthDataForType = [[],[],[]];
+			
+			@foreach($tweetMonth[1][0] as $tweetByMonth)
+				monthDataForType[0].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetMonth[1][1] as $tweetByMonth)
+				monthDataForType[1].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetMonth[1][2] as $tweetByMonth)
+				monthDataForType[2].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			monthData.push(monthDataForType);
 
+			//----------------------------------- Application ------------------------------------------------------
+			var monthDataForApplication = [[],[]];
+			@foreach($tweetMonth[2][0] as $tweetByMonth)
+				monthDataForApplication[0].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetMonth[2][1] as $tweetByMonth)
+				monthDataForApplication[1].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			monthData.push(monthDataForApplication);
 		}
 
 		function prepareData(){
@@ -467,10 +508,6 @@ $(function() {
 			prepareDayData();
 			prepareWeekData();
 			prepareMonthData();
-			dayOptions.push(createAllactivityOption(dayData[0], 1000*3600*24));
-			dayOptions.push(createTypeActivityOption(dayData[1], 1000*3600*24));
-			dayOptions.push(createTypeApplicationOption(dayData[2], 1000*3600*24));
-
 		}
 
 		$(document).ready(function() {
@@ -480,11 +517,7 @@ $(function() {
 			prepareData();
 
 			var myPlotLineId = "myPlotLine";
-			chart1 = new Highcharts.StockChart(dayOptions[0]);
-
-			chart2 = new Highcharts.StockChart(dayOptions[1]);
-
-			chart3 = new Highcharts.StockChart(dayOptions[2]);
+			changeScale("WeekScale");
 		});
 	});
 });
@@ -499,10 +532,39 @@ $(function() {
 				<h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
 			</div>
 			<div class="panel-body">
-				
-				<div id="allActivityGraph" style="margin:20px 50px;"></div>
-				<div id="eachActivityGraph" style="margin:10px 50px;"></div>
-				<div id="applicationGraph" style="margin:10px 50px;"></div>
+				<div class="row"><div class="col-md-2 col-md-offset-5"><h4>กิจกรรมทั้งหมด</h4></div></div>
+				<div class="row">
+					<div style="margin-left: 117px;display: inline">Scale</div>
+					<div style="display: inline">
+						<button type="button" class="btn btn-default btn-xs MonthScale" >Month</button>
+						<button type="button" class="btn btn-default btn-xs WeekScale" >Week</button>
+						<button type="button" class="btn btn-default btn-xs DayScale" >Day</button>
+						<button type="button" class="btn btn-default btn-xs HourScale">Hour</button>
+					</div>
+				</div>
+				<div id="allActivityGraph" style="margin: 0px 50px 20px 50px;"></div>
+				<div class="row"><div class="col-md-2 col-md-offset-5"><h4>ประเภทของการทวีต</h4></div></div>
+				<div class="row">
+					<div style="margin-left: 117px;display: inline">Scale</div>
+					<div style="display: inline">
+						<button type="button" class="btn btn-default btn-xs MonthScale" >Month</button>
+						<button type="button" class="btn btn-default btn-xs WeekScale" >Week</button>
+						<button type="button" class="btn btn-default btn-xs DayScale" >Day</button>
+						<button type="button" class="btn btn-default btn-xs HourScale">Hour</button>
+					</div>
+				</div>
+				<div id="eachActivityGraph" style="margin:0px 50px 10px 50px;"></div>
+				<div class="row"><div class="col-md-3 col-md-offset-5"><h4>ประเภทของแอพพลิเคชั่น</h4></div></div>
+				<div class="row">
+					<div style="margin-left: 117px;display: inline">Scale</div>
+					<div style="display: inline">
+						<button type="button" class="btn btn-default btn-xs MonthScale" >Month</button>
+						<button type="button" class="btn btn-default btn-xs WeekScale" >Week</button>
+						<button type="button" class="btn btn-default btn-xs DayScale" >Day</button>
+						<button type="button" class="btn btn-default btn-xs HourScale">Hour</button>
+					</div>
+				</div>
+				<div id="applicationGraph" style="margin:0px 50px 10px 50px;"></div>
 
 			</div>
 		</div>

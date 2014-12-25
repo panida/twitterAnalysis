@@ -214,16 +214,16 @@ class AnalysisController extends BaseController {
 			$startDateTime = clone $currentDate;
 			$endDateTime = clone $currentDate;
 			array_push($tweetGroupByWeek, array(
-				"startDateTime" => $startDateTime,
-				"endDateTime" => $endDateTime->endOfWeek(),
+				"startDay" => $startDateTime->day,
+				"endDay" => $endDateTime->endOfWeek()->day,
 				"year" => $currentDate->year,
 				"month" => $currentDate->month,
 				"num_of_activity" => 0
 			));
 			for($i = 0; $i<3; $i+=1){
 				array_push($tweetTypeGroupByWeek[$i], array(
-					"startDateTime" => $startDateTime,
-					"endDateTime" => $endDateTime->endOfWeek(),
+					"startDay" => $startDateTime->day,
+					"endDay" => $endDateTime->endOfWeek()->day,
 					"year" => $currentDate->year,
 					"month" => $currentDate->month,
 					"num_of_activity" => 0
@@ -231,8 +231,8 @@ class AnalysisController extends BaseController {
 			}
 			for($i = 0; $i<2; $i+=1){
 				array_push($tweetApplicationGroupByWeek[$i], array(
-					"startDateTime" => $startDateTime,
-					"endDateTime" => $endDateTime->endOfWeek(),
+					"startDay" => $startDateTime->day,
+					"endDay" => $endDateTime->endOfWeek()->day,
 					"year" => $currentDate->year,
 					"month" => $currentDate->month,
 					"num_of_activity" => 0
