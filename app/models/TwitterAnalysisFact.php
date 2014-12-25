@@ -55,6 +55,9 @@ class TwitterAnalysisFact extends Eloquent
 		return $query->where('tweetkey',$tweetkey)->where('activitytypekey',1)->orWhere('activitytypekey',2)->first();
 		// return DB::table('twitter_analysis_fact')->where('tweetkey',$tweetkey)->where('activitytypekey',1)->first();
 	}
+	public static function scopeFindTweetByUserStat($query,$userstatisticskey){
+		return $query->where('userstatisticskey',$userstatisticskey)->first();
+	}
 
 	//$this->belongsTo(table,local_key,parent_key);
 	public function text(){

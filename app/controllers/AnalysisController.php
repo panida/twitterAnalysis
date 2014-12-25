@@ -115,6 +115,30 @@ class AnalysisController extends BaseController {
 		}
 	}
 
+	public static function paginateArray($data, $perPage, $page = null)
+	{
+	    $page = $page ? (int) $page * 1 : (isset($_REQUEST['page']) ? (int) $_REQUEST['page'] * 1 : 1);
+	    $offset = ($page * $perPage) - $perPage;
+	    return Paginator::make(array_slice($data, $offset, $perPage, true), count($data), $perPage);
+	}
+
+	protected function paginateResults(array $results, $perPage = 0, $page = 0)
+	{
+		$page = ($page) ? $page : Input::get('page');
+		$perPage = ($perPage) ? $perPage : $this->perPage;
+		$pagedResults = array_chunk($results, $perPage);
+		return Paginator::make($resultPages[$thisPage], count($results), $perPage);
+	}
+
+	public static function paginateData(){
+		$perPage = 10;
+		$currentPage = Input::get('page') - 1;
+		$pagedData = array_slice($TwUserList, $currentPage * $perPage, $perPage);
+		$TwUserListPaginate = Paginator::make($pagedData, count($TwUserList), $perPage);
+	}
+
+
+
 	public function analyse()
 	{
 		$input = Input::all();
@@ -250,7 +274,58 @@ class AnalysisController extends BaseController {
 			$contributorList[$aKey]->allActivityCount+=1;
 			$sourceList[$tweet->sourcekey]+=1; 
 		}
-		// var_dump($contributorList);
+
+		$TwUserList = array();
+		$RtUserList = array();
+		$RpUserList = array();
+		$TwRtUserList = array();
+		$RtRpUserList = array();
+		$TwRpUserList = array();
+		$TwRtRpUserList = array();
+		usort($contributorList,"ContributorData::cmpByFollowerCountDesc");
+		reset($contributorList);
+		foreach($contributorList as $aUserStat){
+			$tweetFact = TwitterAnalysisFact::findTweetByUserStat($aUserStat->userstatisticskey);
+			$username = $tweetFact->user->screenname; 
+			$userDisplayStat = ['screenname'=>$username,
+								'tweetCount'=>$aUserStat->tweetCount,
+								'retweetCount'=>$aUserStat->retweetCount,
+								'replyCount'=>$aUserStat->replyCount,
+								'followerCount'=>$aUserStat->followerCount];
+			$TW = ($aUserStat->tweetCount > 0);
+			$RT = ($aUserStat->retweetCount > 0);
+			$RP = ($aUserStat->replyCount > 0);
+			if($TW){
+				array_push($TwUserList,$userDisplayStat);
+			}
+			if($RT){
+				array_push($RtUserList,$userDisplayStat);
+			}
+			if($RP){
+				array_push($RpUserList,$userDisplayStat);
+			}
+			if($TW or $RT){
+				array_push($TwRtUserList,$userDisplayStat);
+			}
+			if($TW or $RP){
+				array_push($TwRpUserList,$userDisplayStat);
+			}
+			if($RT or $RP){
+				array_push($RtRpUserList,$userDisplayStat);
+			}
+			if($TW or $RT or $RP){
+				array_push($TwRtRpUserList,$userDisplayStat);
+			}
+		}
+		$perPage = 10;
+		$TwUserList = array_chunk($TwUserList,$perPage);
+		$RtUserList = array_chunk($RtUserList,$perPage);	
+		$RpUserList = array_chunk($RpUserList,$perPage);
+		$TwRtUserList = array_chunk($TwRtUserList,$perPage);
+		$RtRpUserList = array_chunk($RtRpUserList,$perPage);
+		$TwRpUserList = array_chunk($TwRpUserList,$perPage);
+		$TwRtRpUserList = array_chunk($TwRtRpUserList,$perPage);
+		// var_dump($TwUserList);
 		// return View::make('blank_page');
 		usort($contributorList,"ContributorData::cmpByAllActivityCountDesc");
 		reset($contributorList);
@@ -299,7 +374,15 @@ class AnalysisController extends BaseController {
 					'tweetGroupByMonth' => $tweetGroupByMonth,
 					'tweetGroupByWeek' => $tweetGroupByWeek,
 					'tweetGroupByDay' => $tweetGroupByDay,
-					'tweetGroupByHour' => $tweetGroupByHour
+					'tweetGroupByHour' => $tweetGroupByHour,
+					'TwUserList'=>$TwUserList,
+					'RtUserList'=>$RtUserList, 
+					'RpUserList'=>$RpUserList, 
+					'TwRtUserList'=>$TwRtUserList,
+					'RtRpUserList'=>$RtRpUserList,
+					'TwRpUserList'=>$TwRpUserList, 
+					'TwRtRpUserList'=>$TwRtRpUserList,
+					'perPage'=>$perPage
 				];
 		// $result = $input;
 		return View::make('layouts.mainResult',$result);
