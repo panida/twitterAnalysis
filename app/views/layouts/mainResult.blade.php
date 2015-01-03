@@ -7,8 +7,11 @@
 	
 	<!-- statistics CSS-->
 	@include('result.statisticsCSS')
-	@include('result.speedAndLifeCycleCSS')	
-     <script>
+	
+    <!-- D3 -->
+    <script type="text/javascript" href="{{URL::asset('js/d3/d3.min.js')}}"></script>
+    
+    <script>
         $(function() {
             $( document ).tooltip({
                 position:{
