@@ -3,6 +3,7 @@
 class UserDim extends Eloquent
 {
 	protected $table = 'user_dim';
+	protected $primaryKey = 'userkey';
 	
 	public $timestamps = false;
 

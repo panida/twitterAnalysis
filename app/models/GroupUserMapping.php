@@ -8,8 +8,6 @@ class GroupUserMapping extends Eloquent
 
 	public $errors;
 
-
-
-
+	
 
 }
