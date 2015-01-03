@@ -78,34 +78,12 @@
                                 <!-- <span class="badge">0</span> -->
                                 <i class="fa fa-fw fa-plus-circle" style="color:green;"></i> เพิ่มกลุ่มตัวอย่างใหม่
                             </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">0</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> หน่วยราชการ
-                            </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">10</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> นักการเมือง
-                            </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">5</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> คนดัง
-                            </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">2</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> เสื้อแดง
-                            </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">12</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> เสื้อเหลือง/ฟ้า/หลากสี
-                            </a>
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">15</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> สำนักข่าว
-                            </a>  
-                            <a href="{{URL::to('/group/1')}}" class="list-group-item">
-                                <span class="badge">8</span>
-                                <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> นักข่าว
-                            </a>                            
+                            @foreach($groups as $group)
+                                <a href="{{URL::to('/group/'.$group->groupid)}}" class="list-group-item">
+                                    <span class="badge">{{$memberCount[$group->groupid]}}</span>
+                                    <i class="fa fa-fw fa-folder-open" style="color:#EBE241;"></i> {{$group->groupname}}
+                                </a>
+                            @endforeach                       
                         </div>                        
                     </div>
                 </div>
