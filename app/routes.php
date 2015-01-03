@@ -20,7 +20,11 @@ Route::get('/databaseDetail', function(){
 });
 
 Route::get('/groupManagement', function(){
-	return View::make('management.groupManagement');
+	return View::make('management.addGroup');
+});
+
+Route::get('/group/1', function(){
+	return View::make('management.editGroup');
 });
 
 
