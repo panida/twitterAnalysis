@@ -19,12 +19,13 @@ Route::get('/databaseDetail', function(){
 	return View::make('management.databaseDetail');
 });
 
-Route::get('/groupManagement', function(){
-	return View::make('management.addGroup');
-});
+Route::get('/groupManagement', 'GroupManagementController@createGroup');
 
-Route::get('/group/1', function(){
-	return View::make('management.editGroup');
-});
+Route::post('/groupManagement', 'GroupManagementController@addGroup');
 
+Route::get('/group/{id}', 'GroupManagementController@createMembersOfGroup');
+Route::post('/group/{id}', 'GroupManagementController@editGroup');
+
+Route::get('deleteGroup/{groupid}', 'GroupManagementController@deleteGroup');
+Route::get('deleteMember/{groupid}/{userkey}', 'GroupManagementController@deleteMember');
 
