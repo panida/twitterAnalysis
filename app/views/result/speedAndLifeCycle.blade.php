@@ -90,12 +90,15 @@ $(function() {
 								var xMin = this.chart.xAxis[0].min;
 								var xMax = this.chart.xAxis[0].max;
 
-								chart2.options.chart.isZoomed = true;
-								chart3.options.chart.isZoomed = true;
+								// chart1.options.chart.isZoomed = true;
+								// chart2.options.chart.isZoomed = true;
+								// chart3.options.chart.isZoomed = true;
+								//chart1.xAxis[0].setExtremes(xMin, xMax, true);
 								chart2.xAxis[0].setExtremes(xMin, xMax, true);
 								chart3.xAxis[0].setExtremes(xMin, xMax, true);
-								chart2.options.chart.isZoomed = false;
-								chart3.options.chart.isZoomed = false;
+								// chart1.options.chart.isZoomed = false;
+								// chart2.options.chart.isZoomed = false;
+								// chart3.options.chart.isZoomed = false;
 							}
 						}
 					}
@@ -118,7 +121,6 @@ $(function() {
 				rangeSelector:{
 					buttons : [{
 						type : 'all',
-						count : 1,
 						text : 'All'
 					}],
 					selected : 0,
@@ -200,13 +202,15 @@ $(function() {
 								var xMin = this.chart.xAxis[0].min;
 								var xMax = this.chart.xAxis[0].max;
 
-								chart1.options.chart.isZoomed = true;
-								chart3.options.chart.isZoomed = true;
+								// chart1.options.chart.isZoomed = true;
+								// chart2.options.chart.isZoomed = true;
+								// chart3.options.chart.isZoomed = true;
 								chart1.xAxis[0].setExtremes(xMin, xMax, true);
-
+								// chart2.xAxis[0].setExtremes(xMin, xMax, true);
 								chart3.xAxis[0].setExtremes(xMin, xMax, true);
-								chart1.options.chart.isZoomed = false;
-								chart3.options.chart.isZoomed = false;
+								// chart1.options.chart.isZoomed = false;
+								// chart2.options.chart.isZoomed = false;
+								// chart3.options.chart.isZoomed = false;
 							}
 						}
 					}
@@ -316,12 +320,15 @@ $(function() {
 								var xMin = this.chart.xAxis[0].min;
 								var xMax = this.chart.xAxis[0].max;
 
-								chart1.options.chart.isZoomed = true;
-								chart2.options.chart.isZoomed = true;
+								// chart1.options.chart.isZoomed = true;
+								// chart2.options.chart.isZoomed = true;
+								// chart3.options.chart.isZoomed = true;
 								chart1.xAxis[0].setExtremes(xMin, xMax, true);
 								chart2.xAxis[0].setExtremes(xMin, xMax, true);
-								chart1.options.chart.isZoomed = false;
-								chart2.options.chart.isZoomed = false;
+								// chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								// chart1.options.chart.isZoomed = false;
+								// chart2.options.chart.isZoomed = false;
+								// chart3.options.chart.isZoomed = false;
 							}
 						}
 					}
@@ -532,6 +539,7 @@ $(function() {
 				<h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
 			</div>
 			<div class="panel-body">
+				<div><label for="start">Start date:</label><input id="start" style="width: 200px" value="10/10/2011" /><label for="end">End date:</label><input id="end" style="width: 200px" value="10/10/2012"/></div>
 				<div class="row"><div class="col-md-2 col-md-offset-5"><h4>กิจกรรมทั้งหมด</h4></div></div>
 				<div class="row">
 					<div style="margin-left: 117px;display: inline">Scale</div>
