@@ -6,8 +6,8 @@
 	<!-- Custom Fonts -->
 	
 	<!-- statistics CSS-->
-	@include('result.statisticsCSS')
-	
+
+	@include('resultByUser.statisticsCSS')
     <!-- D3 -->
     <script type="text/javascript" href="{{URL::asset('js/d3/d3.min.js')}}"></script>
     
@@ -27,21 +27,29 @@
 	<br><br><br>
 
 	<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 top-buffer" style="background-color:rgba(200,210,250,0.5); border-radius: 10px;">
-        <h3 class="thaibold" style="margin-left: 10px;">
+<!--         <h3 class="thaibold" style="margin-left: 10px;">
 				ค้นหา
-		</h3>
+		</h3> -->
 		<div class="row">
 			<form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
                 <div class="form-group" style="margin-left: 10px">
                     <div class="col-lg-2 col-md-6 col-sm-6">
+                        <h3>ค้นหากรณีศึกษา</h3>
+                        {{ Form::select('caseID', array(null=>'กรุณาเลือกกรณีศึกษา')+$researchCase, $caseID , ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                    </div>
+
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <h3>โดย</h3>
                         {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), $type, ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
                     </div>
                 
-                    <div class="col-lg-5 col-md-6 col-sm-6">                                        
+                    <div class="col-lg-3 col-md-6 col-sm-6">  
+                        <h3>คำค้นหา</h3>                                      
                         {{ Form::text('searchText', $searchText, ['class' => 'form-control', 'placeholder' => 'คำที่ต้องการค้นหา', 'required' => 'required', 'style'=>'font-family:tahoma;']) }}
                     </div>
                 
-                    <div class="col-lg-2 col-md-6 col-sm-6">                                       
+                    <div class="col-lg-2 col-md-6 col-sm-6"> 
+                        <h3>วันที่เริ่มต้น</h3>                                      
                         {{Form::text('startDate', $startDate, [
                             "required" => "required", 
                             "class" => "form-control", 
@@ -53,6 +61,7 @@
                     </div>
                 
                     <div class="col-lg-2 col-md-6 col-sm-6">  
+                        <h3>วันที่สิ้นสุด</h3>
                         {{Form::text('endDate', $endDate, [
                             "required" => "required", 
                             "class" => "form-control", 
@@ -64,6 +73,7 @@
                     </div>
                 
                     <div class="col-lg-1 col-md-6 col-sm-6">
+                        <h3>&nbsp;</h3>
                     	<button type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </div>
                 </div>
@@ -117,9 +127,8 @@
 
 		<li class="active"><a href="#statistics" onmouseout="resize()" data-toggle="tab">ค่าสถิติเบื้องต้น</a></li>
 		<li><a href="#speedAndLifeCycle" onmouseout="resize()" data-toggle="tab">กราฟข้อมูลทวีต</a></li>
-		<li><a href="#contributor" onmouseout="resize();valueChanged();" data-toggle="tab">บุคคลที่เกี่ยวข้อง</a></li>
+		<li><a href="#follower" onmouseout="resize();valueChanged();" data-toggle="tab">ผู้ติดตาม</a></li>
         <li><a href="#interestingContributor" onmouseout ="resize()" data-toggle="tab">กลุ่มตัวอย่างวิจัย</a></li>
-        <li><a href="#twitterSocialGraph" onmouseout="resize()" data-toggle="tab">การแพร่กระจายของทวีต</a></li>
 		<li><a href="#tweetTimeline" onmouseout="resize()" data-toggle="tab">รายการทวีตทั้งหมด</a></li>
 	</ul>
     <script type="text/javascript">
@@ -131,22 +140,19 @@
 
 	<div id="myTabContent" class="tab-content">
 	   	<div class="tab-pane fade in active" id="statistics">
-			@include('result.statistics')	        
+			@include('resultByUser.statistics')       
 	   	</div>
         <div class="tab-pane fade" id="speedAndLifeCycle">
-            @include('result.speedAndLifeCycle')    
+   
         </div>
-	   	<div class="tab-pane fade" id="contributor">
-	   		@include('result.contributor')
+	   	<div class="tab-pane fade" id="follower">
+
 	   	</div>
         <div class="tab-pane fade" id="interestingContributor">
-            @include('result.interestingContributor')
-        </div>
-        <div class="tab-pane fade" id="twitterSocialGraph">
-            @include('result.twitterSocialGraph')
+
         </div>
 	   	<div class="tab-pane fade" id="tweetTimeline">
-	      	@include('result.tweetTimeline')
+            @include('resultByUser.tweetTimeline')
 	   	</div>
 	</div>
     

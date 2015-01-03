@@ -5,7 +5,7 @@
     <style>
         
         .jumbotron{
-            min-height:480px;
+            min-height:530px;
             background-color:rgba(200,210,250,0.5);
         }
 
@@ -18,21 +18,28 @@
     <div class="container">
 
         <!-- Jumbotron Header -->
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <header class="jumbotron hero-spacer">
                 <h1>CU.Tweet</h1>
                 <p class="thaibold" style="font-size:30px;">
-                    เว็บไซต์ที่คุณสามารถวิเคราะห์การกระจายตัวของทวีตได้อย่างละเอียดรอบด้าน ภายใต้ฐานข้อมูลทวิตเตอร์ที่มี</p>
+                    เว็บไซต์ที่คุณสามารถวิเคราะห์การกระจายตัวของทวีตได้อย่างละเอียดและรอบด้าน ภายใต้ฐานข้อมูลทวิตเตอร์ที่มี</p>
                 <p><a class="btn btn-primary btn-large" href="{{URL::to('/databaseDetail')}}">ดูชุดฐานข้อมูล</a>
                 </p>
             </header>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-7">
             <header class="jumbotron hero-spacer">
                 <h1 class="thaibold">เริ่มค้นหา</h1>
                 <form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
-                    <div class="form-group">
+                    <div class="form-group top-buffer">
+                        <label class="col-lg-4 col-md-4 col-sm-4 control-label">กรณีศึกษา</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            {{ Form::select('caseID', array(null=>'กรุณาเลือกกรณีศึกษา')+$researchCase, null , ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">ค้นหาโดย</label>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), 'text', ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
