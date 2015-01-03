@@ -17,7 +17,8 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		return View::make('home/homepage2');
+		$researchCase = ResearchCaseDim::lists('name', 'researchcasekey');
+		return View::make('home/homepage2')->with('researchCase',$researchCase);
 	}
 
 }
