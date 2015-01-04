@@ -10,11 +10,11 @@
                     <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllTweet)}}</h2><h3>ทวีต</h3></div>
                 </div> 
                 <div class="col-lg-4 col-md-6 col-sm-12">
-                    <h3>จำนวนผู้ใช้ทั้งหมด &nbsp;
+                    <h3>จำนวนผู้ติดตามทั้งหมด &nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
                     </h3>                    
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-user" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllContributor)}}</h2><h3>คน</h3></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllFollower)}}</h2><h3>คน</h3></div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวนครั้งการเข้าถึง &nbsp;
