@@ -10,7 +10,7 @@
                     </h3>
 				</div>
 				<div class="panel-body">
-					<div id="container1" style="width:auto; height: 400px; margin: 0 auto"></div>			
+					<div id="container1" style="width:auto; height: 450px; margin: 0 auto"></div>			
 				</div>
 			</div>			
 			<script>
@@ -94,11 +94,15 @@
 				            	@endforeach
 				            ]
 				            // [973, 914, 312, 732, 34]
+				        }, {
+				            name: 'BeRetweeted',
+				            data: [
+				            	@foreach($totalGroupDetail as $aGroup)
+				            		{{$aGroup['beRetweetedCount'].","}}
+				            	@endforeach
+				            ]
+				            // [973, 914, 312, 732, 34]
 				        }
-				        // , {
-				        //     name: 'Retweeted',
-				        //     data: [1204, 166, 512, 321, 12]
-				        // }
 				        ]
 				    });
 				});
