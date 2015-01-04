@@ -70,5 +70,35 @@ class GroupManagementController extends BaseController {
 		GroupUserMapping::where('groupid', '=', $groupid)->where('userkey', '=', $userkey)->delete();
 		return Redirect::to('/group/'.$groupid)->with('notice', 'ลบสมาชิกสำเร็จ');
 	}
+
+	public function addMember($groupid){
+		$input = Input::all();
+		$query = UserDim::where('screenname','=',$input['screen_name'])->get();
+		$userkey = -1;
+		if($query->isEmpty()){
+			$info = TwitterAPIHelper::getUserInfo($input['screen_name']);
+			if(!empty($info)){
+				$userkey = UserDim::storeFromTwitterAPI($info['id_str'], $info['name'], 
+											$info['screen_name'], $info['location'], 
+											$info['url'], $info['description'], 
+											$info['created_at'], $info['time_zone'], 
+											$info['utc_offset'], $info['lang'], 
+											$info['profile_image_url']);
+				UserStatisticsDim::store($info['id_str'], $info['followers_count'], $info['friends_count'], $info['statuses_count']);
+			}
+			else{
+				return Redirect::to('/group/'.$groupid)->with('error', 'ไม่พบสมาชิกที่ต้องการเพิ่ม');
+			}
+			
+		}
+		else{
+			$userkey = $query->first()->userkey;
+		}
+		$group_user_map = new GroupUserMapping;
+		$group_user_map->groupid = $groupid;
+		$group_user_map->userkey = $userkey;
+		$group_user_map->save();
+		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
+	}
 	
 }
