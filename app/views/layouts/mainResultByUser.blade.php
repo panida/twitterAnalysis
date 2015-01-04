@@ -15,9 +15,10 @@
         $(function() {
             $( document ).tooltip({
                 position:{
-                    my: "center bottom-20",
+                    my: "center bottom-10",
                     at: "center top",
                 }
+                // position:{ my: "left top+15", at: "left bottom", collision: "flipfit" }
             });
         });
     </script>
@@ -146,7 +147,7 @@
    
         </div>
 	   	<div class="tab-pane fade" id="follower">
-
+            @include('resultByUser.follower')
 	   	</div>
         <div class="tab-pane fade" id="interestingContributor">
 
