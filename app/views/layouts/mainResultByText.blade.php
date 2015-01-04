@@ -12,8 +12,8 @@
         $(function() {
             $( document ).tooltip({
                 position:{
-                    my: "center bottom-20",
-                    at: "center top",
+                    my: "center bottom-10",
+                    at: "center center",
                 }
             });
         });

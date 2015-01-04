@@ -1265,7 +1265,21 @@ class AnalysisController extends BaseController {
 	// 	// ----- Statistics Tab -----
 		
 		$countAllContributor = sizeof($contributorKeyList);
+
+		$countAllFollower = 0;
+		$user = UserDim::where('name', '=', $searchText)
+				->orWhere('screenname', '=', $searchText)
+				->firstOrFail();
+		$info = TwitterAPIHelper::getUserInfo($user->screenname);
+		if(!empty($info)){
+			$countAllFollower = $info['followers_count'];
+		}
 		
+		$recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
+		// echo "<pre>";
+		// var_dump($recent50Follower);
+		// echo "</pre>";
+		// return View::make('blank_page');
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 
 		$result = ['type'=>$input['type'],
@@ -1274,8 +1288,10 @@ class AnalysisController extends BaseController {
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
 					'endDate'=>$endDate,
+					'user'=>$user,
 					'countAllTweet'=>$countAllTweet,
 					'countAllContributor'=>$countAllContributor,
+					'countAllFollower'=>$countAllFollower,
 					'countAllImpression'=>$countAllImpression,
 					'countAct'=> $countAct,
 					'sourceProportion'=>$sourceProportion,
@@ -1283,6 +1299,7 @@ class AnalysisController extends BaseController {
 					'top10RetweetedList'=>$top10RetweetedList,
 					// 'topFollowerList'=>$topFollowerList,
 					'timelineList'=>$timelineList,
+					'recentFollowerList'=>$recent50Follower,
 					// 'maxFollowerUser'=>$maxFollowerUser,
 					// 'maxRetweetedUser' =>$maxRetweetedUser,
 					// 'maxActivityUser'=>$maxActivityUser,
