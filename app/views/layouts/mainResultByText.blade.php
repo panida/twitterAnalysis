@@ -7,7 +7,7 @@
 	
 	<!-- statistics CSS-->
 	@include('resultByText.statisticsCSS')
-	@include('resultByText.speedAndLifeCycleCSS')	
+
      <script>
         $(function() {
             $( document ).tooltip({

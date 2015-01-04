@@ -493,6 +493,22 @@ class AnalysisController extends BaseController {
 		usort($tweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
 		usort($retweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
 		usort($replyInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
+		
+		$beRetweetedInterestCountList = $tweetResultList[11]
+        		->where('twitter_analysis_fact.activitytypekey','<',3)
+        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+        		->where('user_dim.isinterested','Yes')
+        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')     
+        		->leftJoin('twitter_analysis_fact as all_fact','tweet_dim.tweetkey','=','all_fact.tweetkey')
+        		->where('all_fact.objectid','<>','twitter_analysis_fact.objectid')
+				->leftJoin('date_dim as all_fact_date_dim','all_fact.datekey','=','all_fact_date_dim.datekey')
+				->where('all_fact_date_dim.thedate','>=',new DateTime($startDate))
+				->where('all_fact_date_dim.thedate','<=',new DateTime($endDate))
+				->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalBeRetweeted'))
+				->groupBy('usergroup.groupid')
+				->get();
+
 			// echo "<pre>";
    //   		var_dump($tweetInterestDetailList);
 			// echo "</pre>";
@@ -503,7 +519,8 @@ class AnalysisController extends BaseController {
 									  'groupname'=>$aGroup->groupname,
 									  'tweetCount'=>$aGroup->totalTweet,
 									  'retweetCount'=>0,
-									  'replyCount'=>0];
+									  'replyCount'=>0,
+									  'beRetweetedCount'=>0];
 		}
 		foreach($retweetInterestCountList as $aGroup){
 			if(array_key_exists($aGroup->groupid, $totalGroup)) 
@@ -513,7 +530,8 @@ class AnalysisController extends BaseController {
 									  'groupname'=>$aGroup->groupname,
 									  'tweetCount'=>0,
 									  'retweetCount'=>$aGroup->totalRetweet,
-									  'replyCount'=>0];
+									  'replyCount'=>0,
+									  'beRetweetedCount'=>0];
 		}
 		foreach($replyInterestCountList as $aGroup){
 			if(array_key_exists($aGroup->groupid, $totalGroup)) 
@@ -523,7 +541,12 @@ class AnalysisController extends BaseController {
 									  'groupname'=>$aGroup->groupname,
 									  'tweetCount'=>0,
 									  'retweetCount'=>0,
-									  'replyCount'=>$aGroup->totalReply];
+									  'replyCount'=>$aGroup->totalReply,
+									  'beRetweetedCount'=>0];
+		}
+		foreach($beRetweetedInterestCountList as $aGroup){
+			if(array_key_exists($aGroup->groupid, $totalGroup)) 
+				$totalGroup[$aGroup->groupid]['beRetweetedCount'] = $aGroup->totalBeRetweeted;
 		}
 
 		ksort($totalGroup);
