@@ -43,17 +43,17 @@
     <br>
     <h2 class="panel-title onlythaibold" style="font-size:25px;"><i class="fa fa-fw fa-user" style="color:#4171EB;"></i> จัดการสมาชิกในกลุ่ม - จำนวนสมาชิกปัจจุบัน: {{$members->count()}} คน</h2>
     <br>
-    <form class="form-horizontal" role="form" method="POST" action="{{{ URL::to('addmember') }}}" accept-charset="UTF-8">
+    {{Form::open(array('url' => '/group/addMember/'.$groupDetail->groupid,'method'=>'post','class' => 'form-horizontal','accept-charset'=>'UTF-8'))}}    
         <div class="form-group">
             <label for="inputEmail3" class="col-sm-3 control-label">เพิ่มสมาชิก</label>
             <div class="col-sm-4">
                 <div class="input-group">
                     <span class="input-group-addon">@</span>
-                    {{ Form::text('username', null, ['class' => 'form-control', 'placeholder' => 'screen name', 'required' => 'required']) }}       
+                    {{ Form::text('screen_name', null, ['class' => 'form-control', 'placeholder' => 'screen name', 'required' => 'required']) }}       
                 </div>
             </div>        
             <div class="col-sm-3">
-                <button type="submit" class="btn btn-primary">เพิ่ม</button>
+                {{ Form::submit('เพิ่ม', array('class'=>'btn btn-primary'))}}
             </div>
         </div><!--form-group-->
     </form>

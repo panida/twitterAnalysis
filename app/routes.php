@@ -28,4 +28,5 @@ Route::post('/group/{id}', 'GroupManagementController@editGroup');
 
 Route::get('deleteGroup/{groupid}', 'GroupManagementController@deleteGroup');
 Route::get('deleteMember/{groupid}/{userkey}', 'GroupManagementController@deleteMember');
+Route::post('/group/addMember/{groupid}', 'GroupManagementController@addMember');
 
