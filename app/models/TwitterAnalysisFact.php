@@ -20,8 +20,13 @@ class TwitterAnalysisFact extends Eloquent
 
 	public static function searchByUser($searchText,$startDate,$endDate,$caseID){
 		return DB::table('user_dim')
-					->where('user_dim.name','=',$searchText)
-					->orWhere('user_dim.screenname','=',$searchText)
+					->where(function($query) use($searchText)
+			            {
+			                $query->where('user_dim.name','=',$searchText)
+							->orWhere('user_dim.screenname','=',$searchText);
+			            })
+					// ->where('user_dim.name','=',$searchText)
+					// ->orWhere('user_dim.screenname','=',$searchText)
 					->leftJoin('twitter_analysis_fact','twitter_analysis_fact.userkey','=','user_dim.userkey')
 					->where('twitter_analysis_fact.researchcasekey','=',$caseID)
 					->leftJoin('date_dim','twitter_analysis_fact.datekey','=','date_dim.datekey')
