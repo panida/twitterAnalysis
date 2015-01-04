@@ -388,8 +388,7 @@ class AnalysisController extends BaseController {
         $tweetInterestList = $tweetResultList[8]
         		->where('activitytypekey',1)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
-        		->where('user_dim.isinterested','Yes')
-        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -420,8 +419,7 @@ class AnalysisController extends BaseController {
 		$replyInterestList = $tweetResultList[9]
         		->where('activitytypekey',2)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
-        		->where('user_dim.isinterested','Yes')
-        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -453,8 +451,7 @@ class AnalysisController extends BaseController {
 		$retweetInterestList = $tweetResultList[10]
 				->where('twitter_analysis_fact.activitytypekey',3)   
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')   
-        		->where('user_dim.isinterested','Yes')
-        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')      		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -497,8 +494,7 @@ class AnalysisController extends BaseController {
 		$beRetweetedInterestCountList = $tweetResultList[11]
         		->where('twitter_analysis_fact.activitytypekey','<',3)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
-        		->where('user_dim.isinterested','Yes')
-        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')     
         		->leftJoin('twitter_analysis_fact as all_fact','tweet_dim.tweetkey','=','all_fact.tweetkey')
         		->where('all_fact.objectid','<>','twitter_analysis_fact.objectid')
