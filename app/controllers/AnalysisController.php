@@ -800,13 +800,13 @@ class AnalysisController extends BaseController {
 		
 		$tweetResult = $tweetResultList->get();
 
-	// 	//Prepare Data for tweet graph
-	// 	$allTweetQuery = clone $tweetResultList;
-	// 	$tweetMonth = array();
-	// 	$tweetWeek = array();
-	// 	$tweetDay = array();
-	// 	$tweetHour = array();
-	// 	AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
+		//Prepare Data for tweet graph
+		$allTweetQuery = clone $tweetResultList;
+		$tweetMonth = array();
+		$tweetWeek = array();
+		$tweetDay = array();
+		$tweetHour = array();
+		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
 
 
 		$countAllTweet = sizeof($tweetResult);
@@ -1261,7 +1261,7 @@ class AnalysisController extends BaseController {
 	// 	// ----- Statistics Tab -----
 		
 		$countAllContributor = sizeof($contributorKeyList);
-
+		
 		$countAllFollower = 0;
 		$user = UserDim::where('name', '=', $searchText)
 				->orWhere('screenname', '=', $searchText)
@@ -1299,10 +1299,10 @@ class AnalysisController extends BaseController {
 					// 'maxFollowerUser'=>$maxFollowerUser,
 					// 'maxRetweetedUser' =>$maxRetweetedUser,
 					// 'maxActivityUser'=>$maxActivityUser,
-					// 'tweetMonth' => $tweetMonth,
-					// 'tweetWeek' => $tweetWeek,
-					// 'tweetDay' => $tweetDay,
-					// 'tweetHour' => $tweetHour,
+					'tweetMonth' => $tweetMonth,
+					'tweetWeek' => $tweetWeek,
+					'tweetDay' => $tweetDay,
+					'tweetHour' => $tweetHour,
 					// 'TwUserList'=>$TwUserList,
 					// 'RtUserList'=>$RtUserList, 
 					// 'RpUserList'=>$RpUserList, 

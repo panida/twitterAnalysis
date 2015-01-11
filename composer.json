@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"nesbot/Carbon": "*"
+		"nesbot/Carbon": "*",
+		"pda/pheanstalk": "~2.0"
 	},
 	"autoload": {
 		"classmap": [
