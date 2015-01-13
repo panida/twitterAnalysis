@@ -144,7 +144,7 @@
 			@include('resultByUser.statistics')       
 	   	</div>
         <div class="tab-pane fade" id="speedAndLifeCycle">
-   
+            @include('resultByUser.speedAndLifeCycle')
         </div>
         <div class="tab-pane fade" id="interestingContributor">
 

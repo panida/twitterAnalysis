@@ -98,7 +98,35 @@ class GroupManagementController extends BaseController {
 		$group_user_map->groupid = $groupid;
 		$group_user_map->userkey = $userkey;
 		$group_user_map->save();
+		Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
 		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
+	}
+
+	public function addFollowee($job,$args){
+		$userkey = $args["userkey"];
+		$screenname = $args["screenname"];
+		$cursor = $args["cursor"];
+
+		$result = TwitterAPIHelper::find_followee($userkey,$screenname,$cursor);
+		if(!empty($result)){
+			
+			if($result['next_cursor_str']!='0'){
+				Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => $result['next_cursor_str']));
+			}
+
+			foreach($result['ids'] as $id){
+				$followee_mapping = new FolloweeMapping;
+				echo "".$id.", ";
+				// $followee_mapping->userkey = $userkey;
+				// $followee_mapping->followeeid = $id;
+				// $followee_mapping->save(); 
+			}
+
+			echo "<br/>-------------------------------------------<br/>"
+
+		}
+		sleep(6);
+
 	}
 	
 }
