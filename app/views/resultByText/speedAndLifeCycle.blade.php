@@ -1,8 +1,8 @@
 <script type="text/javascript">
 $(function() {
-	var chart1;
-	var chart2;
-	var chart3;
+	var chart1 = null;
+	var chart2 = null;
+	var chart3 = null;
 	var controllingChart;
 
 	var hourData = [];
@@ -29,28 +29,67 @@ $(function() {
       		changeScale("HourScale");
     	});
 
+
 		function changeScale(id)
 		{
+		    
+		    var isFirst = true;
+		    if(chart1 !=null){
+		    	xMin = chart1.xAxis[0].min;
+				xMax = chart1.xAxis[0].max;
+				isFirst = false;
+		    }
+		    
+
 		    if (id == "MonthScale"){
+		    	$('.MonthScale').attr('class','btn btn-primary btn-xs MonthScale');
+	      		$('.WeekScale').attr('class','btn btn-default btn-xs WeekScale');
+	      		$('.DayScale').attr('class','btn btn-default btn-xs DayScale');
+	      		$('.HourScale').attr('class','btn btn-default btn-xs HourScale');
 		    	chart1 = new Highcharts.StockChart(createAllactivityOption(monthData[0], 1000*3600*24*30));
 				chart2 = new Highcharts.StockChart(createTypeActivityOption(monthData[1], 1000*3600*24*30));
 				chart3 = new Highcharts.StockChart(createTypeApplicationOption(monthData[2], 1000*3600*24*30));
 		    }
 		    else if(id == "WeekScale"){
+	      		$('.MonthScale').attr('class','btn btn-default btn-xs MonthScale');
+	      		$('.WeekScale').attr('class','btn btn-primary btn-xs WeekScale');
+	      		$('.DayScale').attr('class','btn btn-default btn-xs DayScale');
+	      		$('.HourScale').attr('class','btn btn-default btn-xs HourScale');
 		    	chart3 = new Highcharts.StockChart(createAllactivityOption(weekData[0], 1000*3600*24*7));
 				chart2 = new Highcharts.StockChart(createTypeActivityOption(weekData[1], 1000*3600*24*7));
 				chart1 = new Highcharts.StockChart(createTypeApplicationOption(weekData[2], 1000*3600*24*7));
 		    }
 		    else if(id == "DayScale"){
+		    	$('.MonthScale').attr('class','btn btn-default btn-xs MonthScale');
+	      		$('.WeekScale').attr('class','btn btn-default btn-xs WeekScale');
+	      		$('.DayScale').attr('class','btn btn-primary btn-xs DayScale');
+	      		$('.HourScale').attr('class','btn btn-default btn-xs HourScale');
 		    	chart1 = new Highcharts.StockChart(createAllactivityOption(dayData[0], 1000*3600*24));
 				chart2 = new Highcharts.StockChart(createTypeActivityOption(dayData[1], 1000*3600*24));
 				chart3 = new Highcharts.StockChart(createTypeApplicationOption(dayData[2], 1000*3600*24));
 		    }
 		    else if(id == "HourScale"){
+	      		$('.MonthScale').attr('class','btn btn-default btn-xs MonthScale');
+	      		$('.WeekScale').attr('class','btn btn-default btn-xs WeekScale');
+	      		$('.DayScale').attr('class','btn btn-default btn-xs DayScale');
+	      		$('.HourScale').attr('class','btn btn-primary btn-xs HourScale');
 		    	chart1 = new Highcharts.StockChart(createAllactivityOption(hourData[0], 1000*3600));
 				chart2 = new Highcharts.StockChart(createTypeActivityOption(hourData[1], 1000*3600));
 				chart3 = new Highcharts.StockChart(createTypeApplicationOption(hourData[2], 1000*3600));
 		    }
+
+		    if(!isFirst){
+
+				chart1.options.chart.isZoomed = true;
+				chart2.options.chart.isZoomed = true;
+				chart3.options.chart.isZoomed = true;
+				chart1.xAxis[0].setExtremes(xMin, xMax, true);
+				chart2.xAxis[0].setExtremes(xMin, xMax, true);
+				chart3.xAxis[0].setExtremes(xMin, xMax, true);
+				chart1.options.chart.isZoomed = false;
+				chart2.options.chart.isZoomed = false;
+				chart3.options.chart.isZoomed = false;
+			}
 		}
 
 		function createAllactivityOption(dataForSerie, tickIntervalInput){
@@ -90,13 +129,13 @@ $(function() {
 								var xMin = this.chart.xAxis[0].min;
 								var xMax = this.chart.xAxis[0].max;
 
-								// chart1.options.chart.isZoomed = true;
+								chart1.options.chart.isZoomed = true;
 								chart2.options.chart.isZoomed = true;
 								chart3.options.chart.isZoomed = true;
-								//chart1.xAxis[0].setExtremes(xMin, xMax, true);
+								chart1.xAxis[0].setExtremes(xMin, xMax, true);
 								chart2.xAxis[0].setExtremes(xMin, xMax, true);
 								chart3.xAxis[0].setExtremes(xMin, xMax, true);
-								// chart1.options.chart.isZoomed = false;
+								chart1.options.chart.isZoomed = false;
 								chart2.options.chart.isZoomed = false;
 								chart3.options.chart.isZoomed = false;
 							}
@@ -203,13 +242,13 @@ $(function() {
 								var xMax = this.chart.xAxis[0].max;
 
 								chart1.options.chart.isZoomed = true;
-								// chart2.options.chart.isZoomed = true;
+								chart2.options.chart.isZoomed = true;
 								chart3.options.chart.isZoomed = true;
 								chart1.xAxis[0].setExtremes(xMin, xMax, true);
-								// chart2.xAxis[0].setExtremes(xMin, xMax, true);
+								chart2.xAxis[0].setExtremes(xMin, xMax, true);
 								chart3.xAxis[0].setExtremes(xMin, xMax, true);
 								chart1.options.chart.isZoomed = false;
-								// chart2.options.chart.isZoomed = false;
+								chart2.options.chart.isZoomed = false;
 								chart3.options.chart.isZoomed = false;
 							}
 						}
@@ -322,13 +361,13 @@ $(function() {
 
 								chart1.options.chart.isZoomed = true;
 								chart2.options.chart.isZoomed = true;
-								// chart3.options.chart.isZoomed = true;
+								chart3.options.chart.isZoomed = true;
 								chart1.xAxis[0].setExtremes(xMin, xMax, true);
 								chart2.xAxis[0].setExtremes(xMin, xMax, true);
-								// chart3.xAxis[0].setExtremes(xMin, xMax, true);
+								chart3.xAxis[0].setExtremes(xMin, xMax, true);
 								chart1.options.chart.isZoomed = false;
 								chart2.options.chart.isZoomed = false;
-								// chart3.options.chart.isZoomed = false;
+								chart3.options.chart.isZoomed = false;
 							}
 						}
 					}
@@ -539,8 +578,8 @@ $(function() {
 				<h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
 			</div>
 			<div class="panel-body">
-				<!-- <div><label for="start">Start date:</label><input id="start" style="width: 200px" value="10/10/2011" /><label for="end">End date:</label><input id="end" style="width: 200px" value="10/10/2012"/></div>
-				 --><div class="row"><div class="col-md-2 col-md-offset-5"><h4>กิจกรรมทั้งหมด</h4></div></div>
+				<!-- <div><label for="start">Start date:</label><input id="start" style="width: 200px" value="10/10/2011" /><label for="end">End date:</label><input id="end" style="width: 200px" value="10/10/2012"/></div> -->
+				<div class="row"><div class="col-md-2 col-md-offset-5"><h4>กิจกรรมทั้งหมด</h4></div></div>
 				<div class="row">
 					<div style="margin-left: 117px;display: inline">Scale</div>
 					<div style="display: inline">
