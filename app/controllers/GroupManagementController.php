@@ -75,6 +75,7 @@ class GroupManagementController extends BaseController {
 		$input = Input::all();
 		$query = UserDim::where('screenname','=',$input['screen_name'])->get();
 		$userkey = -1;
+		$screenname = null;
 		if($query->isEmpty()){
 			$info = TwitterAPIHelper::getUserInfo($input['screen_name']);
 			if(!empty($info)){
@@ -85,6 +86,7 @@ class GroupManagementController extends BaseController {
 											$info['utc_offset'], $info['lang'], 
 											$info['profile_image_url']);
 				UserStatisticsDim::store($info['id_str'], $info['followers_count'], $info['friends_count'], $info['statuses_count']);
+				$screenname = $info['screen_name'];
 			}
 			else{
 				return Redirect::to('/group/'.$groupid)->with('error', 'ไม่พบสมาชิกที่ต้องการเพิ่ม');
@@ -92,7 +94,9 @@ class GroupManagementController extends BaseController {
 			
 		}
 		else{
-			$userkey = $query->first()->userkey;
+			$user = $query->first();
+			$userkey = $user->userkey;
+			$screenname = $user->screenname;
 		}
 		$group_user_map = new GroupUserMapping;
 		$group_user_map->groupid = $groupid;
@@ -116,16 +120,17 @@ class GroupManagementController extends BaseController {
 
 			foreach($result['ids'] as $id){
 				$followee_mapping = new FolloweeMapping;
-				echo "".$id.", ";
-				// $followee_mapping->userkey = $userkey;
-				// $followee_mapping->followeeid = $id;
-				// $followee_mapping->save(); 
+				//echo "".$id.", ";
+				$followee_mapping->userkey = $userkey;
+				$followee_mapping->followeeid = $id;
+				$followee_mapping->save(); 
 			}
 
-			echo "<br/>-------------------------------------------<br/>"
+			//echo "<br/>-------------------------------------------<br/>";
 
 		}
 		sleep(6);
+		$job->delete();
 
 	}
 	

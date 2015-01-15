@@ -7,6 +7,8 @@
 	
 	<!-- statistics CSS-->
 	@include('resultByText.statisticsCSS')
+    <!-- speedAndLifeCycle CSS-->
+    @include('resultByText.speedAndLifeCycleCSS')
 
      <script>
         $(function() {
