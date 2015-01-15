@@ -1271,7 +1271,7 @@ class AnalysisController extends BaseController {
 			$countAllFollower = $info['followers_count'];
 		}
 		
-		$recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
+		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
 		// echo "<pre>";
 		// var_dump($recent50Follower);
 		// echo "</pre>";
@@ -1295,7 +1295,7 @@ class AnalysisController extends BaseController {
 					'top10RetweetedList'=>$top10RetweetedList,
 					// 'topFollowerList'=>$topFollowerList,
 					'timelineList'=>$timelineList,
-					'recentFollowerList'=>$recent50Follower,
+					// 'recentFollowerList'=>$recent50Follower,
 					// 'maxFollowerUser'=>$maxFollowerUser,
 					// 'maxRetweetedUser' =>$maxRetweetedUser,
 					// 'maxActivityUser'=>$maxActivityUser,
