@@ -62,7 +62,7 @@ class TwitterAPIHelper
 		));
 		$method = 'https://api.twitter.com/1.1/friends/ids.json';
 		$params = array(
-			'screen_name'     => $screenName,
+			'screen_name'     => $screenname,
 			'cursor'		  => intval($cursor),
 			'stringify_ids'	  => true
 	
