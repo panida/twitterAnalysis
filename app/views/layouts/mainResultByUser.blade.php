@@ -150,7 +150,7 @@
             @include('resultByUser.speedAndLifeCycle')
         </div>
         <div class="tab-pane fade" id="interestingContributor">
-
+            @include('resultByUser.interestingContributor')
         </div>
 	   	<div class="tab-pane fade" id="tweetTimeline">
             @include('resultByUser.tweetTimeline')
