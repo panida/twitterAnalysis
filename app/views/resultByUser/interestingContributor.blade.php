@@ -1,11 +1,27 @@
 <div id="page-wrapper">
 	<div class="container-fluid top-buffer">
 		<div class="col-lg-12">
+			<h2 class="panel-title onlythaibold" style="font-size:20px;">
+		        <i class="fa fa-fw fa-user"></i> 
+		        {{$user->name}}<span style="color:#AAAAAA;">{{' @'.$user->screenname}}</span>  
+		        @if(sizeof($hisGroup)!==0)
+		        	&nbsp;เป็นหนึ่งในสมาชิกของกลุ่มตัวอย่าง
+		        	@foreach($hisGroup as $aKey=>$aGroup)
+		        		@if($aKey!==0)
+		        			,&nbsp;
+		        		@endif
+		        		<a href="{{URL::to('/group/'.$aGroup->groupid)}}" target="blank">{{$aGroup->groupname}}</a>
+		        	@endforeach
+		        @else
+		        	&nbsp;ไม่อยู่ในกลุ่มตัวอย่างวิจัยใด
+		        @endif 
+		    </h2>
+		    <br>
 			<div class="panel panel-green">
 				<div class="panel-heading">
 					<h3 class="panel-title thaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
-						กราฟแสดงจำนวนกิจกรรมแบ่งตามกลุ่มตัวอย่างวิจัย&nbsp;
+						กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างวิจัยที่เกี่ยวข้อง&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
                     </h3>
 				</div>

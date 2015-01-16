@@ -10,7 +10,7 @@ class UserDim extends Eloquent
 	public $errors;
 
 	public function groups(){
-		return $this->belongsToMany('UserGroup','GroupUserMapping','userkey','groupid');
+		return $this->belongsToMany('usergroup','group_user_mapping','userkey','groupid');
 	}
 
 	public static function convertDateTimeFormat($date){

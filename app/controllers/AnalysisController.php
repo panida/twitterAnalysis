@@ -1366,9 +1366,12 @@ class AnalysisController extends BaseController {
 		}
 		
 		ksort($totalGroup);
+
+		$hisGroup = $user->groups;
+
 		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
 		// echo "<pre>";
-		// var_dump($followeeInterestDetailList);
+		// var_dump($hisGroup);
 		// echo "</pre>";
 		// return View::make('blank_page');
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
@@ -1392,6 +1395,7 @@ class AnalysisController extends BaseController {
 					'followeeInterestCountList'=>$followeeInterestCountList,
 					'retweetInterestDetailList'=>$retweetInterestDetailList,
 					'retweetInterestCountList'=>$retweetInterestCountList,
+					'hisGroup'=>$hisGroup,
 					// 'topFollowerList'=>$topFollowerList,
 					'timelineList'=>$timelineList,
 					// 'recentFollowerList'=>$recent50Follower,

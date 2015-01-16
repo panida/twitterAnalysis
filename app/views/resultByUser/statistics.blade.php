@@ -10,7 +10,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllTweet)}}</h2><h3>ทวีต</h3></div>
                 </div> 
                 <div class="col-lg-4 col-md-6 col-sm-12">
-                    <h3>จำนวนผู้ติดตามทั้งหมด &nbsp;
+                    <h3>จำนวน<a href="{{'https://twitter.com/'.$user->screenname.'/followers'}}" target="blank" style="color:#333;">ผู้ติดตามทั้งหมด</a> &nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
                     </h3>                    
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-user" style="font-size:80px;" aria-hidden="true"></span></div>

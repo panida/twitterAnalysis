@@ -45,7 +45,10 @@
     </form>
 
     <br>
-    <h2 class="panel-title onlythaibold" style="font-size:25px;"><i class="fa fa-fw fa-user" style="color:#4171EB;"></i> จัดการสมาชิกในกลุ่ม - จำนวนสมาชิกปัจจุบัน: {{$members->count()}} คน</h2>
+    <h2 class="panel-title onlythaibold" style="font-size:25px;">
+        <i class="fa fa-fw fa-user" style="color:#4171EB;"></i> 
+        จัดการสมาชิกในกลุ่ม - จำนวนสมาชิกปัจจุบัน: {{$members->count()}} คน
+    </h2>
     <br>
     {{Form::open(array('url' => '/group/addMember/'.$groupDetail->groupid,'method'=>'post','class' => 'form-horizontal','accept-charset'=>'UTF-8'))}}    
         <div class="form-group">
