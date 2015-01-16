@@ -1028,10 +1028,61 @@ class AnalysisController extends BaseController {
 				->orderBy('totalRetweet','desc')       			
         		->get();
         	// totalRetweet also counts the original tweet edit this in view
+        	$retweetInterestList = $tweetResultList[12] //original = retweet by interesting contributor
+        		->where('twitter_analysis_fact.activitytypekey','<',3)    
+        		->leftJoin('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')       		                
+        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
+        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
+        		->orderBy('tweet_detail_dim.created_at','desc')
+        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
+        		->where('original_fact.activitytypekey','=',3)        		
+        		->leftJoin('date_dim as original_fact_date_dim','original_fact.datekey','=','original_fact_date_dim.datekey')
+				->where('original_fact_date_dim.thedate','>=',new DateTime($startDate))
+				->where('original_fact_date_dim.thedate','<=',new DateTime($endDate))
+				->rightJoin('group_user_mapping','original_fact.userkey','=','group_user_mapping.userkey')
+				->rightJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
+				->where('group_user_mapping.groupid','<>',"NULL")
+        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+        		->select('user_dim.screenname as real_screenname',
+        			'source_dim.sourcename as real_sourcename',
+        			'tweet_detail_dim.created_at as real_created_at',
+        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
+        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
+        			'twitter_analysis_fact.tweetkey as real_tweetkey',
+        			'tweet_original.text as original_text',
+        			'tweet_detail_original.created_at as original_created_at',
+        			'source_original.sourcename as original_sourcename',
+        			'user_original.name as original_name',
+        			'user_original.screenname as original_screenname',
+        			'user_original.profile_pic_url as original_pic',
+        			'original_fact_date_dim.abbr_nameofday as nameday',
+        			'original_fact_date_dim.date as date',
+        			'original_fact_date_dim.abbr_nameofmonth as month',
+        			'original_fact_date_dim.year as year',
+        			'original_fact_date_dim.thedate as thedate',
+        			'usergroup.groupid as groupid',
+					'usergroup.groupname as groupname')
+				->orderBy('groupid','asc')
+				->orderBy('original_fact_date_dim.thedate','desc');
 
+    		$retweetInterestList2 = clone $retweetInterestList;
+			$retweetInterestDetailList = $retweetInterestList
+											->get();
+			$retweetInterestCountList = $retweetInterestList2
+											->select(
+												'usergroup.groupid as groupid',
+												'usergroup.groupname as groupname',
+												DB::raw('count(*) as totalCountInAGroup')
+												)
+											->groupBy('usergroup.groupid')
+											->orderBy('groupid','asc') 
+											->get();
 
 			// echo "<pre>";
-   //   		var_dump($topRetweetedList);
+   //   		var_dump($retweetInterestCountList);
 			// echo "</pre>";
 			// return View::make('blank_page');
 	// 	$totalGroup = array();
@@ -1271,11 +1322,53 @@ class AnalysisController extends BaseController {
 			$countAllFollower = $info['followers_count'];
 		}
 
-		// $followeeInterestList
+		$followeeInterestList = FolloweeMapping::where('followeeid','=',$user->userid)
+									->leftJoin('user_dim','followee_mapping.userkey','=','user_dim.userkey')
+									->leftJoin('group_user_mapping','group_user_mapping.userkey','=','followee_mapping.userkey')
+									->leftJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
+									->where('group_user_mapping.groupid','<>',"NULL")
+									->select('user_dim.screenname as screenname',
+										'user_dim.name as name',
+										'user_dim.profile_pic_url as pic',
+										'user_dim.description as description',
+										'usergroup.groupid as groupid',
+										'usergroup.groupname as groupname'
+										);
+		$followeeInterestList2 = clone $followeeInterestList;
+		$followeeInterestDetailList = $followeeInterestList
+										->orderBy('groupid','asc')  
+										->get();
+		$followeeInterestCountList = $followeeInterestList2
+										->select(
+											'usergroup.groupid as groupid',
+											'usergroup.groupname as groupname',
+											DB::raw('count(*) as totalCountInAGroup')
+											)
+										->groupBy('usergroup.groupid')
+										->orderBy('groupid','asc') 
+										->get();
 		
+		$totalGroup = array();
+		foreach($followeeInterestCountList as $aGroup){
+			$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
+									  'groupname'=>$aGroup->groupname,
+									  'followeeCount'=>$aGroup->totalCountInAGroup,
+									  'retweetCount'=>0];
+		}
+		foreach($retweetInterestCountList as $aGroup){
+			if(array_key_exists($aGroup->groupid, $totalGroup)) 
+				$totalGroup[$aGroup->groupid]['retweetCount'] = $aGroup->totalCountInAGroup;
+			else
+				$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
+									  'groupname'=>$aGroup->groupname,
+									  'followeeCount'=>0,
+									  'retweetCount'=>$aGroup->totalCountInAGroup];
+		}
+		
+		ksort($totalGroup);
 		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
 		// echo "<pre>";
-		// var_dump($recent50Follower);
+		// var_dump($followeeInterestDetailList);
 		// echo "</pre>";
 		// return View::make('blank_page');
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
@@ -1295,6 +1388,10 @@ class AnalysisController extends BaseController {
 					'sourceProportion'=>$sourceProportion,
 					'topRetweetedList'=>$topRetweetedList,
 					'top10RetweetedList'=>$top10RetweetedList,
+					'followeeInterestDetailList'=>$followeeInterestDetailList,
+					'followeeInterestCountList'=>$followeeInterestCountList,
+					'retweetInterestDetailList'=>$retweetInterestDetailList,
+					'retweetInterestCountList'=>$retweetInterestCountList,
 					// 'topFollowerList'=>$topFollowerList,
 					'timelineList'=>$timelineList,
 					// 'recentFollowerList'=>$recent50Follower,
@@ -1316,7 +1413,7 @@ class AnalysisController extends BaseController {
 					// 'tweetInterestDetailList'=>$tweetInterestDetailList,
 					// 'retweetInterestDetailList'=>$retweetInterestDetailList,
 					// 'replyInterestDetailList'=>$replyInterestDetailList,
-					// 'totalGroupDetail'=>$totalGroup
+					'totalGroupDetail'=>$totalGroup
 				];
 		// $result = $input;
 		return View::make('layouts.mainResultByUser',$result);
