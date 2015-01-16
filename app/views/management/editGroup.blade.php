@@ -19,8 +19,10 @@
         <div class="form-group">
             <label for="name" class="col-sm-3 control-label">ชื่อกลุ่ม <span class="required">*</span></label>
             <div class="col-sm-5">
-                {{ Form::text('name', $groupDetail->groupname, ['class' => 'form-control', 'placeholder' => 'ชื่อกลุ่ม', 'required' => 'required']) }}
-                <label class="control-label" style="color:darkred; font-size:12px;">&nbsp; หมายเหตุ: ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า</label>
+                <span>{{ Form::text('name', $groupDetail->groupname, ['class' => 'form-control', 'placeholder' => 'ชื่อกลุ่ม', 'required' => 'required', 'style'=>'display:inline']) }}</span>
+            </div>
+            <div class="col-sm-1" style="padding-left:0;">
+                <span class="glyphicon glyphicon-info-sign" style="font-size:15px; vertical-align: middle;" aria-hidden="true" title="ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า"></span>
             </div>     
             
             <!-- <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" data-toggle="tooltip" title="ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า"></span>                -->
@@ -35,7 +37,9 @@
             <div class="col-sm-offset-3 col-sm-8">
                 {{ Form::submit('บันทึกการแก้ไข', array('class'=>'btn btn-primary'))}}
                 &nbsp;
-                <a href="{{{ URL::to('deleteGroup/'.$groupDetail->groupid) }}}"><button type="button" class="btn btn-danger" onclick="confirmDeleteGroup()">ลบกลุ่มตัวอย่างนี้</button></a>
+                <a href="{{{ URL::to('deleteGroup/'.$groupDetail->groupid) }}}">
+                    <button type="button" class="btn btn-danger" onclick="return confirm('หากลบกลุ่มตัวอย่างนี้แล้วจะไม่สามารถเรียกคือนข้อมูลใดๆเกี่ยวกับกลุ่มตัวอย่างนี้ได้ คุณมั่นใจที่จะลบกลุ่มตัวอย่างวิจัยนี้ใช่หรือไม่')">ลบกลุ่มตัวอย่างนี้</button>
+                </a>
             </div>
         </div>
     </form>
@@ -80,7 +84,9 @@
                                 <strong class="primary-font"><a href="{{$member->user_timeline_url}}" target="blank" class="tweet_screen_name2 screen_name">{{$member->name}}</a></strong> 
                                 <span style="color:#AAAAAA;">{{'@'.$member->screenname}}</span>    
                                 <span class="chat-img pull-right">                                    
-                                    <a href="{{{ URL::to('deleteMember/'.$groupDetail->groupid.'/'.$member->userkey) }}}"><button type="button" class="btn btn-danger" onclick="confirmDelete()">ลบออกจากกลุ่ม</button></a>
+                                    <a href="{{{ URL::to('deleteMember/'.$groupDetail->groupid.'/'.$member->userkey) }}}">
+                                        <button type="button" class="btn btn-danger" onclick="return confirm('คุณมั่นใจหรือไม่ที่จะลบสมาชิกคนนี้ออกจากกลุ่ม')">ลบออกจากกลุ่ม</button>
+                                    </a>
                                 </span>                            
                             </div>
                             <p>
@@ -99,26 +105,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function confirmDelete() {
-            var r = confirm("คุณมั่นใจหรือไม่ที่จะลบสมาชิกคนนี้ออกจากกลุ่ม");
-            if (r == true) {
-                window.location.href = 'http://www.thaicreate.com';
-            } else {
-                window.location.href = '#';
-            }
-        }
-
-        function confirmDeleteGroup() {
-            var r = confirm("หากลบกลุ่มตัวอย่างนี้แล้วจะไม่สามารถเรียกคือนข้อมูลใดๆเกี่ยวกับกลุ่มตัวอย่างนี้ได้ คุณมั่นใจที่จะลบกลุ่มตัวอย่างวิจัยนี้ใช่หรือไม่");
-            if (r == true) {
-                window.location.href = "{{{ URL::to('deletegroup') }}}";
-            } else {
-                window.location.href = '#';
-            }
-        }
-    </script>
-
 
 @stop

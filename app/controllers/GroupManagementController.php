@@ -102,7 +102,7 @@ class GroupManagementController extends BaseController {
 		$group_user_map->groupid = $groupid;
 		$group_user_map->userkey = $userkey;
 		$group_user_map->save();
-		Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
+		//Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
 		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
 	}
 

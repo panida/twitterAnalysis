@@ -21,8 +21,10 @@
         <label for="name" class="col-sm-3 control-label">ชื่อกลุ่ม <span class="required">*</span></label>
         <div class="col-sm-5">
             {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'ชื่อกลุ่ม', 'required' => 'required']) }}
-            <label class="control-label" style="color:darkred; font-size:12px;">&nbsp; หมายเหตุ: ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า</label>
         </div>     
+        <div class="col-sm-1" style="padding-left:0;">
+            <span class="glyphicon glyphicon-info-sign" style="font-size:15px; vertical-align: middle;" aria-hidden="true" title="ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า"></span>
+        </div>
         
         <!-- <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" data-toggle="tooltip" title="ชื่อกลุ่มต้องไม่ซ้ำกับกลุ่มอื่นๆที่มีอยู่ก่อนหน้า"></span>                -->
     </div><!--form-group-->
