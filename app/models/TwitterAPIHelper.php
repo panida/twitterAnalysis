@@ -19,6 +19,7 @@ class TwitterAPIHelper
 		);
 		$code = $tmhOAuth->request('GET', $method, $params);
 		$result = [];
+
 		if($code == 200){
 			//$result = $tmhOAuth;
 			$result = json_decode($tmhOAuth->response["response"], true);
@@ -68,6 +69,7 @@ class TwitterAPIHelper
 	
 		);
 		$code = $tmhOAuth->request('GET', $method, $params);
+		//echo $code;
 		$result = [];
 		if($code == 200){
 			//$result = $tmhOAuth;

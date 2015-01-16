@@ -1270,6 +1270,8 @@ class AnalysisController extends BaseController {
 		if(!empty($info)){
 			$countAllFollower = $info['followers_count'];
 		}
+
+		// $followeeInterestList
 		
 		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
 		// echo "<pre>";
