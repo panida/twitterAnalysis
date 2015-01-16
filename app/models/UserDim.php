@@ -39,7 +39,10 @@ class UserDim extends Eloquent
 		return $user->userkey;
 	}
 
-
+	public function userStatus()
+    {
+        return $this->hasOne('FolloweeProcessedUser','userkey','userkey');
+    }
 
 
 }

@@ -81,6 +81,7 @@ class GroupManagementController extends BaseController {
 		$query = UserDim::where('screenname','=',$input['screen_name'])->get();
 		$userkey = -1;
 		$screenname = null;
+		$info = null;
 		if($query->isEmpty()){
 			$info = TwitterAPIHelper::getUserInfo($input['screen_name']);
 			if(!empty($info)){
@@ -95,8 +96,7 @@ class GroupManagementController extends BaseController {
 			}
 			else{
 				return Redirect::to('/group/'.$groupid)->with('error', 'ไม่พบสมาชิกที่ต้องการเพิ่ม');
-			}
-			
+			}	
 		}
 		else{
 			$user = $query->first();
@@ -111,13 +111,23 @@ class GroupManagementController extends BaseController {
 		$preprocessUser = FolloweeProcessedUser::find($userkey);
 
 		if(!$preprocessUser){
-			$processedUser = new FolloweeProcessedUser;
-			$processedUser->userkey = $userkey;
-			$processedUser->status = 'process';
-			$processedUser->save();
-			Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
+			if($query->isEmpty() && $info['protected']==true){
+				$processedUser = new FolloweeProcessedUser;
+				$processedUser->userkey = $userkey;
+				$processedUser->status = 'finish';
+				$processedUser->protected = 'yes';
+				$processedUser->save();
+			}
+			else{
+				$processedUser = new FolloweeProcessedUser;
+				$processedUser->userkey = $userkey;
+				$processedUser->status = 'process';
+				$processedUser->protected = 'no';
+				$processedUser->save();
+				Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
+			}
+			
 		}
-		
 		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
 	}
 
@@ -147,6 +157,12 @@ class GroupManagementController extends BaseController {
 				$processedUser->save();
 			}
 
+		}
+		else{
+			$processedUser = FolloweeProcessedUser::find($userkey);
+			$processedUser->status = 'finish';
+			$processedUser->protected = 'yes';
+			$processedUser->save();
 		}
 		sleep(6);
 		$job->delete();
