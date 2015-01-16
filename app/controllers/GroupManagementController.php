@@ -4,11 +4,16 @@ class GroupManagementController extends BaseController {
 	
 	public function createGroup(){
 		$groups = UserGroup::all();
-		$memberCount = array();
+		//$memberCount = [];
+		$notFinishedMembers = array();
 		foreach($groups as $group){
 			$memberCount[$group->groupid] = $group->users->count();
 		}
-		return View::make('management.addGroup',['groups'=>$groups,'memberCount'=>$memberCount]);
+		$query = FolloweeProcessedUser::where('status','=','process')->get();
+		//if(!$query->isEmpty()){
+			$notFinishedMembers = $query;
+		//}
+		return View::make('management.addGroup',['groups'=>$groups,'memberCount'=>$memberCount, 'notFinishedMembers'=>$notFinishedMembers]);
 	}
 
 	public function addGroup(){
@@ -76,6 +81,7 @@ class GroupManagementController extends BaseController {
 		$query = UserDim::where('screenname','=',$input['screen_name'])->get();
 		$userkey = -1;
 		$screenname = null;
+		$info = null;
 		if($query->isEmpty()){
 			$info = TwitterAPIHelper::getUserInfo($input['screen_name']);
 			if(!empty($info)){
@@ -90,8 +96,7 @@ class GroupManagementController extends BaseController {
 			}
 			else{
 				return Redirect::to('/group/'.$groupid)->with('error', 'ไม่พบสมาชิกที่ต้องการเพิ่ม');
-			}
-			
+			}	
 		}
 		else{
 			$user = $query->first();
@@ -102,7 +107,27 @@ class GroupManagementController extends BaseController {
 		$group_user_map->groupid = $groupid;
 		$group_user_map->userkey = $userkey;
 		$group_user_map->save();
-		//Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
+		
+		$preprocessUser = FolloweeProcessedUser::find($userkey);
+
+		if(!$preprocessUser){
+			if($query->isEmpty() && $info['protected']==true){
+				$processedUser = new FolloweeProcessedUser;
+				$processedUser->userkey = $userkey;
+				$processedUser->status = 'finish';
+				$processedUser->protected = 'yes';
+				$processedUser->save();
+			}
+			else{
+				$processedUser = new FolloweeProcessedUser;
+				$processedUser->userkey = $userkey;
+				$processedUser->status = 'process';
+				$processedUser->protected = 'no';
+				$processedUser->save();
+				Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => "-1"));
+			}
+			
+		}
 		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
 	}
 
@@ -113,10 +138,6 @@ class GroupManagementController extends BaseController {
 
 		$result = TwitterAPIHelper::find_followee($userkey,$screenname,$cursor);
 		if(!empty($result)){
-			
-			if($result['next_cursor_str']!='0'){
-				Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => $result['next_cursor_str']));
-			}
 
 			foreach($result['ids'] as $id){
 				$followee_mapping = new FolloweeMapping;
@@ -127,7 +148,21 @@ class GroupManagementController extends BaseController {
 			}
 
 			//echo "<br/>-------------------------------------------<br/>";
+			if($result['next_cursor_str']!='0'){
+				Queue::push('GroupManagementController@addFollowee', array('userkey' => "".$userkey, 'screenname' => ''.$screenname, 'cursor' => $result['next_cursor_str']));
+			}
+			else{
+				$processedUser = FolloweeProcessedUser::find($userkey);
+				$processedUser->status = 'finish';
+				$processedUser->save();
+			}
 
+		}
+		else{
+			$processedUser = FolloweeProcessedUser::find($userkey);
+			$processedUser->status = 'finish';
+			$processedUser->protected = 'yes';
+			$processedUser->save();
 		}
 		sleep(6);
 		$job->delete();

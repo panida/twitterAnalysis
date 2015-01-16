@@ -85,7 +85,14 @@
                         <div class="chat-body clearfix">
                             <div class="header">
                                 <strong class="primary-font"><a href="{{$member->user_timeline_url}}" target="blank" class="tweet_screen_name2 screen_name">{{$member->name}}</a></strong> 
-                                <span style="color:#AAAAAA;">{{'@'.$member->screenname}}</span>    
+                                <span style="color:#AAAAAA;">{{'@'.$member->screenname}}</span>
+                                <span>
+                                    @if($member->userStatus->protected=="yes")
+                                    <i class="fa fa-fw fa-lock" style="color:#AAAAAA;"></i>
+                                    @else
+                                    <i class="fa fa-fw fa-unlock" style="color:#AAAAAA;"></i>
+                                    @endif
+                                </span>    
                                 <span class="chat-img pull-right">                                    
                                     <a href="{{{ URL::to('deleteMember/'.$groupDetail->groupid.'/'.$member->userkey) }}}">
                                         <button type="button" class="btn btn-danger" onclick="return confirm('คุณมั่นใจหรือไม่ที่จะลบสมาชิกคนนี้ออกจากกลุ่ม')">ลบออกจากกลุ่ม</button>
