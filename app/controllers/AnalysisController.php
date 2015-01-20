@@ -298,7 +298,6 @@ class AnalysisController extends BaseController {
 		$tweetHour = array();
 		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
 
-
 		$countAllTweet = sizeof($tweetResult);
 		if($countAllTweet==0){
 			$result = ['type'=>$input['type'],
@@ -307,7 +306,8 @@ class AnalysisController extends BaseController {
 					'startDate'=>$startDate,
 					'endDate'=>$endDate,
 					'countAllTweet'=>$countAllTweet,
-					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey')];
+					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
+					'cases'=> ResearchCaseDim::caseData()];
 			return View::make('layouts.notFound',$result);
 		}
 
@@ -748,6 +748,7 @@ class AnalysisController extends BaseController {
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
+					'cases'=> ResearchCaseDim::caseData(),
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
 					'endDate'=>$endDate,
@@ -817,7 +818,8 @@ class AnalysisController extends BaseController {
 					'startDate'=>$startDate,
 					'endDate'=>$endDate,
 					'countAllTweet'=>$countAllTweet,
-					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey')];
+					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
+					'cases'=> ResearchCaseDim::caseData()];
 			return View::make('layouts.notFound',$result);
 		}
 
@@ -1379,6 +1381,7 @@ class AnalysisController extends BaseController {
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
+					'cases'=> ResearchCaseDim::caseData(),
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
 					'endDate'=>$endDate,

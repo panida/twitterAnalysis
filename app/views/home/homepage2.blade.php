@@ -35,7 +35,7 @@
                     <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">กรณีศึกษา</label>
                         <div class="col-lg-6 col-md-6 col-sm-6">
-                            {{ Form::select('caseID', array(null=>'กรุณาเลือกกรณีศึกษา')+$researchCase, null , ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                            {{ Form::select('caseID', array(null=>'กรุณาเลือกกรณีศึกษา')+$researchCase, null , ['class' => 'form-control', 'id'=> 'selectCase', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
                         </div>
                     </div>
 
@@ -168,6 +168,11 @@
                 dayNamesMin: ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
                 monthNames: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ]
             });
+        });
+        $( "#selectCase" ).change(function() {
+            var cases = {{json_encode($cases)}};
+            $("#datepicker1").val(cases[$("#selectCase").val()]['startdate']);
+            $("#datepicker2").val(cases[$("#selectCase").val()]['enddate']);
         });
         </script>
 @stop
