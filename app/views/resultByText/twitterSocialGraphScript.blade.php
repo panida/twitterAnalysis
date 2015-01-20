@@ -1,0 +1,28 @@
+<style type="text/css">
+
+/*circle.node {
+  fill: lightsteelblue;
+  stroke: #555;
+  stroke-width: 3px;
+}
+circle.leaf {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+path.hull {
+  fill: lightsteelblue;
+  fill-opacity: 0.3;
+}
+line.link {
+  stroke: #333;
+  stroke-opacity: 0.5;
+  pointer-events: none;
+}*/
+circle {
+  stroke-width: 1.5px;
+}
+
+line {
+  stroke: #999;
+}
+</style>

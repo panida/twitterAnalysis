@@ -1,7 +1,18 @@
-<div id="page-wrapper">
-	<div class="container-fluid top-buffer socialGraph">
-		
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle {
+  stroke-width: 1.5px;
+}
+
+line {
+  stroke: #999;
+}
+
+</style>
+<body>
+   <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
 var width = 960,
@@ -53,6 +64,5 @@ d3.json("miserables.json", function(error, graph) {
 });
 
 </script>
-
-	</div>
-</div>
+  </body>
+</html>

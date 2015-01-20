@@ -9,8 +9,9 @@
 	@include('resultByText.statisticsCSS')
     <!-- speedAndLifeCycle CSS-->
     @include('resultByText.speedAndLifeCycleCSS')
+    @include('resultByText.twitterSocialGraphScript')
 
-     <script>
+    <script>
         $(function() {
             $( document ).tooltip({
                 position:{
