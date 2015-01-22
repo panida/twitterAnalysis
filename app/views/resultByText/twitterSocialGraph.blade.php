@@ -2,59 +2,12 @@
 	<div class="container-fluid top-buffer socialGraph">
 		
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="{{URL::asset('js/d3.slider.js')}}"></script>
 <script>
 
-// var width = 960,
-//     height = 500,
-//     radius = 6;
-
-// var fill = d3.scale.category20();
-
-// var force = d3.layout.force()
-//     .gravity(.04)
-//     .charge(-450)
-//     .size([width, height]);
-
-// var svg = d3.select("body").select('.socialGraph').append("svg")
-//     .attr("width", width)
-//     .attr("height", height)
-//     .attr("class", "socialGraphSvg");
-
-// d3.json("miserables.json", function(error, graph) {
-//   if (error) return console.error(error);
-
-//   var link = svg.selectAll("line")
-//       .data(graph.links)
-//     .enter().append("line");
-
-//   var node = svg.selectAll("circle")
-//       .data(graph.nodes)
-//     .enter().append("circle")
-//       .attr("r", radius - .75)
-//       .style("fill", function(d) { return fill(d.group); })
-//       .style("stroke", function(d) { return d3.rgb(fill(d.group)).darker(); })
-//       .call(force.drag);
-
-//   force
-//       .nodes(graph.nodes)
-//       .links(graph.links)
-//       .on("tick", tick)
-//       .start();
-
-//   function tick() {
-//     node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
-//         .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
-
-//     link.attr("x1", function(d) { return d.source.x; })
-//         .attr("y1", function(d) { return d.source.y; })
-//         .attr("x2", function(d) { return d.target.x; })
-//         .attr("y2", function(d) { return d.target.y; });
-//   }
-// });
-
-var width = 960,     // svg width
-    height = 600,     // svg height
-    dr = 4,      // default point radius
+var width = 1100,     // svg width
+    height = 500,     // svg height
+    dr = 6,      // default point radius
     off = 15,    // cluster hull offset
     expand = {}, // expanded clusters
     data, net, force, hullg, hull, linkg, link, nodeg, node;
@@ -63,7 +16,7 @@ var curve = d3.svg.line()
     .interpolate("cardinal-closed")
     .tension(.85);
 
-var fill = d3.scale.category20();
+var stroke = d3.scale.category20();
 
 function noop() { return false; }
 
@@ -121,19 +74,7 @@ function network(data, prev, index, expand) {
         n.x = gn[i].x + Math.random();
         n.y = gn[i].y + Math.random();
       }
-    // } else {
-    //   // the node is part of a collapsed cluster
-    //   if (l.size == 0) {
-    //     // if new cluster, add to set and position at centroid of leaf nodes
-    //     nm[i] = nodes.length;
-    //     nodes.push(l);
-    //     if (gc[i]) {
-    //       l.x = gc[i].x / gc[i].count;
-    //       l.y = gc[i].y / gc[i].count;
-    //     }
-    //   }
-    //   l.nodes.push(n);
-    // }
+    
   // always count group size as we also use it to tweak the force graph strengths/distances
     l.size += 1;
   	n.group_data = l;
@@ -193,10 +134,30 @@ function drawCluster(d) {
 
 var body = d3.select("body");
 
-var vis = d3.select("body").select('.socialGraph').append("svg")
+var vis = body.select('.socialGraph').append("svg")
    .attr("width", width)
    .attr("height", height)
    .attr("class", "socialGraphSvg");
+
+var tran = body.select('.socialGraph').append("svg")
+   .attr("width", 1100)
+   .attr("height", 50)
+   .attr("class", "slidebarSvg");
+
+var playButtonBlackground = tran.append( "rect" )
+    .attr("class", "playButtonBlackground");
+    
+var playButtonImg = tran.append( "image" )
+    .attr("class", "playButtonBlackground")
+    .attr("xlink:href","https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-play-128.png")
+    .attr("width", "50px")
+    .attr("height", "50px")
+    .attr("x", 0)
+    .attr("y", 0)
+    .on("click", clickPlay );
+
+
+
 
 d3.json("miserables.json", function(json) {
   data = json;
@@ -204,6 +165,7 @@ d3.json("miserables.json", function(json) {
     o = data.links[i];
     o.source = data.nodes[o.source];
     o.target = data.nodes[o.target];
+    
   }
 
   hullg = vis.append("g");
@@ -261,7 +223,7 @@ function init() {
     .enter().append("path")
       .attr("class", "hull")
       .attr("d", drawCluster)
-      .style("fill", function(d) { return fill(d.group); });
+      .style("fill", function(d) { return stroke(d.group); });
 
   link = linkg.selectAll("line.link").data(net.links, linkid);
   link.exit().remove();
@@ -276,12 +238,14 @@ function init() {
   node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
   node.exit().remove();
   node.enter().append("circle")
-      // if (d.size) -- d.size > 0 when d is a group node.
+      // if (d.size) -- d.size > 0 when d is a group node
       .attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
+      .attr("id",function(d) { return "" + nodeid(d); })
+      .attr("fill","#FFF")
       .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
       .attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
       .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); })
-      .style("fill", function(d) { return fill(d.group); });
+      .style("stroke", function(d) { return stroke(d.group); });
 
   node.call(force.drag);
 
@@ -300,6 +264,115 @@ function init() {
         .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
   });
 }
+
+
+
+var slideWidth = 1000,
+    slideheight = 30;
+
+var x = d3.scale.linear()
+    .domain([0, 264])
+    .range([0, slideWidth])
+    .clamp(true);
+
+var brush = d3.svg.brush()
+    .x(x)
+    .extent([0, 0])
+    .on("brush", brushed);
+
+var svg = tran.append("svg")
+    .attr("width", slideWidth+20)
+    .attr("height", 50).attr("x",60).attr("y",10).attr("class","slidebarBound")
+    .append("g")
+    .attr("transform", "translate(" + 10 + "," + 0 + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + slideheight / 2 + ")")
+    .call(d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(function(d) { return ""; })
+      .tickSize(0)
+      .tickPadding(12))
+  .select(".domain")
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "halo");
+
+var slider = svg.append("g")
+    .attr("class", "slider")
+    .call(brush);
+
+slider.selectAll(".extent,.resize")
+    .remove();
+
+slider.select(".background")
+    .attr("height", slideheight);
+
+var handle = slider.append("circle")
+    .attr("class", "handle")
+    .attr("transform", "translate(0," + slideheight / 2 + ")")
+    .attr("r", 9);
+
+var currentBrush = 0;
+function brushed() {
+  var value = brush.extent()[0];
+
+  if (d3.event.sourceEvent) { // not a programmatic event
+    value = x.invert(d3.mouse(this)[0]);
+    brush.extent([value, value]);
+  }
+  if(currentBrush > value){
+    removeAnimationNode(value, currentBrush);
+  }
+  else if(currentBrush < value){
+    addAnimationNode(currentBrush, value);
+  }
+  handle.attr("cx", x(value));
+  currentBrush = value; 
+  console.log(""+value+", "+currentBrush);
+}
+
+function removeAnimationNode(pointStart, pointStop){
+  for(var k=data.transitions.length-1;k>=0;k--){
+    if(data.transitions[k].count <= pointStart) break;
+    if(data.transitions[k].count <= pointStop){
+      for(var j=0;j<data.transitions[k].nodes.length;j++){
+        d3.select('#'+data.transitions[k].nodes[j]).attr("fill","#FFFFFF");
+      }
+    }  
+  }
+}
+
+function addAnimationNode(pointStart, pointStop){
+  for(var k=0;k<data.transitions.length;k++){
+    if(data.transitions[k].count > pointStop) break;
+    if(data.transitions[k].count > pointStart){
+      for(var j=0;j<data.transitions[k].nodes.length;j++){
+        d3.select('#'+data.transitions[k].nodes[j]).attr("fill","#0000FF");
+      }
+    }
+  }
+}
+
+function clickPlay(){
+  console.log("play");
+  var i=0,k=0;
+  while(i<264){
+    if(k<data.transitions.length && data.transitions[k].count==i){
+      for(var j=0;j<data.transitions[k].nodes.length;j++){
+        d3.select('#'+data.transitions[k].nodes[j]).transition().attr("fill","#0000FF").delay(10*i);
+        console.log(""+i);
+        console.log(""+data.transitions[k].nodes[j]);
+      }
+      k++;
+    }
+    brush.extent([i, i]);
+    handle.transition().attr("cx", x(i)).delay(200*i);
+    i++;
+  }
+}
+
 
 </script>
 
