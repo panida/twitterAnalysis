@@ -270,8 +270,10 @@ function init() {
 var slideWidth = 1000,
     slideheight = 30;
 
+var isPlay = false, intervalId, maxPoint = 264;
+
 var x = d3.scale.linear()
-    .domain([0, 264])
+    .domain([0, maxPoint])
     .range([0, slideWidth])
     .clamp(true);
 
@@ -355,23 +357,35 @@ function addAnimationNode(pointStart, pointStop){
   }
 }
 
-function clickPlay(){
-  console.log("play");
-  var i=0,k=0;
-  while(i<264){
-    if(k<data.transitions.length && data.transitions[k].count==i){
-      for(var j=0;j<data.transitions[k].nodes.length;j++){
-        d3.select('#'+data.transitions[k].nodes[j]).transition().attr("fill","#0000FF").delay(10*i);
-        console.log(""+i);
-        console.log(""+data.transitions[k].nodes[j]);
-      }
-      k++;
-    }
-    brush.extent([i, i]);
-    handle.transition().attr("cx", x(i)).delay(200*i);
-    i++;
+function stepAnimationNode(){
+  if(currentBrush < maxPoint){
+    
+    handle.attr("cx", x(currentBrush));
+    addAnimationNode(currentBrush,currentBrush+1);
+    currentBrush++;
+  }
+  else{
+    clickPlay();
   }
 }
+
+
+function clickPlay(){
+  console.log("play");
+
+  if(isPlay){
+    playButtonImg = playButtonImg.attr("xlink:href","https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-play-128.png");
+    clearInterval(intervalId);
+
+  }
+  else{
+    playButtonImg = playButtonImg.attr("xlink:href","https://cdn4.iconfinder.com/data/icons/cc_mono_icon_set/blacks/48x48/playback_pause.png");
+    intervalId = setInterval(stepAnimationNode,100);
+  }
+  isPlay=!isPlay;
+}
+
+
 
 
 </script>
