@@ -2,6 +2,7 @@
 @section('customCSS')
 	<!-- Custom CSS -->
 	<link href="{{URL::asset('css/sb-admin.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{URL::asset('css/d3.slider.css')}}" />
 
 	<!-- Custom Fonts -->
 	
@@ -9,8 +10,9 @@
 	@include('resultByText.statisticsCSS')
     <!-- speedAndLifeCycle CSS-->
     @include('resultByText.speedAndLifeCycleCSS')
+    @include('resultByText.twitterSocialGraphScript')
 
-     <script>
+    <script>
         $(function() {
             $( document ).tooltip({
                 position:{

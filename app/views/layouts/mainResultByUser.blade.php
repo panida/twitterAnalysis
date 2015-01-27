@@ -11,9 +11,6 @@
     <!-- speedAndLifeCycle CSS-->
     @include('resultByText.speedAndLifeCycleCSS')
     
-    <!-- D3 -->
-    <script type="text/javascript" href="{{URL::asset('js/d3/d3.min.js')}}"></script>
-    
     <script>
         $(function() {
             $( document ).tooltip({
