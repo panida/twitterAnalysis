@@ -30,3 +30,5 @@ Route::get('deleteGroup/{groupid}', 'GroupManagementController@deleteGroup');
 Route::get('deleteMember/{groupid}/{userkey}', 'GroupManagementController@deleteMember');
 Route::post('/group/addMember/{groupid}', 'GroupManagementController@addMember');
 
+Route::get('report','HomeController@exportReport');
+Route::get('resultReport/{filename}','ReportController@getDownload');

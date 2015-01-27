@@ -136,7 +136,7 @@
                         <h2>รายงานผล</h2>
                         <h4 style="font-family:thaisansneue;">แสดงผลด้วยกราฟและแผนภูมิแบบ Interactive ง่ายต่อการเข้าใจ อีกทั้งสามารถ export รายงานออกเป็นไฟล์ pdf ได้อีกด้วย</h4>
                         <p>
-                            <a href="#" class="btn btn-primary">อ่านต่อ</a> 
+                            <a href="{{{ URL::to('report') }}}" class="btn btn-primary" target="blank">อ่านต่อ</a> 
                         </p>
                     </div>
                 </div>

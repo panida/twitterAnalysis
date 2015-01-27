@@ -98,15 +98,19 @@
     </script>
 
 	<div class="row">
-		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-			@if($type=='text')
-                <h1 class="page-header onlythaibold">
-    				ค้นหาข้อความ: {{$searchText}}
-    			</h1>
-            @else
-                <h1 class="page-header onlythaibold">
-                    ค้นหาผู้ใช้: {{$searchText}}
-                </h1>
-            @endif
+		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">			
+            <h1 class="page-header onlythaibold">
+                @if($type=='text')
+				ค้นหาข้อความ: {{$searchText}}
+                @else
+                ค้นหาผู้ใช้: {{$searchText}}
+                @endif
+                <span class="pull-right">
+                    <i class="fa fa-print" style="font-size:22px;"></i> 
+                    <a href="{{ URL::action('ReportController@getDownload',[$filename]) }}">
+                        <i class="fa fa-file-pdf-o" style="font-size:22px; color:rgb(200,10,10);"></i>
+                    </a> 
+                </span>
+			</h1>            
 		</div>
 	</div>

@@ -740,10 +740,30 @@ class AnalysisController extends BaseController {
 		}
 
 		// ----- Statistics Tab -----
-		
 		$countAllContributor = sizeof($contributorList);
 		
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
+		
+		//-------------------------GenReport-----------------------	
+		$timestamp = date('Y-m-d_h-i-s_').rand(1000,9999);	
+		$fpdf = new FPDF();
+        $fpdf->AddFont('browa','','browa.php');
+        $fpdf->AddFont('browa','B','browab.php');		
+		$fpdf->AddFont('browa','I','browai.php');
+		$fpdf->AddFont('browa','BI','browaz.php');
+		$fpdf->SetFont('browa','B',18);
+        $fpdf->AddPage();
+        // $fpdf->SetFont('Arial','B',16);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet'),0,'C');
+        $fpdf->SetFont('browa','B',16);
+        if($input['type']=='text'){
+        	$fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '.$searchText));
+        }
+        else{
+        	$fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '.$searchText));
+        }
+        $fpdf->Output(public_path().'\report\report'.$timestamp.'.pdf' ,'F');
+        $filename = 'report'.$timestamp.'.pdf';
 
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
@@ -779,7 +799,8 @@ class AnalysisController extends BaseController {
 					'tweetInterestDetailList'=>$tweetInterestDetailList,
 					'retweetInterestDetailList'=>$retweetInterestDetailList,
 					'replyInterestDetailList'=>$replyInterestDetailList,
-					'totalGroupDetail'=>$totalGroup
+					'totalGroupDetail'=>$totalGroup,
+					'filename' => $filename
 				];
 		// $result = $input;
 		return View::make('layouts.mainResultByText',$result);

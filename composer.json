@@ -8,6 +8,9 @@
 		"nesbot/Carbon": "*",
 		"pda/pheanstalk": "~2.0"
 	},
+	"require-dev": {
+	    "anouar/fpdf": "dev-master"
+	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
