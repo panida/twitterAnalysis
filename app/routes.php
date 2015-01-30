@@ -31,6 +31,12 @@ Route::get('deleteMember/{groupid}/{userkey}', 'GroupManagementController@delete
 Route::post('/group/addMember/{groupid}', 'GroupManagementController@addMember');
 
 
+Route::get('report','HomeController@exportReport');
+Route::get('resultReport/{filename}','ReportController@getDownload');
+Route::get('callForImage','ReportController@callForImage');
+Route::post('callForImage','ReportController@callForImage');
+
 Route::any('test', function(){
 	return View::make('test');
 });
+

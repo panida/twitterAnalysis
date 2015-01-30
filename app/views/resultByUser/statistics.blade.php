@@ -81,10 +81,6 @@
                             </li>
                         @endforeach
                     </ul>
-                    <!-- /.panel .chat-panel -->
-                    <div class="text-right">
-                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
                 </div>
             </div>
         </div>
