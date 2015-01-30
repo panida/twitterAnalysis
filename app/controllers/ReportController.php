@@ -17,7 +17,7 @@ class ReportController extends BaseController {
 
 	public function getDownload($filename){
 
-        $file = public_path(). "\\report\\".$filename;
+        $file = /index-utf8-encode.php(). "/report/".$filename;
   //       echo "<pre>";
 		// var_dump($file);
 		// echo "</pre>";
@@ -56,7 +56,7 @@ class ReportController extends BaseController {
 						        }]
 
 						}";
-		$url = 'http://export.highcharts.com/';
+		$url = 'http://export.highcharts.com/index-utf8-encode.php';
 		$data = array(
 					'content' => 'options',
 					'options' => $jsonString,
@@ -144,7 +144,7 @@ class ReportController extends BaseController {
 		echo "</pre>";
 		return View::make('blank_page');
 	    curl_close ($ch);
-	    $saveto = public_path().'\reportImage\pic.png';
+	    $saveto = public_path().'/reportImage/pic.png';
 	    $fp = fopen($saveto,'x');
 	    fwrite($fp, $raw);
 	    fclose($fp);

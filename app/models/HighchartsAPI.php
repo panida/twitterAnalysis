@@ -32,7 +32,7 @@ class HighchartsAPI
 
 		// 				}";
 		// $width = '500';
-		$url = 'http://export.highcharts.com/';
+		$url = 'http://export.highcharts.com';
 		$data = array(
 					'content' => 'options',
 					'options' => $jsonString,
@@ -47,7 +47,7 @@ class HighchartsAPI
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	    $raw = curl_exec($ch);
 	    curl_close ($ch);
-	    $saveto = public_path().'\reportImage\\'.$filename;
+	    $saveto = public_path().'/reportImage/'.$filename;
 	    if(file_exists($saveto)){
 	        unlink($saveto);
 	    }	    	    

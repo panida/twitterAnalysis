@@ -940,7 +940,277 @@ class AnalysisController extends BaseController {
 				}";
 		$deviceImageName = 'report'.$timestamp.'_deviceChart.png';
         HighchartsAPI::callForImage($deviceImageName,$jsonString,'500');
-   
+
+        //-----------speedAndlifecyclePic------------------
+
+        //----------- All -------------
+		$dayDataForAll = '[';
+		$length = count($tweetDay[0]);
+		$countLength = 0;
+		foreach($tweetDay[0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForAll .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForAll .= ',';
+		}
+		$dayDataForAll .= ']';
+		
+		//--------- ActivityType ------------
+		$dayDataForType = "[{name: 'Tweet', data:[";
+		$length = count($tweetDay[1][0]);
+		$countLength = 0;
+		foreach($tweetDay[1][0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= "]},{name: 'Retweet', data:[";
+		$length = count($tweetDay[1][1]);
+		$countLength = 0;
+		foreach($tweetDay[1][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= "]},{name: 'Reply', data:[";
+		$length = count($tweetDay[1][2]);
+		$countLength = 0;
+		foreach($tweetDay[1][2] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= ']}]';
+
+		//-------------- Application -------------
+		$dayDataForApplication = "[{name: 'Web', data:[";
+		$length = count($tweetDay[2][0]);
+		$countLength = 0;
+		foreach($tweetDay[2][0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Mobile', data:[";
+		$length = count($tweetDay[2][1]);
+		$countLength = 0;
+		foreach($tweetDay[2][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= ']}]';
+
+        $jsonString = "{
+				chart: {
+					type: 'area',
+					isZoomed: false
+				},
+				credits: {
+					enabled : false
+				},
+				title: {
+						text: '',
+				},
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				rangeSelector:{
+					buttons : [{
+						type : 'all',
+						text : 'All'
+					}],
+					selected : 0,
+					inputEnabled : true,
+					inputEditDateFormat: '%Y-%m-%d'
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					area: {
+						marker: {
+							radius: 3,
+						}
+					}
+				},
+				series: [{
+					name: 'All',
+					color: 'rgba(150, 150, 255, 0.5)',
+					data: ".$dayDataForAll.",
+					fillColor : {
+						linearGradient : {
+							x1: 0,
+							y1: 0,
+							x2: 0,
+							y2: 1
+						},
+						stops : [
+							[0, Highcharts.getOptions().colors[0]],
+							[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+						]
+					}
+				}]
+			}";
+		$speedAllActivityImageName = 'report'.$timestamp.'_speedAllActivity.png';
+        HighchartsAPI::callForImage($speedAllActivityImageName,$jsonString,'700');
+
+
+        $jsonString = "{
+				chart: {
+					type: 'line',
+					isZoomed: false,
+				},
+				title: {
+						text: '',
+				},
+				credits: {
+					enabled : false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true,
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					line: {
+						marker: {
+							radius: 3,
+						}
+					}
+				},
+				series: ".$dayDataForType."}";
+		
+		$speedActivityTypeImageName = 'report'.$timestamp.'_speedActivityType.png';
+        HighchartsAPI::callForImage($speedActivityTypeImageName,$jsonString,'700');
+
+        $jsonString = "{
+				chart: {
+					renderTo: 'applicationGraph',
+					type: 'line',
+				},
+				title: {
+						text: '',
+				},
+				credits: {
+					enabled : false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					line: {
+						marker: {
+							radius: 3
+						}
+					}
+				},
+				series: ".$dayDataForApplication."
+			}";
+		
+		$speedApplicationImageName = 'report'.$timestamp.'_speedApplication.png';
+        HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'700');
 
 		//-------------------------GenReport-----------------------	
 			
@@ -980,10 +1250,10 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.3 จำนวนครั้งการเข้าถึง = '.number_format($countAllImpression).' ครั้ง'));
         $fpdf->setX(25);
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.4 สัดส่วนประเภทของทวีต'));
-        $fpdf->Image(public_path().'\reportImage\\'.$activityImageName,25);
+        $fpdf->Image(public_path().'/reportImage/'.$activityImageName,25);
         $fpdf->setX(25);
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.5 สัดส่วนแอพพลิเคชั่นที่ใช้')); 
-        $fpdf->Image(public_path().'\reportImage\\'.$deviceImageName,25);
+        $fpdf->Image(public_path().'/reportImage/'.$deviceImageName,25);
         //------------------Page2----------------------
         $fpdf->AddPage();
 		$fpdf->setX(25);
@@ -1010,7 +1280,7 @@ class AnalysisController extends BaseController {
         	));        	
         }
         //------------------OutputPage-----------------
-        $fpdf->Output(public_path().'\report\\'.$filename ,'F');
+        $fpdf->Output(public_path().'/report/'.$filename ,'F');
 
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
