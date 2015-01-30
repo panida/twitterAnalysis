@@ -44,5 +44,12 @@ class UserDim extends Eloquent
         return $this->hasOne('FolloweeProcessedUser','userkey','userkey');
     }
 
+    public function twitterAnalysisFact()
+    {
+        return $this->hasMany('TwitterAnalysisFact','userkey','userkey');
+    }
+
+
+
 
 }

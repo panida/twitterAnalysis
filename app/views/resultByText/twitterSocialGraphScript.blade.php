@@ -38,8 +38,20 @@ line.link {
   marker-end: "url(#suit)";
 }
 
+.socialGraph{
+  width: 1200px;
+}
+
 .socialGraphSvg{
-  border: 1px solid #ccc;
+  border: 2px solid #5cb85c;
+}
+
+.socialGraphPanel{
+  border: 2px solid #5cb85c;
+  width: 300px;
+  height: 500px;
+  margin-left: 10px;
+  display: inline-block;
 }
 
 .axis {

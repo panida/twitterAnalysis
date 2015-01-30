@@ -265,6 +265,127 @@ class AnalysisController extends BaseController {
 		} return ($a->real_created_at<$b->real_created_at)? 1:-1; 
 	} 
 
+	function TransitionCMP($a, $b)
+	{
+	    return $a->count - $b->count;
+	}
+
+	public function prepareDataForSocialGraph($tweetResultList, $startDate, $endDate, &$socialNodes, &$socialLinks, &$socialTransitions){
+		
+		$links = DB::table('group_user_mapping AS user_map_1')
+							->join('user_dim AS friend', 'friend.userkey', '=', 'user_map_1.userkey')
+							->join('followee_mapping', 'followee_mapping.followeeid', '=', 'friend.userid')
+							->join('user_dim AS user', 'followee_mapping.userkey', '=', 'user.userkey')
+							->select(DB::raw('user.userkey AS source'), DB::raw('friend.userkey AS target'))
+							->distinct()
+							->orderBy('source')
+							->orderBy('target')
+							->get();
+
+		foreach($links as $link){
+			$obj = new \stdClass();
+			$obj->source = $link->source;
+			$obj->target = $link->target;
+			$obj->value = 500;
+			array_push($socialLinks, $obj);
+		}
+
+		$researchPeople = DB::table('group_user_mapping')
+								->join('user_dim', 'user_dim.userkey', '=', 'group_user_mapping.userkey', 'left')
+								->select(DB::raw('group_user_mapping.groupid AS groupid'),
+											DB::raw('user_dim.userkey AS userkey'), 
+											DB::raw('user_dim.screenname AS screenname'), 
+											DB::raw('user_dim.description AS description'), 
+											DB::raw('user_dim.user_timeline_url AS user_timeline_url'), 
+											DB::raw('user_dim.profile_pic_url AS profile_pic_url'))
+								->orderBy('userkey')
+								->get();
+		$num_people = count($researchPeople);
+		$i = 0;
+		$socialIndex = -1;
+		while($i<$num_people){
+			$researchPerson = $researchPeople[$i];
+
+			if($i==0 || $researchPerson->userkey != $socialNodes[$socialIndex]->name){
+				
+				$socialIndex += 1;
+				
+				$obj = new \stdClass();
+				$obj->name = $researchPerson->userkey;
+				$obj->screenname = $researchPerson->screenname;
+				$obj->description = $researchPerson->description;
+				$obj->user_timeline_url = $researchPerson->user_timeline_url;
+				$obj->profile_pic_url = $researchPerson->profile_pic_url;
+				$obj->tweet = array();
+				$obj->group = $researchPerson->groupid;
+				array_push($socialNodes, $obj);
+			}
+			else{
+				$socialNodes[$socialIndex]->group = 0;
+			}
+			$i += 1;
+		}
+
+		$nodes = $tweetResultList->join('group_user_mapping', 'group_user_mapping.userkey', '=', 'twitter_analysis_fact.userkey')
+								->join('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')  
+								->select(DB::raw('group_user_mapping.userkey AS userkey'), 
+											DB::raw('tweet_dim.text AS text'),
+											DB::raw('tweet_dim.number_of_retweet AS number_of_retweet'),
+											DB::raw('tweet_detail_dim.created_at AS created_at'),
+											DB::raw('twitter_analysis_fact.activitytypekey AS activitytypekey'))
+								->distinct()
+								->orderBy('userkey')
+								->orderBy('created_at')
+								->get();
+		
+		$socialIndex = 0;
+		foreach ($nodes as $node) {
+			$tweet = new \stdClass();
+			$tweet->text = $node->text;
+			$tweet->activitytypekey = $node->activitytypekey;
+			$tweet->created_at = $node->created_at;
+			$tweet->number_of_retweet = $node->number_of_retweet;
+
+			while($socialNodes[$socialIndex]->name < $node->userkey){
+				$socialIndex+=1;
+			}
+			array_push($socialNodes[$socialIndex]->tweet, $tweet);
+		}
+		// echo '-----------------------------------------<br/><pre>';
+		// var_dump($socialNodes);
+		// echo "</pre>";
+
+		$tempTransitions = array();
+		$startDateCarbon = Carbon::createFromFormat('Y-m-d H:i:s',$startDate." 00:00:00");
+		$endDateCarbon = Carbon::createFromFormat('Y-m-d H:i:s',$endDate." 23:00:00");
+		foreach($socialNodes as $socialNode){
+			if(count($socialNode->tweet)>0){
+				$nodeDate = Carbon::createFromFormat('Y-m-d H:i:s', $socialNode->tweet[0]->created_at);
+				$transition = new \stdClass();
+				$transition->count = $startDateCarbon->diffInHours($nodeDate);
+				$transition->node = $socialNode->name;
+				array_push($tempTransitions, $transition);
+			}
+		}
+		usort($tempTransitions, array($this,"TransitionCMP"));
+		$tranIndex = -1;
+		foreach($tempTransitions as $tempTransition){
+			if($tranIndex==-1 || $tempTransition->count != $socialTransitions[$tranIndex]->count){
+				$tranIndex += 1;
+				$obj = new \stdClass();
+				$obj->count = $tempTransition->count;
+				$obj->nodes = array();
+				array_push($socialTransitions, $obj);
+			}
+			array_push($socialTransitions[$tranIndex]->nodes, $tempTransition->node);
+		}
+
+		return $startDateCarbon->diffInHours($endDateCarbon)+1;
+		
+
+	}
+
+
 	public function analyse(){		
 		$input = Input::all();
 		if($input['type']=='text'){
@@ -310,6 +431,21 @@ class AnalysisController extends BaseController {
 					'cases'=> ResearchCaseDim::caseData()];
 			return View::make('layouts.notFound',$result);
 		}
+		
+		//prepare data for social graph
+		$socialNodes = array();
+		$socialLinks = array();
+		$socialTransitions = array();
+
+		$tweetResultListForSocialGraph = clone $tweetResultList;
+
+		$slidebarLength = AnalysisController::prepareDataForSocialGraph($tweetResultListForSocialGraph, $startDate, $endDate, $socialNodes, $socialLinks, $socialTransitions);
+		$socialGraphData = new \stdClass();
+		$socialGraphData->nodes = $socialNodes;
+		$socialGraphData->links = $socialLinks;
+		$socialGraphData->transitions = $socialTransitions;
+		$socialGraphData = json_encode($socialGraphData, JSON_UNESCAPED_UNICODE);
+		
 
         						// ->get();
   //       var_dump($topFollowerList);
@@ -779,7 +915,9 @@ class AnalysisController extends BaseController {
 					'tweetInterestDetailList'=>$tweetInterestDetailList,
 					'retweetInterestDetailList'=>$retweetInterestDetailList,
 					'replyInterestDetailList'=>$replyInterestDetailList,
-					'totalGroupDetail'=>$totalGroup
+					'totalGroupDetail'=>$totalGroup,
+					'socialGraphData' => $socialGraphData,
+					'slidebarLength' => $slidebarLength
 				];
 		// $result = $input;
 		return View::make('layouts.mainResultByText',$result);
