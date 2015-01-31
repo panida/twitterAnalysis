@@ -93,7 +93,7 @@
                 @yield('addEditGroup')                
             </div>
         </div>
-
+        <hr>
 
 
 @stop
