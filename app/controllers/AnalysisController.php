@@ -940,6 +940,146 @@ class AnalysisController extends BaseController {
 				}";
 		$deviceImageName = 'report'.$timestamp.'_deviceChart.png';
         HighchartsAPI::callForImage($deviceImageName,$jsonString,'500');
+        //-------------------------InterestingContributorGraph1----
+   		$jsonString=" {
+				        chart: {
+				            type: 'column'
+				        },
+				        title: {
+				            text: ''
+				        },
+				        xAxis: {
+				            categories: [";
+				            	for($i=1;$i<=count($totalGroup);$i++){
+				            		$jsonString.="'Group".$i."',";
+				            	}
+				            	$jsonString.="],
+				            title: {
+				                text: null
+				            }
+				        },
+				        yAxis: {
+				            min: 0,
+				            title: {
+				                text: 'Number of Tweets',
+				                align: 'high'
+				            },
+				            labels: {
+				                overflow: 'justify'
+				            }
+				        },
+				        plotOptions: {
+				            bar: {
+				                dataLabels: {
+				                    enabled: true
+				                }
+				            }
+				        },
+				        legend: {
+				            layout: 'vertical',
+				            align: 'right',
+				            verticalAlign: 'top',
+				            x: -40,
+				            y: 100,
+				            floating: true,
+				            borderWidth: 1,
+				            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+				            shadow: true
+				        },
+				        credits: {
+				            enabled: false
+				        },
+				        series: [{
+				            name: 'Tweet',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['tweetCount'].",";
+				            	}
+				            $jsonString.="]
+				        }, {
+				            name: 'Retweet',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['retweetCount'].",";
+				            	}
+				            $jsonString.="]
+				        }, {
+				            name: 'Reply',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['replyCount'].",";
+				            	}
+				            $jsonString.="]
+				        }, {
+				            name: 'BeRetweeted',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['beRetweetedCount'].",";
+				            	}
+				            $jsonString.="]
+				        }
+				        ]
+				    }";
+		$interestingContributor1ImageName = 'report'.$timestamp.'_interestingContributor1Chart.png';
+        HighchartsAPI::callForImage($interestingContributor1ImageName,$jsonString,'450');
+        //-------------------------InterestingContributorGraph2----
+   		$jsonString="{
+				        chart: {
+				            type: 'column'
+				        },
+				        title: {
+				            text: ''
+				        },
+				        xAxis: {
+				            categories: ['Tweet', 'Retweet', 'Reply'],
+				            title: {
+				                text: null
+				            }
+				        },
+				        yAxis: {
+				            min: 0,
+				            title: {
+				                text: 'Number of Tweets',
+				                align: 'high'
+				            },
+				            labels: {
+				                overflow: 'justify'
+				            }
+				        },
+				        plotOptions: {
+				            bar: {
+				                dataLabels: {
+				                    enabled: true
+				                }
+				            }
+				        },
+				        legend: {
+				            layout: 'vertical',
+				            align: 'right',
+				            verticalAlign: 'top',
+				            x: -40,
+				            y: 100,
+				            floating: true,
+				            borderWidth: 1,
+				            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+				            shadow: true
+				        },
+				        credits: {
+				            enabled: false
+				        },
+				        series: [";
+				        $index=1;
+				        foreach($totalGroup as $aGroup){
+				        	$jsonString.="{
+				        		name: 'Group".$index."',".
+				        		"data: [".$aGroup['tweetCount'].",".$aGroup['retweetCount'].",".$aGroup['replyCount']."]
+				        	},";
+				        	$index++;
+				        }
+				        $jsonString.="]
+				    }";
+		$interestingContributor2ImageName = 'report'.$timestamp.'_interestingContributor2Chart.png';
+        HighchartsAPI::callForImage($interestingContributor2ImageName,$jsonString,'450');
 
         //-----------speedAndlifecyclePic------------------
 
@@ -1254,7 +1394,6 @@ class AnalysisController extends BaseController {
         $fpdf->setX(25);
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.5 สัดส่วนแอพพลิเคชั่นที่ใช้')); 
         $fpdf->Image(public_path().'/reportImage/'.$deviceImageName,25);
-        //------------------Page2----------------------
         $fpdf->AddPage();
 		$fpdf->setX(25);
         $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','1.6 สิบทวีตที่ถูกรีทวีตสูงสุด'));
@@ -1268,7 +1407,7 @@ class AnalysisController extends BaseController {
         					iconv('UTF-8','cp874','เวลาที่ทวีต'),
         					iconv('UTF-8','cp874','จำนวนรีทวีต')
         	));
-        $fpdf->SetFont('browa','',14);
+        $fpdf->SetFont('browa','',13);
         $fpdf->SetAligns(array('C','L','L','C','C','C'));
         foreach($top10RetweetedList as $key=>$anOriginalTweet){
         	$fpdf->Row(array(iconv('UTF-8','cp874//IGNORE',$key+1),
@@ -1279,6 +1418,34 @@ class AnalysisController extends BaseController {
         					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['retweetCount'])
         	));        	
         }
+        //------------------Page3----------------------
+        $fpdf->AddPage();
+        $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. ผู้มีส่วนร่วมที่สำคัญ'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1 ผู้มีส่วนร่วมที่มีผู้ติดตามมากที่สุด คือ @'.$maxFollowerUser['screenname'].' (มีผู้ติดตามทั้งสิ้น '.number_format($maxFollowerUser['count']).' คน)'));
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 ผู้มีส่วนร่วมที่ถูกรีทวีตมากที่สุด คือ @'.$maxRetweetedUser['screenname'].' (ถูกรีทวีตทั้งสิ้น '.number_format($maxRetweetedUser['count']).' ครั้ง)'));
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.3 ผู้ที่มีส่วนร่วมมากที่สุด คือ @'.$maxActivityUser['screenname'].' (มีส่วนร่วม '.number_format($maxActivityUser['count']).' ครั้ง)'));
+        $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างวิจัยดังนี้'));
+        $index = 0;
+        foreach($totalGroup as $aGroup){
+        	$fpdf->setX(35);
+        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','Group'.($index+1).' - '.$aGroup['groupname']));
+        	$index++;
+        }
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย'));
+        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.2  กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต'));
+        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor2ImageName,25);
         //------------------OutputPage-----------------
         $fpdf->Output(public_path().'/report/'.$filename ,'F');
 

@@ -17,7 +17,7 @@ class ReportController extends BaseController {
 
 	public function getDownload($filename){
 
-        $file = /index-utf8-encode.php(). "/report/".$filename;
+        $file = public_path(). '\report\\'.$filename;
   //       echo "<pre>";
 		// var_dump($file);
 		// echo "</pre>";
