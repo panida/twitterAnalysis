@@ -2114,6 +2114,526 @@ class AnalysisController extends BaseController {
 		// return View::make('blank_page');
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 
+		//-------------------------GenImageForReport---------------
+		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
+		//-----------ActivityPic------------------
+		$jsonString = "{
+			  	title:{
+			      text:''
+				 },
+			 	 plotOptions: {
+			            pie: {
+			                dataLabels: {
+			                    enabled: true,
+			                    format: '<b>{point.name}</b>:<br>{point.y:,.0f} ({point.percentage:.1f} %)',
+			                    style: {
+			                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+			                    }
+			                }
+			            }
+			        },
+				        series: [{
+				            type: 'pie',
+				            name: 'Application',
+				            data: [
+								['Tweets',". $countAct['tweet'] ."],
+				                ['Retweets',".$countAct['retweet']."],
+				                ['Replies',". $countAct['reply']."],
+        						]
+				        }]
+
+				}";
+		$activityImageName = 'report'.$timestamp.'_activityChart.png';
+        HighchartsAPI::callForImage($activityImageName,$jsonString,'450');
+        //-----------DevicePic------------------
+		$jsonString = "{
+			  	title:{
+			      text:''
+				 },
+			 	 plotOptions: {
+			            pie: {
+			                dataLabels: {
+			                    enabled: true,
+			                    format: '<b>{point.name}</b>:<br>{point.y:,.0f} ({point.percentage:.1f} %)',
+			                    style: {
+			                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+			                    }
+			                }
+			            }
+			        },
+				        series: [{
+				            type: 'pie',
+				            name: 'Application',
+				            data: [";
+		foreach($sourceProportion as $aSource){
+            		$jsonString .= "['".$aSource['sourceName']."',".$aSource['count']."],";
+        }
+        $jsonString .= "]
+				        }]
+
+				}";
+		$deviceImageName = 'report'.$timestamp.'_deviceChart.png';
+        HighchartsAPI::callForImage($deviceImageName,$jsonString,'450');
+        //-------------------------InterestingContributorGraph1----
+   		$jsonString=" {
+				        chart: {
+				            type: 'column'
+				        },
+				        title: {
+				            text: ''
+				        },
+				        xAxis: {
+				            categories: [";
+				            	for($i=1;$i<=count($totalGroup);$i++){
+				            		$jsonString.="'Group".$i."',";
+				            	}
+				            	$jsonString.="],
+				            title: {
+				                text: null
+				            }
+				        },
+				        yAxis: {
+				            min: 0,
+				            title: {
+				                text: 'Number of Followee / Retweets',
+				                align: 'high'
+				            },
+				            labels: {
+				                overflow: 'justify'
+				            }
+				        },
+				        plotOptions: {
+				            column: {
+				                dataLabels: {
+				                    enabled: true,
+				                    color: '#666',
+				                }
+				            }
+				        },
+				        legend: {
+				            layout: 'vertical',
+				            align: 'right',
+				            verticalAlign: 'top',
+				            x: -40,
+				            y: 100,
+				            floating: true,
+				            borderWidth: 1,
+				            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+				            shadow: true
+				        },
+				        credits: {
+				            enabled: false
+				        },
+				        series: [{
+				            name: 'Followee',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['followeeCount'].",";
+				            	}
+				            $jsonString.="]
+				        }, {
+				            name: 'Retweet',
+				            data: [";
+				            	foreach($totalGroup as $aGroup){
+				            		$jsonString.=$aGroup['retweetCount'].",";
+				            	}
+				            $jsonString.="]
+				        }
+				        ]
+				    }";
+		$interestingContributor1ImageName = 'report'.$timestamp.'_interestingContributor1Chart.png';
+        HighchartsAPI::callForImage($interestingContributor1ImageName,$jsonString,'450');
+
+        //-----------speedAndlifecyclePic------------------
+
+        //----------- All -------------
+		$dayDataForAll = '[';
+		$length = count($tweetDay[0]);
+		$countLength = 0;
+		foreach($tweetDay[0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForAll .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForAll .= ',';
+		}
+		$dayDataForAll .= ']';
+		
+		//--------- ActivityType ------------
+		$dayDataForType = "[{name: 'Tweet', data:[";
+		$length = count($tweetDay[1][0]);
+		$countLength = 0;
+		foreach($tweetDay[1][0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= "]},{name: 'Retweet', data:[";
+		$length = count($tweetDay[1][1]);
+		$countLength = 0;
+		foreach($tweetDay[1][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= "]},{name: 'Reply', data:[";
+		$length = count($tweetDay[1][2]);
+		$countLength = 0;
+		foreach($tweetDay[1][2] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForType .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForType .= ',';
+		}
+		$dayDataForType .= ']}]';
+
+		//-------------- Application -------------
+		$dayDataForApplication = "[{name: 'Web', data:[";
+		$length = count($tweetDay[2][0]);
+		$countLength = 0;
+		foreach($tweetDay[2][0] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Mobile', data:[";
+		$length = count($tweetDay[2][1]);
+		$countLength = 0;
+		foreach($tweetDay[2][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= ']}]';
+
+        $jsonString = "{
+				chart: {
+					type: 'area',
+					isZoomed: false
+				},
+				credits: {
+					enabled : false
+				},
+				title: {
+						text: '',
+				},
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				rangeSelector:{
+					buttons : [{
+						type : 'all',
+						text : 'All'
+					}],
+					selected : 0,
+					inputEnabled : true,
+					inputEditDateFormat: '%Y-%m-%d'
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					area: {
+						marker: {
+							radius: 3,
+						}
+					}
+				},
+				series: [{
+					name: 'All',
+					color: 'rgba(150, 150, 255, 0.5)',
+					data: ".$dayDataForAll.",
+					fillColor : {
+						linearGradient : {
+							x1: 0,
+							y1: 0,
+							x2: 0,
+							y2: 1
+						},
+						stops : [
+							[0, Highcharts.getOptions().colors[0]],
+							[1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+						]
+					}
+				}]
+			}";
+		$speedAllActivityImageName = 'report'.$timestamp.'_speedAllActivity.png';
+        HighchartsAPI::callForImage($speedAllActivityImageName,$jsonString,'600');
+
+
+        $jsonString = "{
+				chart: {
+					type: 'line',
+					isZoomed: false,
+				},
+				title: {
+						text: '',
+				},
+				credits: {
+					enabled : false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true,
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					line: {
+						marker: {
+							radius: 3,
+						}
+					}
+				},
+				series: ".$dayDataForType."}";
+		
+		$speedActivityTypeImageName = 'report'.$timestamp.'_speedActivityType.png';
+        HighchartsAPI::callForImage($speedActivityTypeImageName,$jsonString,'600');
+
+        $jsonString = "{
+				chart: {
+					renderTo: 'applicationGraph',
+					type: 'line',
+				},
+				title: {
+						text: '',
+				},
+				credits: {
+					enabled : false
+				},
+				navigator: {
+		            margin: 10
+		        },
+				xAxis: {
+					type: 'datetime',
+					title: {
+						text: 'Date-Time'
+					},
+					minTickInterval: 86400000,
+					
+					startOnTick: true,
+					endOnTick: true,
+					showLastLabel: true
+				},
+				yAxis: {
+					floor: 0,
+					labels: {
+						align: 'right',
+						x: -3
+					},
+					title: {
+						text: 'Number of Tweets'
+					},
+					
+					lineWidth: 2,
+					opposite: false,
+					offset: 0
+					
+				},
+				legend: {
+					enabled: true,
+					floating:true,
+					align: 'center',
+					layout: 'horizontal',
+					verticalAlign: 'top',
+					borderWidth: 1
+					
+				},
+				plotOptions: {
+					line: {
+						marker: {
+							radius: 3
+						}
+					}
+				},
+				series: ".$dayDataForApplication."
+			}";
+		
+		$speedApplicationImageName = 'report'.$timestamp.'_speedApplication.png';
+        HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'600');
+
+		//-------------------------GenReport-----------------------	
+			
+		$filename = 'report'.$timestamp.'.pdf';
+		$fpdf = new PDF();
+		$fpdf->AliasNbPages('tp');
+        $fpdf->AddFont('browa','','browa.php');
+        $fpdf->AddFont('browa','B','browab.php');		
+		$fpdf->AddFont('browa','I','browai.php');
+		$fpdf->AddFont('browa','BI','browaz.php');
+		$fpdf->SetFont('browa','B',18);
+		$fpdf->SetLeftMargin(10);
+        //------------------Page1----------------------
+        $fpdf->AddPage();
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet'),0,'C');
+        $fpdf->SetFont('browa','B',16);
+        $x = $fpdf->GetX();
+		$y = $fpdf->GetY();
+        if($input['type']=='text'){
+        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+        }
+        else{
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+        }
+        $fpdf->SetXY($x + 40, $y);
+        $fpdf->SetFont('browa','',16);
+        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
+        $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ผลการค้นหา : '));
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1. ค่าสถิติเบื้องต้น'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.1 จำนวนทวีตทั้งหมด = '.number_format($countAllTweet).' ทวีต'));
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.2 จำนวนผู้ติดตามทั้งหมด = '.number_format($countAllFollower).' คน'));
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.3 จำนวนครั้งการเข้าถึง = '.number_format($countAllImpression).' ครั้ง'));
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.4 สัดส่วนประเภทของทวีต'));
+        $fpdf->Image(public_path().'/reportImage/'.$activityImageName,25);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1.5 สัดส่วนแอพพลิเคชั่นที่ใช้')); 
+        $fpdf->Image(public_path().'/reportImage/'.$deviceImageName,25);
+        $fpdf->AddPage();
+		$fpdf->setX(25);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','1.6 สิบทวีตที่ถูกรีทวีตสูงสุด'));
+        $fpdf->SetFont('browa','B',14);
+        $fpdf->SetWidths(array(15,28,70,25,25,24));
+        $fpdf->SetAligns(array('C','C','C','C','C','C'));
+        $fpdf->Row(array(iconv('UTF-8','cp874','อันดับที่'),
+        					iconv('UTF-8','cp874','ชื่อผู้ใช้'),
+        					iconv('UTF-8','cp874','ข้อความที่ทวีต'),
+        					iconv('UTF-8','cp874','แอพพลิเคชั่น'),
+        					iconv('UTF-8','cp874','เวลาที่ทวีต'),
+        					iconv('UTF-8','cp874','จำนวนรีทวีต')
+        	));
+        $fpdf->SetFont('browa','',13);
+        $fpdf->SetAligns(array('C','L','L','C','C','C'));
+        foreach($top10RetweetedList as $key=>$anOriginalTweet){
+        	$fpdf->Row(array(iconv('UTF-8','cp874//IGNORE',$key+1),
+        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->name."\xA@".$anOriginalTweet->screenname),
+        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->text),
+        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->sourcename),
+        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->created_at),
+        					iconv('UTF-8','cp874//IGNORE',($anOriginalTweet->totalRetweet-1))
+        	));        	
+        }
+        //------------------Page3----------------------
+        $fpdf->AddPage();
+        $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','2. กราฟข้อมูลทวีต'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.1 กราฟปริมาณข้อมูลทวิตเตอร์ในภาพรวม'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedAllActivityImageName,25);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.2 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทกิจกรรม'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedActivityTypeImageName,25);
+        //------------------Page4----------------------
+        $fpdf->AddPage();
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.3 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทแอพพลิเคชั่น'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedApplicationImageName,25);
+        $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. กลุ่มตัวอย่างวิจัย'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        if(count($hisGroup)==0){
+        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' ไม่อยู่ในกลุ่มตัวอย่างวิจัยใด'));	
+        }
+        else{
+        	$listOfGroup = '';
+        	foreach($hisGroup as $aKey=>$aGroup){
+        		if($aKey!==0){
+        			$listOfGroup .= ', ';
+        		} 
+        		$listOfGroup .= $aGroup->groupname;
+        	}
+        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' เป็นหนึ่งในสมาชิกของกลุ่มตัวอย่าง '.$listOfGroup));	
+        }
+        $fpdf->setX(25);
+	    $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างวิจัยที่เกี่ยวข้อง'));
+        if(count($totalGroup)==0){
+        	$fpdf->setX(35);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดทำกิจกรรมเกี่ยวข้องกับผู้ใช้คนนี้'));
+        }
+        else{
+        	$index = 0;
+	        foreach($totalGroup as $aGroup){
+	        	$fpdf->setX(35);
+	        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','Group'.($index+1).' - '.$aGroup['groupname']));
+	        	$index++;
+	        }
+	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
+        }
+       
+        //------------------OutputPage-----------------
+        $fpdf->Output(public_path().'/report/'.$filename ,'F');
+
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
@@ -2156,7 +2676,8 @@ class AnalysisController extends BaseController {
 					// 'tweetInterestDetailList'=>$tweetInterestDetailList,
 					// 'retweetInterestDetailList'=>$retweetInterestDetailList,
 					// 'replyInterestDetailList'=>$replyInterestDetailList,
-					'totalGroupDetail'=>$totalGroup
+					'totalGroupDetail'=>$totalGroup,
+					'filename'=>$filename
 				];
 		// $result = $input;
 		return View::make('layouts.mainResultByUser',$result);
