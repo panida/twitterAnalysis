@@ -6,7 +6,7 @@
 					<h3 class="panel-title thaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
 						กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย&nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งแสดงจำนวนทวีตประเภทต่างๆและจำนวนครั้งการถูกรีทวีตของแต่ละกลุ่มตัวอย่างวิจัย"></span>
                     </h3>
 				</div>
 				<div class="panel-body">
@@ -114,7 +114,7 @@
 					<h3 class="panel-title thaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
 						กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต&nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งที่แสดงว่าแต่ละประเภทกิจกรรม (Tweet, Retweet, Reply) มีกลุ่มตัวอย่างวิจัยใดมีส่วนร่วมบ้าง"></span>
                     </h3>
 				</div>
 				<div class="panel-body">

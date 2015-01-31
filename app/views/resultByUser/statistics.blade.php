@@ -4,21 +4,21 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวนทวีตทั้งหมด &nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนทวีตในกรณีศึกษาทั้งหมดของผู้ใช้ค้นหา"></span>
                     </h3>
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-comment" style="font-size:80px;" aria-hidden="true"></span></div>
                     <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllTweet)}}</h2><h3>ทวีต</h3></div>
                 </div> 
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวน<a href="{{'https://twitter.com/'.$user->screenname.'/followers'}}" target="blank" style="color:#333;">ผู้ติดตามทั้งหมด</a> &nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนผู้ติดตามทั้งหมดของผู้ใช้ค้นหา"></span>
                     </h3>                    
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-user" style="font-size:80px;" aria-hidden="true"></span></div>
                     <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllFollower)}}</h2><h3>คน</h3></div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวนครั้งการเข้าถึง &nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="We ask for your age only for statistical purposes."></span>
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนผู้ติดตามรวมของทุกทวีตที่ค้นหาได้"></span>
                     </h3>
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-eye-open" style="font-size:80px;" aria-hidden="true"></span></div>
                     <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllImpression)}}</h2><h3>ครั้ง</h3></div>

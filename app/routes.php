@@ -16,7 +16,16 @@ Route::get('/', 'HomeController@showWelcome');
 Route::any('result', 'AnalysisController@analyse');
 
 Route::get('/databaseDetail', function(){
-	return View::make('management.databaseDetail');
+	$db = ResearchCaseDim::all();
+	return View::make('management.databaseDetail',['db'=>$db]);
+});
+
+Route::get('/about', function(){
+	return View::make('management.about');
+});
+
+Route::get('/contact', function(){
+	return View::make('management.contact');
 });
 
 Route::get('/groupManagement', 'GroupManagementController@createGroup');
