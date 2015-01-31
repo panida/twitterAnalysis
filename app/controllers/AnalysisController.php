@@ -910,7 +910,7 @@ class AnalysisController extends BaseController {
 
 				}";
 		$activityImageName = 'report'.$timestamp.'_activityChart.png';
-        HighchartsAPI::callForImage($activityImageName,$jsonString,'500');
+        HighchartsAPI::callForImage($activityImageName,$jsonString,'450');
         //-----------DevicePic------------------
 		$jsonString = "{
 			  	title:{
@@ -939,7 +939,7 @@ class AnalysisController extends BaseController {
 
 				}";
 		$deviceImageName = 'report'.$timestamp.'_deviceChart.png';
-        HighchartsAPI::callForImage($deviceImageName,$jsonString,'500');
+        HighchartsAPI::callForImage($deviceImageName,$jsonString,'450');
         //-------------------------InterestingContributorGraph1----
    		$jsonString=" {
 				        chart: {
@@ -1226,7 +1226,7 @@ class AnalysisController extends BaseController {
 				}]
 			}";
 		$speedAllActivityImageName = 'report'.$timestamp.'_speedAllActivity.png';
-        HighchartsAPI::callForImage($speedAllActivityImageName,$jsonString,'700');
+        HighchartsAPI::callForImage($speedAllActivityImageName,$jsonString,'600');
 
 
         $jsonString = "{
@@ -1288,7 +1288,7 @@ class AnalysisController extends BaseController {
 				series: ".$dayDataForType."}";
 		
 		$speedActivityTypeImageName = 'report'.$timestamp.'_speedActivityType.png';
-        HighchartsAPI::callForImage($speedActivityTypeImageName,$jsonString,'700');
+        HighchartsAPI::callForImage($speedActivityTypeImageName,$jsonString,'600');
 
         $jsonString = "{
 				chart: {
@@ -1350,7 +1350,7 @@ class AnalysisController extends BaseController {
 			}";
 		
 		$speedApplicationImageName = 'report'.$timestamp.'_speedApplication.png';
-        HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'700');
+        HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'600');
 
 		//-------------------------GenReport-----------------------	
 			
@@ -1378,8 +1378,9 @@ class AnalysisController extends BaseController {
         $fpdf->SetXY($x + 40, $y);
         $fpdf->SetFont('browa','',16);
         $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
         $fpdf->SetFont('browa','B',16);
-        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ผลการค้นหา'));
+        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ผลการค้นหา : '));
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','1. ค่าสถิติเบื้องต้น'));
         $fpdf->SetFont('browa','',16);
         $fpdf->setX(25);
@@ -1421,6 +1422,20 @@ class AnalysisController extends BaseController {
         //------------------Page3----------------------
         $fpdf->AddPage();
         $fpdf->SetFont('browa','B',16);
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','2. กราฟข้อมูลทวีต'));
+        $fpdf->SetFont('browa','',16);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.1 กราฟปริมาณข้อมูลทวิตเตอร์ในภาพรวม'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedAllActivityImageName,25);
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.2 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทกิจกรรม'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedActivityTypeImageName,25);
+        //------------------Page4----------------------
+        $fpdf->AddPage();
+        $fpdf->setX(25);
+        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.3 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทแอพพลิเคชั่น'));
+        $fpdf->Image(public_path().'/reportImage/'.$speedApplicationImageName,25);
+        $fpdf->SetFont('browa','B',16);
         $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. ผู้มีส่วนร่วมที่สำคัญ'));
         $fpdf->SetFont('browa','',16);
         $fpdf->setX(25);
@@ -1429,23 +1444,34 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 ผู้มีส่วนร่วมที่ถูกรีทวีตมากที่สุด คือ @'.$maxRetweetedUser['screenname'].' (ถูกรีทวีตทั้งสิ้น '.number_format($maxRetweetedUser['count']).' ครั้ง)'));
         $fpdf->setX(25);
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.3 ผู้ที่มีส่วนร่วมมากที่สุด คือ @'.$maxActivityUser['screenname'].' (มีส่วนร่วม '.number_format($maxActivityUser['count']).' ครั้ง)'));
-        $fpdf->SetFont('browa','B',16);
-        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
-        $fpdf->SetFont('browa','',16);
-        $fpdf->setX(25);
-        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างวิจัยดังนี้'));
-        $index = 0;
-        foreach($totalGroup as $aGroup){
-        	$fpdf->setX(35);
-        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','Group'.($index+1).' - '.$aGroup['groupname']));
-        	$index++;
+        if(count($totalGroup)==0){
+        	$fpdf->SetFont('browa','B',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->setX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดมีส่วนร่วมกับการค้นหานี้'));
         }
-        $fpdf->setX(25);
-        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย'));
-        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
-        $fpdf->setX(25);
-        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.2  กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต'));
-        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor2ImageName,25);
+        //------------------Page5----------------------
+        else{
+	        $fpdf->AddPage();
+	        $fpdf->SetFont('browa','B',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->setX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างวิจัยดังนี้'));
+	        $index = 0;
+	        foreach($totalGroup as $aGroup){
+	        	$fpdf->setX(35);
+	        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','Group'.($index+1).' - '.$aGroup['groupname']));
+	        	$index++;
+	        }
+	        $fpdf->setX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย'));
+	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
+	        $fpdf->setX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.2  กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต'));
+	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor2ImageName,25);
+	    }
         //------------------OutputPage-----------------
         $fpdf->Output(public_path().'/report/'.$filename ,'F');
 

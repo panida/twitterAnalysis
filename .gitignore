@@ -2,3 +2,5 @@
 .env.*.php
 .env.php
 /app/config/database.php
+/public/report/
+/public/reportImage/
