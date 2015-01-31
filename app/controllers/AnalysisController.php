@@ -397,6 +397,7 @@ class AnalysisController extends BaseController {
 	}
 
 	public function analyseByText(){
+		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		$input = Input::all();
 		$caseID = $input['caseID'];
 		$searchText = $input['searchText'];
@@ -421,6 +422,37 @@ class AnalysisController extends BaseController {
 
 		$countAllTweet = sizeof($tweetResult);
 		if($countAllTweet==0){
+			$filename = 'report'.$timestamp.'.pdf';
+			$fpdf = new PDF();
+			$fpdf->AliasNbPages('tp');
+	        $fpdf->AddFont('browa','','browa.php');
+	        $fpdf->AddFont('browa','B','browab.php');		
+			$fpdf->AddFont('browa','I','browai.php');
+			$fpdf->AddFont('browa','BI','browaz.php');
+			$fpdf->SetFont('browa','B',18);
+			$fpdf->SetLeftMargin(10);
+	        //------------------Page1----------------------
+	        $fpdf->AddPage();
+	        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet'),0,'C');
+	        $fpdf->SetFont('browa','B',16);
+	        $x = $fpdf->GetX();
+			$y = $fpdf->GetY();
+	        if($input['type']=='text'){
+	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        }
+	        else{
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        }
+	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
+	        $fpdf->SetFont('browa','B',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ผลการค้นหา : '));
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->SetX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา'));
+	        $fpdf->Output(public_path().'/report/'.$filename ,'F');
 			$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
@@ -428,7 +460,8 @@ class AnalysisController extends BaseController {
 					'endDate'=>$endDate,
 					'countAllTweet'=>$countAllTweet,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
-					'cases'=> ResearchCaseDim::caseData()];
+					'cases'=> ResearchCaseDim::caseData(),
+					'filename'=>$filename];
 			return View::make('layouts.notFound',$result);
 		}
 		
@@ -881,7 +914,6 @@ class AnalysisController extends BaseController {
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 		
 		//-------------------------GenImageForReport---------------
-		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		//-----------ActivityPic------------------
 		$jsonString = "{
 			  	title:{
@@ -1523,6 +1555,7 @@ class AnalysisController extends BaseController {
 
 	public function analyseByUser()
 	{
+		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		$input = Input::all();
 		$caseID = $input['caseID'];
 		$searchText = $input['searchText'];
@@ -1548,6 +1581,37 @@ class AnalysisController extends BaseController {
 
 		$countAllTweet = sizeof($tweetResult);
 		if($countAllTweet==0){
+			$filename = 'report'.$timestamp.'.pdf';
+			$fpdf = new PDF();
+			$fpdf->AliasNbPages('tp');
+	        $fpdf->AddFont('browa','','browa.php');
+	        $fpdf->AddFont('browa','B','browab.php');		
+			$fpdf->AddFont('browa','I','browai.php');
+			$fpdf->AddFont('browa','BI','browaz.php');
+			$fpdf->SetFont('browa','B',18);
+			$fpdf->SetLeftMargin(10);
+	        //------------------Page1----------------------
+	        $fpdf->AddPage();
+	        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet'),0,'C');
+	        $fpdf->SetFont('browa','B',16);
+	        $x = $fpdf->GetX();
+			$y = $fpdf->GetY();
+	        if($input['type']=='text'){
+	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        }
+	        else{
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        }
+	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
+	        $fpdf->SetFont('browa','B',16);
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','ผลการค้นหา : '));
+	        $fpdf->SetFont('browa','',16);
+	        $fpdf->SetX(25);
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา'));
+	        $fpdf->Output(public_path().'/report/'.$filename ,'F');
 			$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
@@ -1555,7 +1619,8 @@ class AnalysisController extends BaseController {
 					'endDate'=>$endDate,
 					'countAllTweet'=>$countAllTweet,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
-					'cases'=> ResearchCaseDim::caseData()];
+					'cases'=> ResearchCaseDim::caseData(),
+					'filename' => $filename];
 			return View::make('layouts.notFound',$result);
 		}
 
@@ -2115,7 +2180,6 @@ class AnalysisController extends BaseController {
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 
 		//-------------------------GenImageForReport---------------
-		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		//-----------ActivityPic------------------
 		$jsonString = "{
 			  	title:{
