@@ -31,12 +31,6 @@ path.hull {
   fill: lightsteelblue;
   fill-opacity: 0.3;
 }
-line.link {
-  stroke: #333;
-  stroke-opacity: 0.5;
-  pointer-events: none;
-  marker-end: "url(#suit)";
-}
 
 .socialGraph{
   width: 1200px;
@@ -82,5 +76,19 @@ line.link {
   stroke-opacity: .5;
   stroke-width: 1.25px;
   cursor: crosshair;
+}
+
+.link.real{
+  stroke: #333;
+  stroke-opacity: 0.5;
+  pointer-events: none;
+  marker-end: url(#suit);
+  stroke-width: 1;
+}
+
+.link.virtual{
+  stroke-opacity: 0;
+  pointer-events: none;
+  stroke-width: 0;
 }
 </style>

@@ -286,7 +286,7 @@ class AnalysisController extends BaseController {
 			$obj = new \stdClass();
 			$obj->source = $link->source;
 			$obj->target = $link->target;
-			$obj->value = 500;
+			$obj->type = 1;
 			array_push($socialLinks, $obj);
 		}
 
@@ -2375,8 +2375,7 @@ class AnalysisController extends BaseController {
 
         $jsonString = "{
 				chart: {
-					type: 'area',
-					isZoomed: false
+					type: 'area'
 				},
 				credits: {
 					enabled : false
@@ -2409,15 +2408,6 @@ class AnalysisController extends BaseController {
 					offset: 0
 					
 				},
-				rangeSelector:{
-					buttons : [{
-						type : 'all',
-						text : 'All'
-					}],
-					selected : 0,
-					inputEnabled : true,
-					inputEditDateFormat: '%Y-%m-%d'
-				},
 				legend: {
 					enabled: true,
 					floating:true,
@@ -2430,7 +2420,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					area: {
 						marker: {
-							radius: 3,
+							radius: 0,
 						}
 					}
 				},
@@ -2459,7 +2449,6 @@ class AnalysisController extends BaseController {
         $jsonString = "{
 				chart: {
 					type: 'line',
-					isZoomed: false,
 				},
 				title: {
 						text: '',
@@ -2508,7 +2497,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					line: {
 						marker: {
-							radius: 3,
+							radius: 0,
 						}
 					}
 				},
@@ -2569,7 +2558,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					line: {
 						marker: {
-							radius: 3
+							radius: 0
 						}
 					}
 				},

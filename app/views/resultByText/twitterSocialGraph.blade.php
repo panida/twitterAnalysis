@@ -77,7 +77,7 @@ function network(data, index) {
     u = nm[e.source.name];
     v = nm[e.target.name];
     var i = u+"|"+v,
-        l = lm[i] || (lm[i] = {source:u, target:v, size:0});
+        l = lm[i] || (lm[i] = {source:u, target:v, size:0, type:e.type});
     l.size += 1;
   }
   for (i in lm) { links.push(lm[i]); }
@@ -91,12 +91,15 @@ function convexHulls(nodes, index, offset) {
   // create point sets
   for (var k=0; k<nodes.length; ++k) {
     var n = nodes[k];
-    var i = index(n),
+    if(n.group!=0){
+      var i = index(n),
         l = hulls[i] || (hulls[i] = []);
-    l.push([n.x-offset, n.y-offset]);
-    l.push([n.x-offset, n.y+offset]);
-    l.push([n.x+offset, n.y-offset]);
-    l.push([n.x+offset, n.y+offset]);
+        l.push([n.x-offset, n.y-offset]);
+        l.push([n.x-offset, n.y+offset]);
+        l.push([n.x+offset, n.y-offset]);
+        l.push([n.x+offset, n.y+offset]);
+    }
+    
   }
 
   // create convex hulls
@@ -202,6 +205,26 @@ var linkedByIndex = {};
 //d3.json("miserables.json", function(json) {
   
   data = {{$socialGraphData}};
+
+  var nodeslen = data.nodes.length;
+  var groupRef = [];
+  for(var i=0; i < nodeslen; i++){
+    if(data.nodes[i].group != 0){
+      var groupidx = -1;
+      for(var j = 0 ; j < groupRef.length; j++){
+        if(data.nodes[i].group == groupRef[j].group){
+          groupidx = j;
+          break;
+        }
+      }
+      if(groupidx == -1){
+        groupRef.push({group:data.nodes[i].group, index:i});
+      }
+      else{
+        data.links.push({source:data.nodes[groupRef[groupidx].index].name, target:data.nodes[i].name, type:0});
+      }
+    }
+  }
   
   for (var i=0; i<data.links.length; ++i) {
     o = data.links[i];
@@ -209,8 +232,7 @@ var linkedByIndex = {};
     o.target = data.nodes[indexNode(o.target)];
     
   }
-  console.log(data);
-
+  
   hullg = vis.append("g");
   linkg = vis.append("g");
   nodeg = vis.append("g");
@@ -243,21 +265,23 @@ function init() {
     // nodes of another group or other group node or between two group nodes.
     //
     // The latter was done to keep the single-link groups ('blue', rose, ...) close.
-    return 30 +
-      Math.min(20 * Math.min((n1.size || (n1.group != n2.group ? n1.group_data.size : 0)),
-                             (n2.size || (n1.group != n2.group ? n2.group_data.size : 0))),
-           -30 +
-           30 * Math.min((n1.link_count || (n1.group != n2.group ? n1.group_data.link_count : 0)),
-                         (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
-           100);
+    // return 30 +
+    //   Math.min(20 * Math.min((n1.size || (n1.group != n2.group ? n1.group_data.size : 0)),
+    //                          (n2.size || (n1.group != n2.group ? n2.group_data.size : 0))),
+    //        -30 +
+    //        30 * Math.min((n1.link_count || (n1.group != n2.group ? n1.group_data.link_count : 0)),
+    //                      (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
+    //        100);
+
+    return (30 *(n1.group != n2.group ? 5 : 1))+30;
       //return 150;
     })
     .linkStrength(function(l, i) {
       return 0.9;
     })
     .gravity(0.05)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
-    .charge(-500)    // ... charge is important to turn single-linked groups to the outside
-    .friction(0.5)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
+    .charge(-100)    // ... charge is important to turn single-linked groups to the outside
+    .friction(0.05)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
     .start();
 
   hullg.selectAll("path.hull").remove();
@@ -271,13 +295,11 @@ function init() {
   link = linkg.selectAll("line.link").data(net.links, linkid);
   link.exit().remove();
   link.enter().append("line")
-      .attr("class", "link")
+      .attr("class", function(d){ return d.type?"link real":"link virtual";})
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; })
-      .style("marker-end",  "url(#suit)")
-      .style("stroke-width", function(d) { return d.size || 1; });
+      .attr("y2", function(d) { return d.target.y; });
 
   node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
   node.exit().remove();
@@ -307,7 +329,37 @@ function init() {
 
     node.attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
         .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
+    node.each(collide(0.5));
   });
+
+
+  function collide(alpha) {
+    var padding = 30, // separation between circles
+    radius=9;
+    var quadtree = d3.geom.quadtree(net.nodes);
+    return function(d) {
+      var rb = 2*radius + padding,
+          nx1 = d.x - rb,
+          nx2 = d.x + rb,
+          ny1 = d.y - rb,
+          ny2 = d.y + rb;
+      quadtree.visit(function(quad, x1, y1, x2, y2) {
+        if (quad.point && (quad.point !== d)) {
+          var x = d.x - quad.point.x,
+              y = d.y - quad.point.y,
+              l = Math.sqrt(x * x + y * y);
+            if (l < rb) {
+            l = (l - rb) / l * alpha;
+            d.x -= x *= l;
+            d.y -= y *= l;
+            quad.point.x += x;
+            quad.point.y += y;
+          }
+        }
+        return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+      });
+    };
+  }
 
   //for double-click focus
   for (var i = 0; i < data.nodes.length; i++) {
@@ -319,19 +371,17 @@ function init() {
 
   //arrow marker
   svg.append("defs").selectAll("marker")
-      .data(["suit", "licensing", "resolved"])
-    .enter().append("marker")
-      .attr("id", function(d) { return d; })
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 25)
-      .attr("refY", 0)
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("orient", "auto")
+    .data(["suit", "licensing", "resolved"])
+  .enter().append("marker")
+    .attr("id", function(d) { return d; })
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 23)
+    .attr("refY", 0)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
     .append("path")
-      .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-      .style("stroke", "#4679BD")
-      .style("opacity", "0.6");
+    .attr("d", "M0,-5L10,0L0,5");
 }
 
 function brushed() {
@@ -375,7 +425,7 @@ function addAnimationNode(pointStart, pointStop){
 }
 
 function stepAnimationNode(){
-  if(currentBrush < maxPoint){
+  if(currentBrush <= maxPoint){
     
     handle.attr("cx", x(currentBrush));
     addAnimationNode(currentBrush,currentBrush+1);
@@ -397,7 +447,7 @@ function clickPlay(){
   }
   else{
     playButtonImg = playButtonImg.attr("xlink:href","https://cdn4.iconfinder.com/data/icons/cc_mono_icon_set/blacks/48x48/playback_pause.png");
-    intervalId = setInterval(stepAnimationNode,50);
+    intervalId = setInterval(stepAnimationNode,80);
   }
   isPlay=!isPlay;
 }
@@ -408,6 +458,7 @@ function clickPlay(){
 function neighboring(a, b) {
     return linkedByIndex[a.index + "," + b.index];
 }
+
 function connectedNodes() {
     if (toggle == 0) {
         //Reduce the opacity of all but the neighbouring nodes
