@@ -969,9 +969,10 @@ class AnalysisController extends BaseController {
 				            }
 				        },
 				        plotOptions: {
-				            bar: {
+				            column: {
 				                dataLabels: {
-				                    enabled: true
+				                    enabled: true,
+				                    color: '#666',
 				                }
 				            }
 				        },
@@ -1047,9 +1048,10 @@ class AnalysisController extends BaseController {
 				            }
 				        },
 				        plotOptions: {
-				            bar: {
+				            column: {
 				                dataLabels: {
-				                    enabled: true
+				                    enabled: true,
+				                    color: '#666',
 				                }
 				            }
 				        },
