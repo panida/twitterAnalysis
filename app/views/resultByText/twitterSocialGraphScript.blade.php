@@ -32,6 +32,14 @@ path.hull {
   fill-opacity: 0.3;
 }
 
+.node.activeNode circle{
+  opacity: 1;
+}
+
+
+.node.hideNode circle{
+  opacity: 0.1;
+}
 .socialGraph{
   width: 1200px;
 }

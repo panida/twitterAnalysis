@@ -297,7 +297,7 @@ function init() {
     //                      (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
     //        100);
 
-    return (30 *(n1.group != n2.group ? 6 : 1))+30;
+    return (30 *(n1.group != n2.group ? 5 : 1))+30;
       //return 150;
     })
     .linkStrength(function(l, i) {
@@ -325,19 +325,46 @@ function init() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
-  node.exit().remove();
-  node.enter().append("circle")
-      // if (d.size) -- d.size > 0 when d is a group node
-      .attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
-      .attr("id",function(d) { return "key" + d.name; })
-      .attr("fill","#FFF")
-      .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
-      .attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
-      .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); })
-      .style("stroke", function(d) { return stroke(d.group); })
-      .on('dblclick', connectedNodes);
+  node = nodeg.selectAll(".node")
+    .data(net.nodes, nodeid)
+    .enter().append("g")
+    .attr("class", "node")
+    .attr("x", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
+    .attr("y", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
+    
+  node.append("circle")
+    //.attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
+    .attr("id",function(d) { return "key" + d.name; })
+    .attr("fill","#FFF")
+    .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
+    .style("stroke", function(d) { return stroke(d.group); })
+    .on('dblclick', connectedNodes)
+    .on('mouseover', showTip)
+    .on('mouseout', hideTip);
+  node.append("text")
+    .attr("dx", ".35em")
+    .attr("dy", -10)
+    .text(function(d) { return d.screenname })
+    .style("stroke", "gray")
+    .style("opacity", 0);
 
+  // node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
+  // node.exit().remove();
+  // node.enter().append("circle")
+  //     // if (d.size) -- d.size > 0 when d is a group node
+  //     .attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
+  //     .attr("id",function(d) { return "key" + d.name; })
+  //     .attr("fill","#FFF")
+  //     .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
+  //     .attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
+  //     .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); })
+  //     .style("stroke", function(d) { return stroke(d.group); })
+  //     .on('dblclick', connectedNodes);
+  // node.append("text")
+  //     .attr("dx", 10)
+  //     .attr("dy", ".35em")
+  //     .text(function(d) { return d.name })
+  //     .style("stroke", "gray");
   node.call(force.drag);
 
   force.on("tick", function() {
@@ -351,11 +378,16 @@ function init() {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-    node.attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
+    node.selectAll("circle").attr("cx", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
         .attr("cy", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
-    node.each(collide(0.5));
+    node.selectAll("circle").each(collide(0.5));
+    node.selectAll("text").attr("x", function (d) {
+        return d.x;
+    })
+        .attr("y", function (d) {
+        return d.y;
+    });
   });
-
 
   function collide(alpha) {
     var padding = 30, // separation between circles
@@ -390,7 +422,7 @@ function init() {
       linkedByIndex[i + "," + i] = 1;
   };
   data.links.forEach(function (d) {
-      linkedByIndex[d.source.index + "," + d.target.index] = 1;
+      if(d.type) linkedByIndex[d.source.index + "," + d.target.index] = 1;
   });
 
   //arrow marker
@@ -487,24 +519,36 @@ function neighboring(a, b) {
 }
 
 function connectedNodes() {
-    if (toggle == 0) {
-        //Reduce the opacity of all but the neighbouring nodes
-        d = d3.select(this).node().__data__;
-        node.style("opacity", function (o) {
-            return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
-        });
-        link.style("opacity", function (o) {
-            return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
-        });
-        //Reduce the op
-        toggle = 1;
-    } else {
-        //Put them back to opacity=1
-        node.style("opacity", 1);
-        link.style("opacity", 1);
-        toggle = 0;
-    }
+  if (toggle == 0) {
+      //Reduce the opacity of all but the neighbouring nodes
+      d = d3.select(this).node().__data__;
+      node.attr("class", function (o) {
+          return neighboring(d, o) | neighboring(o, d) ? "node activeNode" : "node hideNode";
+      });
+      link.style("opacity", function (o) {
+          return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+      });
+      //Reduce the op
+      toggle = 1;
+  } else {
+      //Put them back to opacity=1
+      node.attr("class", "node activeNode");
+      link.style("opacity", 1);
+      toggle = 0;
+  }
 }
+
+function showTip(){
+  d = d3.select(this).node().__data__;
+  node.selectAll('text').style("opacity", function(o){ return (o==d)?1:0});
+}
+
+function hideTip(){
+  d = d3.select(this).node().__data__;
+  node.selectAll('text').style("opacity", 0);
+}
+
+
 </script>
   </div>
 </div>
