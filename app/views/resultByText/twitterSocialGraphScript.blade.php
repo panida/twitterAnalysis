@@ -69,8 +69,10 @@ path.hull {
   height: 350px;
   border: 2px solid #5cb85c;
   margin: 0 0 0 0;
+  padding: 10px;
   float: left;
   top:200px;
+  overflow-y: scroll;
 }
 
 .axis {

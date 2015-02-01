@@ -292,10 +292,13 @@ class AnalysisController extends BaseController {
 
 		$researchPeople = DB::table('group_user_mapping')
 								->join('user_dim', 'user_dim.userkey', '=', 'group_user_mapping.userkey', 'left')
+								->join('followee_processed_user', 'user_dim.userkey', '=', 'followee_processed_user.userkey')
 								->select(DB::raw('group_user_mapping.groupid AS groupid'),
 											DB::raw('user_dim.userkey AS userkey'), 
-											DB::raw('user_dim.screenname AS screenname'), 
-											DB::raw('user_dim.description AS description'), 
+											DB::raw('user_dim.screenname AS screenname'),
+											DB::raw('user_dim.name AS realname'),  
+											DB::raw('user_dim.description AS description'),
+											DB::raw('followee_processed_user.protected AS isProtected'), 
 											DB::raw('user_dim.user_timeline_url AS user_timeline_url'), 
 											DB::raw('user_dim.profile_pic_url AS profile_pic_url'))
 								->orderBy('userkey')
@@ -316,6 +319,8 @@ class AnalysisController extends BaseController {
 				$obj->description = $researchPerson->description;
 				$obj->user_timeline_url = $researchPerson->user_timeline_url;
 				$obj->profile_pic_url = $researchPerson->profile_pic_url;
+				$obj->realname = $researchPerson->realname;
+				$obj->isProtected = $researchPerson->isProtected;
 				$obj->tweet = array();
 				$obj->group = $researchPerson->groupid;
 				array_push($socialNodes, $obj);
