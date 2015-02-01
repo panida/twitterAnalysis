@@ -41,11 +41,28 @@ path.hull {
 }
 
 .socialGraphPanel{
-  border: 2px solid #5cb85c;
   width: 300px;
   height: 500px;
-  margin-left: 10px;
+  margin-right: 10px;
   display: inline-block;
+}
+
+.timePanel{
+  width: 300px;
+  height: 140px;
+  border: 2px solid #5cb85c;
+  margin: 0 0 10px 0;
+  float: left;
+  text-align: center;
+}
+
+.infoPanel{
+  width: 300px;
+  height: 350px;
+  border: 2px solid #5cb85c;
+  margin: 0 0 0 0;
+  float: left;
+  top:200px;
 }
 
 .axis {

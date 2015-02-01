@@ -6,6 +6,22 @@
 
 <script>
 
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+}
+//---------------------------Date Time--------------------------------
+function addHours(date, h){
+  date1 = new Date();
+  date1.setTime(date.getTime() + (h*60*60*1000)); 
+  return date1;  
+}
+
+var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+
+var startDateForSocialGraph = new Date({{substr($startDate,0,4)}}, {{substr($startDate,5,2)}}-1, {{substr($startDate,8,2)}}, 0, 0);
+//---------------------------Social graph--------------------------------
+
 var width = 800,     // svg width
     height = 500,     // svg height
     dr = 6,      // default point radius
@@ -119,13 +135,21 @@ function drawCluster(d) {
 
 var body = d3.select("body");
 
+var panel = body.select('.socialGraph').append("div")
+   .attr("class", "socialGraphPanel"); 
+var timePanel = panel.append("div")
+   .attr("class", "timePanel");
+var showDate = timePanel.append("h1").attr("class", "showDateTime showDate");
+showDate.text(""+startDateForSocialGraph.getDate()+" "+monthNames[startDateForSocialGraph.getMonth()]+" "+startDateForSocialGraph.getFullYear());
+var showTime = timePanel.append("h1").attr("class", "showDateTime showTime");
+showTime.text(""+((startDateForSocialGraph.getHours()<10)?("0"+startDateForSocialGraph.getHours()):startDateForSocialGraph.getHours())+" : 00");
+var infoPanel = panel.append("div")
+   .attr("class", "infoPanel"); 
+
 var vis = body.select('.socialGraph').append("svg")
    .attr("width", width)
    .attr("height", height)
    .attr("class", "socialGraphSvg");
-
-var panel = body.select('.socialGraph').append("div")
-   .attr("class", "socialGraphPanel"); 
 
 var tran = body.select('.socialGraph').append("svg")
    .attr("width", 1100)
@@ -273,15 +297,15 @@ function init() {
     //                      (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
     //        100);
 
-    return (30 *(n1.group != n2.group ? 5 : 1))+30;
+    return (30 *(n1.group != n2.group ? 6 : 1))+30;
       //return 150;
     })
     .linkStrength(function(l, i) {
-      return 0.9;
+      return (l.source.group==l.target.group)?0.9:0.3;
     })
-    .gravity(0.05)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
+    .gravity(0)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
     .charge(-100)    // ... charge is important to turn single-linked groups to the outside
-    .friction(0.05)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
+    .friction(0.5)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
     .start();
 
   hullg.selectAll("path.hull").remove();
@@ -385,7 +409,7 @@ function init() {
 }
 
 function brushed() {
-  var value = brush.extent()[0];
+  var value = Math.round(brush.extent()[0]);
 
   if (d3.event.sourceEvent) { // not a programmatic event
     value = x.invert(d3.mouse(this)[0]);
@@ -399,7 +423,6 @@ function brushed() {
   }
   handle.attr("cx", x(value));
   currentBrush = value; 
-  console.log(""+value+", "+currentBrush);
 }
 
 function removeAnimationNode(pointStart, pointStop){
@@ -411,6 +434,9 @@ function removeAnimationNode(pointStart, pointStop){
       }
     }  
   }
+  var newDate = addHours(startDateForSocialGraph, pointStart);
+  showDate.text(""+newDate.getDate()+" "+monthNames[newDate.getMonth()]+" "+newDate.getFullYear());
+  showTime.text(""+((newDate.getHours()<10)?("0"+newDate.getHours()):newDate.getHours())+" : 00");
 }
 
 function addAnimationNode(pointStart, pointStop){
@@ -422,11 +448,13 @@ function addAnimationNode(pointStart, pointStop){
       }
     }
   }
+  var newDate = addHours(startDateForSocialGraph, pointStop);
+  showDate.text(""+newDate.getDate()+" "+monthNames[newDate.getMonth()]+" "+newDate.getFullYear());
+  showTime.text(""+((newDate.getHours()<10)?("0"+newDate.getHours()):newDate.getHours())+" : 00");
 }
 
 function stepAnimationNode(){
   if(currentBrush <= maxPoint){
-    
     handle.attr("cx", x(currentBrush));
     addAnimationNode(currentBrush,currentBrush+1);
     currentBrush++;
@@ -438,7 +466,6 @@ function stepAnimationNode(){
 
 
 function clickPlay(){
-  console.log("play");
 
   if(isPlay){
     playButtonImg = playButtonImg.attr("xlink:href","https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-play-128.png");

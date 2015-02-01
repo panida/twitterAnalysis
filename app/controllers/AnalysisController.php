@@ -380,7 +380,7 @@ class AnalysisController extends BaseController {
 			array_push($socialTransitions[$tranIndex]->nodes, $tempTransition->node);
 		}
 
-		return $startDateCarbon->diffInHours($endDateCarbon)+1;
+		return $startDateCarbon->diffInHours($endDateCarbon);
 		
 
 	}
