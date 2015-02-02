@@ -323,9 +323,12 @@ class AnalysisController extends BaseController {
 				$obj->isProtected = $researchPerson->isProtected;
 				$obj->tweet = array();
 				$obj->group = $researchPerson->groupid;
+				$obj->groupsList = array();
+				array_push($obj->groupsList, $researchPerson->groupid);
 				array_push($socialNodes, $obj);
 			}
 			else{
+				array_push($socialNodes[$socialIndex]->groupsList, $researchPerson->groupid);
 				$socialNodes[$socialIndex]->group = 0;
 			}
 			$i += 1;
@@ -425,6 +428,27 @@ class AnalysisController extends BaseController {
 		$tweetHour = array();
 		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
 
+		//prepare data for social graph
+		$socialNodes = array();
+		$socialLinks = array();
+		$socialTransitions = array();
+
+		$tweetResultListForSocialGraph = clone $tweetResultList;
+
+		$allGroups = UserGroup::all();
+		$existMemberGroup = array();
+		foreach ($allGroups as $group) {
+			if(count($group->users)>0)	array_push($existMemberGroup, $group);
+		}
+
+		$slidebarLength = AnalysisController::prepareDataForSocialGraph($tweetResultListForSocialGraph, $startDate, $endDate, $socialNodes, $socialLinks, $socialTransitions);
+		$socialGraphData = new \stdClass();
+		$socialGraphData->nodes = $socialNodes;
+		$socialGraphData->links = $socialLinks;
+		$socialGraphData->transitions = $socialTransitions;
+		$socialGraphData->groups = $existMemberGroup;
+		$socialGraphData = json_encode($socialGraphData, JSON_UNESCAPED_UNICODE);
+
 		$countAllTweet = sizeof($tweetResult);
 		if($countAllTweet==0){
 			$filename = 'report'.$timestamp.'.pdf';
@@ -470,19 +494,6 @@ class AnalysisController extends BaseController {
 			return View::make('layouts.notFound',$result);
 		}
 		
-		//prepare data for social graph
-		$socialNodes = array();
-		$socialLinks = array();
-		$socialTransitions = array();
-
-		$tweetResultListForSocialGraph = clone $tweetResultList;
-
-		$slidebarLength = AnalysisController::prepareDataForSocialGraph($tweetResultListForSocialGraph, $startDate, $endDate, $socialNodes, $socialLinks, $socialTransitions);
-		$socialGraphData = new \stdClass();
-		$socialGraphData->nodes = $socialNodes;
-		$socialGraphData->links = $socialLinks;
-		$socialGraphData->transitions = $socialTransitions;
-		$socialGraphData = json_encode($socialGraphData, JSON_UNESCAPED_UNICODE);
 		
 
         						// ->get();

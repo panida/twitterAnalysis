@@ -129,6 +129,8 @@
 			//Create an array logging what is connected to what
 			var linkedByIndex = {};
 
+			var previousClickNode = -1;
+
 			data = {{$socialGraphData}};
 
 			var nodeslen = data.nodes.length;
@@ -215,7 +217,11 @@
 				.enter().append("path")
 				.attr("class", "hull")
 				.attr("d", drawCluster)
-				.style("fill", function(d) { return stroke(d.group); });
+				.style("fill", function(d) { 
+					return stroke(d.group); 
+				});
+
+				
 
 				//-------------------link------------------------------
 				link = linkg.selectAll("line.link").data(net.links, linkid);
@@ -227,6 +233,36 @@
 				.attr("x2", function(d) { return d.target.x; })
 				.attr("y2", function(d) { return d.target.y; });
 
+				
+				// add legend   
+
+				var legendwidth = 200;
+				var legend = vis.append("g")
+				  .attr("class", "legend")
+				  .attr("x", width - legendwidth)
+				  .attr("y", 25)
+				  .attr("height", 100)
+				  .attr("width", legendwidth);
+				
+				legend.selectAll('g').data(data.groups)
+				    .enter()
+				    .append('g')
+				    .each(function(d, i) {
+				      var g = d3.select(this);
+				      g.append("rect")
+				        .attr("x", width - legendwidth)
+				        .attr("y", i*25+15)
+				        .attr("width", 10)
+				        .attr("height", 10)
+				        .style("fill", function(d) { return stroke(d.groupid); });
+				      g.append("text")
+				        .attr("x", width - legendwidth + 20)
+				        .attr("y", i * 25 + 23)
+				        .attr("height",30)
+				        .attr("width",100)
+				        .text(d.groupname);
+				    }
+				);
 				//-------------------node------------------------------
 				node = nodeg.selectAll(".node")
 							.data(net.nodes, nodeid)
@@ -271,6 +307,9 @@
 				//     .style("stroke", "gray");
 				node.call(force.drag);
 
+				groupLen = data.groups.length;
+
+			
 				//-------------------force------------------------------
 
 				force.on("tick", function() {
@@ -294,6 +333,8 @@
 						return d.y;
 					});
 				});
+
+
 
 				function collide(alpha) {
 					var padding = 30, // separation between circles
@@ -520,67 +561,82 @@
 				return linkedByIndex[a.index + "," + b.index];
 			}
 
-			function showDetail() {
-				if (toggle == 0) {
-						//Reduce the opacity of all but the neighbouring nodes
-						d = d3.select(this).node().__data__;
-						node.attr("class", function (o) {
-							return neighboring(d, o) | neighboring(o, d) ? "node activeNode" : "node hideNode";
-						});
-						link.style("opacity", function (o) {
-							return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
-						});
-						
-						//infoPanel
-						infoPanel.html("");
-						infoPanel.append("span").attr("class","chat-img pull-left")
-									.append("a").attr("class", "tweet_avatar2").attr("href", d.user_timeline_url)
-									.append("img").style("margin-right","5px").attr("class","avatar").attr("src", d.profile_pic_url).attr("onerror","if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';");
-						userDetailDiv = infoPanel.append("div").attr("class", "chat-body clearfix");
-						userHeaderDiv = userDetailDiv.append("div").attr("class", "header");
-						userHeaderDiv.html('<strong class="primary-font" style="display:block"><a href="'+d.user_timeline_url+'" target="blank" class="tweet_screen_name2 screen_name">'+d.realname+'</a></strong>'+ 
-			                                '<span style="color:#AAAAAA;">@'+d.screenname+'</span>'+
-			                                '<span>'+
-			                                ((d.isProtected=="yes")?'<i class="fa fa-fw fa-lock" style="color:#AAAAAA;"></i>':'<i class="fa fa-fw fa-unlock" style="color:#AAAAAA;"></i>')+
-			                                '</span>'
-			                               );
-						tweetLen = d.tweet.length;
-						if(tweetLen == 0){
-
-						}
-						else{
-							infoPanel.append("h4").style("margin-top","25px").text("ทวีตที่เกี่ยวข้อง");
-							relatedTweet = infoPanel.append("div").attr("class","panel-body").style('padding-top','5px');
-
-							relatedTweetHTML = '<ul class="chat">'
-							
-							for(var i=0; i<tweetLen; i++){
-								relatedTweetHTML += '<li>'+
-													'<div>'+
-														'<p style="margin:0;">'+d.tweet[i].text+'</p>'+
-														'<small>'+
-														'<i class="fa fa-clock-o fa-fw"></i>'+ d.tweet[i].created_at+
-														((d.tweet[i].activitytypekey==3)?'<i class="fa fa-retweet fa-fw" style="margin-left:5px"></i> Retweeted':'')+
-														'</small>'+
-					                                '</div>'+
-
-					                                '</li>';
-							}
-							relatedTweetHTML += '</ul>';
-
-							relatedTweet.html(relatedTweetHTML);
-						}
-
-
-						toggle = 1;
-					} else {
-						//Put them back to opacity=1
-						node.attr("class", "node activeNode");
-						link.style("opacity", 1);
-						infoPanel.html("<p>คลิกที่จุดเพื่อแสดงรายละเอียด</p>");
-						toggle = 0;
-					}
+			function getGroupName(groupid){
+				for(var i=0; i<data.groups.length; i++){
+					if(data.groups[i].groupid == groupid)	return data.groups[i].groupname;
 				}
+			}
+			function showDetail() {
+				d = d3.select(this).node().__data__;
+				if (d.name != previousClickNode || toggle==0) {
+					//Reduce the opacity of all but the neighbouring nodes
+					
+					node.attr("class", function (o) {
+						return neighboring(d, o) | neighboring(o, d) ? "node activeNode" : "node hideNode";
+					});
+					link.style("opacity", function (o) {
+						return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+					});
+					
+					//infoPanel
+					infoPanel.html("");
+					infoPanel.append("span").attr("class","chat-img pull-left")
+								.append("a").attr("class", "tweet_avatar2").attr("href", d.user_timeline_url)
+								.append("img").style("margin-right","5px").attr("class","avatar").attr("src", d.profile_pic_url).attr("onerror","if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';");
+					userDetailDiv = infoPanel.append("div").attr("class", "chat-body clearfix");
+					userHeaderDiv = userDetailDiv.append("div").attr("class", "header");
+					userHeaderDiv.html('<strong class="primary-font" style="display:block"><a href="'+d.user_timeline_url+'" target="blank" class="tweet_screen_name2 screen_name">'+d.realname+'</a></strong>'+ 
+		                                '<span style="color:#AAAAAA;">@'+d.screenname+'</span>'+
+		                                '<span>'+
+		                                ((d.isProtected=="yes")?'<i class="fa fa-fw fa-lock" style="color:#AAAAAA;"></i>':'<i class="fa fa-fw fa-unlock" style="color:#AAAAAA;"></i>')+
+		                                '</span>'
+		                               );
+					groupsShowList = '<strong>กลุ่ม:</strong><span style="margin-left:5px">';
+					for( var i=0; i < d.groupsList.length; i++){
+						groupsShowList += ''+getGroupName(d.groupsList[i]);
+						if(i!=d.groupsList.length-1) groupsShowList += ', ';
+					}
+					groupsShowList += '</span>';
+					infoPanel.append("div").style('font-size','1.1em').style("margin-top", "15px").html(groupsShowList);
+					tweetLen = d.tweet.length;
+					if(tweetLen == 0){
+
+					}
+					else{
+						infoPanel.append("h4").style("margin-top","20px").text("ทวีตที่เกี่ยวข้อง");
+						relatedTweet = infoPanel.append("div").attr("class","panel-body").style('padding-top','5px');
+
+						relatedTweetHTML = '<ul class="chat">'
+						
+						for(var i=0; i<tweetLen; i++){
+							relatedTweetHTML += '<li>'+
+												'<div>'+
+													'<p style="margin:0;">'+d.tweet[i].text+'</p>'+
+													'<small>'+
+													'<i class="fa fa-clock-o fa-fw"></i>'+ d.tweet[i].created_at+
+													((d.tweet[i].activitytypekey==3)?'<i class="fa fa-retweet fa-fw" style="margin-left:5px"></i> Retweeted':'')+
+													'</small>'+
+				                                '</div>'+
+
+				                                '</li>';
+						}
+						relatedTweetHTML += '</ul>';
+
+						relatedTweet.html(relatedTweetHTML);
+					}
+
+
+					toggle = 1;
+				} 
+				else {
+					//Put them back to opacity=1
+					node.attr("class", "node activeNode");
+					link.style("opacity", 1);
+					infoPanel.html("<p>คลิกที่จุดเพื่อแสดงรายละเอียด</p>");
+					toggle = 0;
+				}
+				previousClickNode = d.name;
+			}
 
 			function showTip(){
 				d = d3.select(this).node().__data__;
