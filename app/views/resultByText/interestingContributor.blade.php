@@ -3,7 +3,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-green">
 				<div class="panel-heading">
-					<h3 class="panel-title thaibold" style="font-size:20px;">
+					<h3 class="panel-title onlythaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
 						กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งแสดงจำนวนทวีตประเภทต่างๆและจำนวนครั้งการถูกรีทวีตของแต่ละกลุ่มตัวอย่างวิจัย"></span>
@@ -111,7 +111,7 @@
 
 			<div class="panel panel-green">
 				<div class="panel-heading">
-					<h3 class="panel-title thaibold" style="font-size:20px;">
+					<h3 class="panel-title onlythaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
 						กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งที่แสดงว่าแต่ละประเภทกิจกรรม (Tweet, Retweet, Reply) มีกลุ่มตัวอย่างวิจัยใดมีส่วนร่วมบ้าง"></span>

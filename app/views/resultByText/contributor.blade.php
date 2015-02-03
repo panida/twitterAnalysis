@@ -103,7 +103,7 @@
         <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด</h3>
                 </div>
                 <div class="panel-body" style="min-height: 570px; max-height: 570px; overflow-y: scroll;">
                     <div class="row onlythaibold" style="font-size:20px;">
@@ -138,7 +138,7 @@
 
 					<div class="table-responsive contributorTable" id="table1" style="display: none;">
 						<div class="col-lg-12 col-md-12 col-sm-12"> 
-							<p class="col-lg-1 col-md-1 col-sm-1 thaibold" style="font-size:22px;">หน้า </p>    
+							<p class="col-lg-1 col-md-1 col-sm-1 onlythaibold" style="font-size:22px;">หน้า </p>    
 							<ul id="pillMenu1" class="nav nav-pills" style="position: relative;">
 							  	<li role="presentation" class="active"><a href="#RP0" data-toggle="tab">1</a></li>
 							  	@for($i=2;$i<=count($RpUserList);$i++)

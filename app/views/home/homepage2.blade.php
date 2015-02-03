@@ -21,7 +21,7 @@
         <div class="col-lg-5">
             <header class="jumbotron hero-spacer">
                 <h1>CU.Tweet</h1>
-                <p class="thaibold" style="font-size:30px;">
+                <p class="onlythaibold" style="font-size:30px;">
                     เว็บไซต์ที่คุณสามารถวิเคราะห์การกระจายตัวของทวีตได้อย่างละเอียดและรอบด้าน ภายใต้ฐานข้อมูลทวิตเตอร์ที่มี</p>
                 <p><a class="btn btn-primary btn-large" href="{{URL::to('/databaseDetail')}}">ดูชุดฐานข้อมูล</a>
                 </p>
@@ -30,8 +30,8 @@
 
         <div class="col-lg-7">
             <header class="jumbotron hero-spacer">
-                <h1 class="thaibold">เริ่มค้นหา</h1>
-                <form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
+                <h1 class="onlythaibold">เริ่มค้นหา</h1>
+                <form class="form-horizontal onlythaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
                     <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">กรณีศึกษา</label>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -93,7 +93,7 @@
 
         <!-- Title -->
         <div class="row">
-            <div class="col-lg-12 thaibold">
+            <div class="col-lg-12 onlythaibold">
                 <h2>ทำความรู้จักกับเว็บของเรา</h2>
             </div>
         </div>
@@ -101,7 +101,7 @@
         <!-- /.row -->
 
         <!-- Page Features -->
-        <div class="row text-center col-md-10 col-md-offset-1 thaibold">
+        <div class="row text-center col-md-10 col-md-offset-1 onlythaibold">
 
             <div class="col-md-4 col-sm-6 hero-feature">
                 <div class="thumbnail">

@@ -3,7 +3,7 @@
 	<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 top-buffer" style="background-color:rgba(200,210,250,0.5); border-radius: 10px;">
 
 		<div class="row">
-			<form class="form-horizontal thaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
+			<form class="form-horizontal onlythaibold" style="font-size:23px;"role="search" method="POST" action="{{{ URL::to('result') }}}" accept-charset="UTF-8">
                 <div class="form-group" style="margin-left: 10px; margin-bottom: 0px;">
                     <div class="col-lg-2 col-md-6 col-sm-6">
                         <h3>ค้นหากรณีศึกษา</h3>
