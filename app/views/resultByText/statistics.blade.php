@@ -31,7 +31,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนประเภทของทวีต</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนประเภทของทวีต</h3>
                 </div>
                 <div class="panel-body">
                     <div id="activity" style="height:350px"></div>
@@ -39,7 +39,7 @@
             </div>
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนแอพพลิเคชั่นที่ใช้</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนแอพพลิเคชั่นที่ใช้</h3>
                 </div>
                 <div class="panel-body">
                     <div id="device" style="height:350px"></div>
@@ -51,7 +51,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> 10 ทวีตที่ถูกรีทวีตสูงสุดในช่วงเวลาที่ค้นหา</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> 10 ทวีตที่ถูกรีทวีตสูงสุดในช่วงเวลาที่ค้นหา</h3>
                 </div>
                 <div class="panel-body" style="min-height: 825px; max-height: 825px; overflow-y: scroll;">
                     <ul class="chat">

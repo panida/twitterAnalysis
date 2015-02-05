@@ -1,7 +1,29 @@
 @extends('layouts.default')
 @section('customCSS')
     <!-- Custom CSS -->
+    {{ HTML::style('css/jquery-ui.css'); }}
+    {{ HTML::script('js/jquery-ui-1.10.4.min.js'); }}
+    {{ HTML::style('css/jquery.asmselect.css'); }}
+    {{ HTML::script('js/jquery.asmselect.js'); }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("select[multiple]").asmSelect({
+                addItemTarget: 'bottom',
+                animate: true,
+                highlight: true,
+                removeLabel: 'ยกเลิก'
+                // sortable: true
+            });     
 
+            $("select[multiple]").change(function(e, data) {
+                // if it's a sort or an add, then give it a little color animation to highlight it
+                if(data.type != 'drop') data.item.animate({ 'backgroundColor': '#ffffcc' }, 20, 'linear', function() {
+                    data.item.animate({ 'backgroundColor': '#dddddd' }, 500); 
+                }); 
+            });        
+        }); 
+
+    </script>
 
 @stop
 
@@ -35,6 +57,22 @@
                         <li>วันที่เริ่มเก็บข้อมูล : {{(new DateTime($aCase->startdate))->format('l d/m/Y')}}</li>
                         <li>วันสิ้นสุดการเก็บข้อมูล : {{(new DateTime($aCase->enddate))->format('l d/m/Y')}}</li>
                         <li>รายละเอียดกรณีศึกษา : {{$aCase->description}}</li>
+                        <li>
+                            <form action="#" method="post">
+                                <label for="interestingGroup">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่สนใจ : </label>
+                                <select id="interestingGroup" multiple="multiple" name="interestingGroup[]" size="4" title="-----เพิ่มกลุ่มตัวอย่าง-----">
+                                    <option selected="selected">หน่วยราชการ</option>      
+                                    <option selected="selected">นักการเมือง</option>
+                                    <option selected="selected">คนดัง</option>
+                                    <option selected="selected">เสื้อแดง</option>
+                                    <option selected="selected">เสื้อเหลือง/ฟ้า/หลากสี</option>
+                                    <option selected="selected">สำนักข่าว</option>
+                                    <option selected="selected">นักข่าว</option>
+                                    <option>test</option>                                                
+                                </select>
+                                <p><input type="submit" name="save" value="บันทึกการแก้ไข" /></p>
+                            </form>
+                        </li>
                     </ul>               
                     </div>
                 </div>
@@ -44,6 +82,7 @@
         @endif
         <hr>
 
+        
 
 @stop
 

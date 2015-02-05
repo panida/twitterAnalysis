@@ -1461,12 +1461,12 @@ class AnalysisController extends BaseController {
         $fpdf->SetFont('browa','',13);
         $fpdf->SetAligns(array('C','L','L','C','C','C'));
         foreach($top10RetweetedList as $key=>$anOriginalTweet){
-        	$fpdf->Row(array(iconv('UTF-8','cp874//IGNORE',$key+1),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet["user"]->name."\xA@".$anOriginalTweet["user"]->screenname),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['text']),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['source']),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['detail']->created_at),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['retweetCount'])
+        	$fpdf->Row(array(@iconv('UTF-8','cp874//IGNORE',$key+1),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet["user"]->name).@iconv('UTF-8','cp874//IGNORE',"\xA@".$anOriginalTweet["user"]->screenname),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['text']),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['source']),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['detail']->created_at),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['retweetCount'])
         	));        	
         }
         //------------------Page3----------------------
@@ -2643,12 +2643,12 @@ class AnalysisController extends BaseController {
         $fpdf->SetFont('browa','',13);
         $fpdf->SetAligns(array('C','L','L','C','C','C'));
         foreach($top10RetweetedList as $key=>$anOriginalTweet){
-        	$fpdf->Row(array(iconv('UTF-8','cp874//IGNORE',$key+1),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->name."\xA@".$anOriginalTweet->screenname),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->text),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->sourcename),
-        					iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->created_at),
-        					iconv('UTF-8','cp874//IGNORE',($anOriginalTweet->totalRetweet-1))
+        	$fpdf->Row(array(@iconv('UTF-8','cp874//IGNORE',$key+1),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->name).@iconv('UTF-8','cp874//IGNORE',"\xA@".$anOriginalTweet->screenname),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->text),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->sourcename),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->created_at),
+        					@iconv('UTF-8','cp874//IGNORE',($anOriginalTweet->totalRetweet-1))
         	));        	
         }
         //------------------Page3----------------------

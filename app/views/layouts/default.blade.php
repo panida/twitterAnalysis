@@ -122,19 +122,19 @@
 	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	                <ul class="nav navbar-nav">
 	                    <li>
-	                        <a href="{{URL::to('/')}}" class="thaibold" style="font-size:20px;">หน้าแรก</a>
+	                        <a href="{{URL::to('/')}}" class="onlythaibold" style="font-size:20px;">หน้าแรก</a>
 	                    </li>
 	                    <li>
-	                        <a href="{{URL::to('/about')}}" class="thaibold" style="font-size:20px;">เกี่ยวกับเรา</a>
+	                        <a href="{{URL::to('/about')}}" class="onlythaibold" style="font-size:20px;">เกี่ยวกับเรา</a>
 	                    </li>
 	                    <li>
-	                        <a href="{{URL::to('/databaseDetail')}}" class="thaibold" style="font-size:20px;">ชุดฐานข้อมูล</a>
+	                        <a href="{{URL::to('/databaseDetail')}}" class="onlythaibold" style="font-size:20px;">ชุดฐานข้อมูล</a>
 	                    </li>
 	                    <li>
-	                        <a href="{{URL::to('/groupManagement')}}" class="thaibold" style="font-size:20px;">จัดการกลุ่มตัวอย่างวิจัย</a>
+	                        <a href="{{URL::to('/groupManagement')}}" class="onlythaibold" style="font-size:20px;">จัดการกลุ่มตัวอย่างวิจัย</a>
 	                    </li>
 	                    <li>
-	                        <a href="{{URL::to('/contact')}}" class="thaibold" style="font-size:20px;">ติดต่อ</a>
+	                        <a href="{{URL::to('/contact')}}" class="onlythaibold" style="font-size:20px;">ติดต่อ</a>
 	                    </li>
 	                </ul>
 	            </div>

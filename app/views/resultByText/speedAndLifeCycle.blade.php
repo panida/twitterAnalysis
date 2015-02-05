@@ -3,7 +3,7 @@
 		<br>
 		<div class="panel panel-green" style"width:1200px;">
 			<div class="panel-heading">
-				<h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
+				<h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> กราฟการแพร่กระจายของข้อมูลทวิตเตอร์</h3>
 			</div>
 			<div class="panel-body">
 				<!-- <div><label for="start">Start date:</label><input id="start" style="width: 200px" value="10/10/2011" /><label for="end">End date:</label><input id="end" style="width: 200px" value="10/10/2012"/></div> -->
