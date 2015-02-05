@@ -1,5 +1,13 @@
 <div id="page-wrapper">
 	<div class="container-fluid top-buffer socialGraph">
+		<div class = 'manageLinks'>
+			<button id='EnableAllLinks'>
+		        Enable all links
+		    </button>
+		    <button id='DisableAllLinks'>
+		        Disable all links
+		    </button>
+		</div>
 		
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="{{URL::asset('js/d3.slider.js')}}"></script>
@@ -210,6 +218,14 @@
 							.friction(0.5)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
 							.start();
 
+				buttonWidth = 120;
+				buttonHeight = 30;
+				//-------------------disable all link------------------------------
+				var disableAllLinksButton = body.select("#DisableAllLinks").on("click",disableAllLink);
+
+				//-------------------enable all link------------------------------
+				var enableAllLinksButton = body.select("#EnableAllLinks").on("click",enableAllLink);
+
 				//-------------------hull------------------------------
 				hullg.selectAll("path.hull").remove();
 				hull = hullg.selectAll("path.hull")
@@ -234,7 +250,7 @@
 				.attr("y2", function(d) { return d.target.y; });
 
 				
-				// add legend   
+				//-------------------legend------------------------------
 
 				var legendwidth = 200;
 				var legend = vis.append("g")
@@ -268,7 +284,7 @@
 							.data(net.nodes, nodeid)
 							.enter().append("g")
 							.attr("class", "node")
-							.attr("x", function(d) { return d.x = Math.max(dr, Math.min(width - dr, d.x)); })
+							.attr("x", function(d) { return d.x = Math.max(dr, Math.min(width - legendwidth - dr, d.x)); })
 							.attr("y", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
 				
 				node.append("circle")
@@ -371,6 +387,8 @@
 				data.links.forEach(function (d) {
 					if(d.type) linkedByIndex[d.source.index + "," + d.target.index] = 1;
 				});
+
+				link.style('opacity',0);
 
 				//arrow marker
 				svg.append("defs").selectAll("marker")
@@ -554,7 +572,13 @@
 				isPlay=!isPlay;
 			}
 
+			function disableAllLink(){
+				link.style("opacity", 0);
+			}
 
+			function enableAllLink(){
+				link.style("opacity", 1);
+			}
 
 			//This function looks up whether a pair are neighbours
 			function neighboring(a, b) {
@@ -575,7 +599,7 @@
 						return neighboring(d, o) | neighboring(o, d) ? "node activeNode" : "node hideNode";
 					});
 					link.style("opacity", function (o) {
-						return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+						return d.index==o.source.index | d.index==o.target.index ? 1 : 0;
 					});
 					
 					//infoPanel
@@ -631,7 +655,7 @@
 				else {
 					//Put them back to opacity=1
 					node.attr("class", "node activeNode");
-					link.style("opacity", 1);
+					link.style("opacity", 0);
 					infoPanel.html("<p>คลิกที่จุดเพื่อแสดงรายละเอียด</p>");
 					toggle = 0;
 				}

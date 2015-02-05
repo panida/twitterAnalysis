@@ -18,6 +18,12 @@ line.link {
   stroke-opacity: 0.5;
   pointer-events: none;
 }*/
+
+.linkManagement rect{
+  stroke: #AAA;
+  stroke-width: 1px;
+  fill: white;
+}
 circle.node {
 
   stroke: #555;
@@ -32,16 +38,21 @@ path.hull {
   fill-opacity: 0.3;
 }
 
-.node.activeNode circle{
+.node circle{
   opacity: 1;
+}
+
+.node.activeNode circle{
+  
 }
 
 
 .node.hideNode circle{
-  opacity: 0.1;
+  /*opacity: 0.1;*/
 }
 .socialGraph{
   width: 1200px;
+  position: relative;
 }
 
 .socialGraphSvg{
@@ -118,4 +129,16 @@ path.hull {
   pointer-events: none;
   stroke-width: 0;
 }
+
+.socialGraph .manageLinks {
+    position: absolute;
+    left: 325px;
+    top: 0px;
+    margin: 7px 0px 0px 7px; 
+}
+
+.socialGraph .manageLinks button{
+    display: inline-block;
+}
+
 </style>
