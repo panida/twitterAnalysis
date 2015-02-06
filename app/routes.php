@@ -15,10 +15,9 @@ Route::get('/', 'HomeController@showWelcome');
 
 Route::any('result', 'AnalysisController@analyse');
 
-Route::get('/databaseDetail', function(){
-	$db = ResearchCaseDim::all();
-	return View::make('management.databaseDetail',['db'=>$db]);
-});
+Route::get('/databaseDetail', 'DatabaseManagementController@editGroupsOfCase');
+
+Route::post('addGroupOfCase', 'DatabaseManagementController@saveGroupsOfCase');
 
 Route::get('/about', function(){
 	return View::make('management.about');
@@ -38,6 +37,8 @@ Route::post('/group/{id}', 'GroupManagementController@editGroup');
 Route::get('deleteGroup/{groupid}', 'GroupManagementController@deleteGroup');
 Route::get('deleteMember/{groupid}/{userkey}', 'GroupManagementController@deleteMember');
 Route::post('/group/addMember/{groupid}', 'GroupManagementController@addMember');
+
+
 
 
 Route::get('report','HomeController@exportReport');

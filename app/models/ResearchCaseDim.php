@@ -24,4 +24,9 @@ class ResearchCaseDim extends Eloquent
 		return $cases;
 	}
 
+	public function userGroups()
+    {
+        return $this->belongsToMany('UserGroup', 'researchcase_usergroup_mapping', 'researchcasekey', 'groupid');
+    }
+
 }
