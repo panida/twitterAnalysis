@@ -492,6 +492,26 @@ class AnalysisController extends BaseController {
 	        $fpdf->SetX(25);
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา'));
 	        $fpdf->Output(public_path().'/report/'.$filename ,'F');
+
+	        //------------------Create CSV File---------------------
+	        $filenameCSV = 'report'.$timestamp.'.csv';
+	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
+	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
+	        if($input['type']=='text'){
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        }
+	        else{
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        }
+	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ตั้งแต่วันที่ '),iconv('UTF-8','cp874',' '.$startDate)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ถึงวันที่ '),iconv('UTF-8','cp874',' '.$endDate)]);
+	        //------------------SpeedAndLifeCycleGraph--------------
+	        fputcsv($file,[]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา')]);	        
+	        fclose($file);
+	        //------------------------------------------------------
 			$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
@@ -500,7 +520,8 @@ class AnalysisController extends BaseController {
 					'countAllTweet'=>$countAllTweet,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
 					'cases'=> ResearchCaseDim::caseData(),
-					'filename'=>$filename];
+					'filename'=>$filename,
+					'filenameCSV'=>$filenameCSV];
 			return View::make('layouts.notFound',$result);
 		}
 		
@@ -1688,6 +1709,25 @@ class AnalysisController extends BaseController {
 	        $fpdf->SetX(25);
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา'));
 	        $fpdf->Output(public_path().'/report/'.$filename ,'F');
+	        //------------------Create CSV File---------------------
+	        $filenameCSV = 'report'.$timestamp.'.csv';
+	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
+	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
+	        if($input['type']=='text'){
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        }
+	        else{
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        }
+	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ตั้งแต่วันที่ '),iconv('UTF-8','cp874',' '.$startDate)]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ถึงวันที่ '),iconv('UTF-8','cp874',' '.$endDate)]);
+	        //------------------SpeedAndLifeCycleGraph--------------
+	        fputcsv($file,[]);
+	        fputcsv($file,[iconv('UTF-8','cp874','ไม่พบข้อมูลทวีตที่ท่านต้องการค้นหา')]);	        
+	        fclose($file);
+	        //------------------------------------------------------
 			$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
@@ -1696,7 +1736,8 @@ class AnalysisController extends BaseController {
 					'countAllTweet'=>$countAllTweet,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
 					'cases'=> ResearchCaseDim::caseData(),
-					'filename' => $filename];
+					'filename' => $filename,
+					'filenameCSV' => $filenameCSV];
 			return View::make('layouts.notFound',$result);
 		}
 
@@ -2759,9 +2800,49 @@ class AnalysisController extends BaseController {
 	        }
 	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
         }
-       
-        //------------------OutputPage-----------------
+       	//------------------OutputPage-----------------
         $fpdf->Output(public_path().'/report/'.$filename ,'F');
+
+        //------------------Create CSV File---------------------
+        $filenameCSV = 'report'.$timestamp.'.csv';
+        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
+        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
+        if($input['type']=='text'){
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+        }
+        else{
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+        }
+        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
+        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
+        fputcsv($file,[iconv('UTF-8','cp874','ตั้งแต่วันที่ '),iconv('UTF-8','cp874',' '.$startDate)]);
+        fputcsv($file,[iconv('UTF-8','cp874','ถึงวันที่ '),iconv('UTF-8','cp874',' '.$endDate)]);
+        //------------------SpeedAndLifeCycleGraph--------------
+        fputcsv($file,[]);
+        fputcsv($file,[iconv('UTF-8','cp874','1. กราฟข้อมูลทวีต')]);
+        fputcsv($file,['Date','Tweets','Retweets','Replies']);
+        	//--------Put Your Code Here--------------
+        //------------------Contributors--------------
+        fputcsv($file,[]);
+        fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างวิจัย')]);
+        fputcsv($file,['Group','Followee','Retweets']);
+        foreach ($totalGroup as $key => $aGroup) {
+        	fputcsv($file,[iconv('UTF-8','cp874',$aGroup['groupname']),number_format($aGroup['followeeCount']),number_format($aGroup['retweetCount'])]);
+        }
+        //------------------TweetTimeline--------------
+        fputcsv($file,[]);
+        fputcsv($file,[iconv('UTF-8','cp874','3. ทวีตทั้งหมดเรียงตามเวลา')]);
+        fputcsv($file,['Date-Time','Screenname','Text','Source']);
+        foreach ($timelineList as $key => $aTweet) {
+        	if($aTweet->real_activitytypekey==3){
+        		fputcsv($file,[' '.$aTweet->real_created_at, '@'.$aTweet->real_screenname, @iconv('UTF-8','cp874//IGNORE','RT@'.$aTweet->original_screenname.':'.$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->real_sourcename)]);
+        	}
+        	else{
+        		fputcsv($file,[' '.$aTweet->original_created_at, '@'.$aTweet->original_screenname, @iconv('UTF-8','cp874//IGNORE',$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->original_sourcename)]);
+        	}
+        }
+        fclose($file);        
+        //---------------------------------------------
 
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
@@ -2806,7 +2887,8 @@ class AnalysisController extends BaseController {
 					// 'retweetInterestDetailList'=>$retweetInterestDetailList,
 					// 'replyInterestDetailList'=>$replyInterestDetailList,
 					'totalGroupDetail'=>$totalGroup,
-					'filename'=>$filename
+					'filename'=>$filename,
+					'filenameCSV'=>$filenameCSV
 				];
 		// $result = $input;
 		return View::make('layouts.mainResultByUser',$result);
