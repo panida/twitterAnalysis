@@ -9,7 +9,7 @@
 		    </button>
 		</div>
 		
-		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="{{URL::asset('js/d3/d3.min.js')}}"></script>
 		<script src="{{URL::asset('js/d3.slider.js')}}"></script>
 
 		<script>

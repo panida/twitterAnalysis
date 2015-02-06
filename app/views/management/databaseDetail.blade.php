@@ -7,6 +7,11 @@
     {{ HTML::script('js/jquery.asmselect.js'); }}
     <script type="text/javascript">
         $(document).ready(function() {
+            @foreach($db as $aCase)
+                @foreach($aCase->userGroups as $group)
+                    $('#interestingGroup option[value="{{$aCase->researchcasekey.",".$group->groupid}}"]').attr('selected','selected');
+                @endforeach
+            @endforeach  
             $("select[multiple]").asmSelect({
                 addItemTarget: 'bottom',
                 animate: true,
@@ -30,9 +35,15 @@
 @section('content')
     <br><br>
     <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+        
         <h1 class="page-header onlythaibold">
             ชุดฐานข้อมูล
         </h1>
+
+        @if (Session::get('notice'))
+            <div class="alert alert-success">{{ Session::get('notice') }}</div>
+        @endif
+
         <h3 class="onlythaibold">
             @if(sizeof($db)==0)
             <i class="fa fa-fw fa-database" style="color:grey;"></i> ปัจจุบันระบบ CU.Tweet ไม่มีฐานข้อมูลกรณีศึกษา
@@ -40,7 +51,7 @@
             <i class="fa fa-fw fa-database" style="color:grey;"></i> ปัจจุบันระบบ CU.Tweet มีฐานข้อมูลกรณีศึกษาทั้งสิ้น {{sizeof($db)}} กรณี ได้แก่
             @endif
         </h3>
-        <br>
+        
         @if(sizeof($db)>0)
         <div class="panel-group" id="accordion1" style="font-family:thaisansneue; font-size:18px;">
             @foreach($db as $aCase)
@@ -58,17 +69,12 @@
                         <li>วันสิ้นสุดการเก็บข้อมูล : {{(new DateTime($aCase->enddate))->format('l d/m/Y')}}</li>
                         <li>รายละเอียดกรณีศึกษา : {{$aCase->description}}</li>
                         <li>
-                            <form action="#" method="post">
+                            <form action="{{ URL::to('addGroupOfCase') }}" method="post">
                                 <label for="interestingGroup">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่สนใจ : </label>
-                                <select id="interestingGroup" multiple="multiple" name="interestingGroup[]" size="4" title="-----เพิ่มกลุ่มตัวอย่าง-----">
-                                    <option selected="selected">หน่วยราชการ</option>      
-                                    <option selected="selected">นักการเมือง</option>
-                                    <option selected="selected">คนดัง</option>
-                                    <option selected="selected">เสื้อแดง</option>
-                                    <option selected="selected">เสื้อเหลือง/ฟ้า/หลากสี</option>
-                                    <option selected="selected">สำนักข่าว</option>
-                                    <option selected="selected">นักข่าว</option>
-                                    <option>test</option>                                                
+                                <select id="interestingGroup" multiple="multiple" name="interestingGroups[]" size="4" title="-----เพิ่มกลุ่มตัวอย่าง-----">
+                                    @foreach($userGroups as $group)
+                                    <option value="{{$aCase->researchcasekey.','.$group->groupid}}">{{$group->groupname}}</option> 
+                                    @endforeach                                             
                                 </select>
                                 <p><input type="submit" name="save" value="บันทึกการแก้ไข" /></p>
                             </form>
