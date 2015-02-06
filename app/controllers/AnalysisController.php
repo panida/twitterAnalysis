@@ -270,12 +270,17 @@ class AnalysisController extends BaseController {
 	    return $a->count - $b->count;
 	}
 
-	public function prepareDataForSocialGraph($tweetResultList, $startDate, $endDate, &$socialNodes, &$socialLinks, &$socialTransitions){
+	public function prepareDataForSocialGraph($tweetResultList, $startDate, $endDate, $caseId, &$socialNodes, &$socialLinks, &$socialTransitions){
 		
-		$links = DB::table('group_user_mapping AS user_map_1')
+		$links = DB::table('researchcase_usergroup_mapping AS case_map_1')
+							->where('case_map_1.researchcasekey','=',$caseId)
+							->join('group_user_mapping AS user_map_1', 'user_map_1.groupid', '=', 'case_map_1.groupid')
 							->join('user_dim AS friend', 'friend.userkey', '=', 'user_map_1.userkey')
 							->join('followee_mapping', 'followee_mapping.followeeid', '=', 'friend.userid')
 							->join('user_dim AS user', 'followee_mapping.userkey', '=', 'user.userkey')
+							->join('group_user_mapping AS user_map_2', 'user.userkey', '=', 'user_map_2.userkey')
+							->join('researchcase_usergroup_mapping AS case_map_2','case_map_2.groupid','=','user_map_2.groupid')
+							->where('case_map_2.researchcasekey','=',$caseId)
 							->select(DB::raw('user.userkey AS source'), DB::raw('friend.userkey AS target'))
 							->distinct()
 							->orderBy('source')
@@ -290,7 +295,9 @@ class AnalysisController extends BaseController {
 			array_push($socialLinks, $obj);
 		}
 
-		$researchPeople = DB::table('group_user_mapping')
+		$researchPeople = DB::table('researchcase_usergroup_mapping')
+								->where('researchcase_usergroup_mapping.researchcasekey','=',$caseId)
+								->join('group_user_mapping', 'group_user_mapping.groupid', '=', 'researchcase_usergroup_mapping.groupid')
 								->join('user_dim', 'user_dim.userkey', '=', 'group_user_mapping.userkey', 'left')
 								->join('followee_processed_user', 'user_dim.userkey', '=', 'followee_processed_user.userkey')
 								->select(DB::raw('group_user_mapping.groupid AS groupid'),
@@ -335,6 +342,8 @@ class AnalysisController extends BaseController {
 		}
 
 		$nodes = $tweetResultList->join('group_user_mapping', 'group_user_mapping.userkey', '=', 'twitter_analysis_fact.userkey')
+								->join('researchcase_usergroup_mapping', 'researchcase_usergroup_mapping.groupid', '=', 'group_user_mapping.groupid')
+								->where('researchcase_usergroup_mapping.researchcasekey','=',$caseId)
 								->join('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')  
 								->select(DB::raw('group_user_mapping.userkey AS userkey'), 
 											DB::raw('tweet_dim.text AS text'),
@@ -435,13 +444,14 @@ class AnalysisController extends BaseController {
 
 		$tweetResultListForSocialGraph = clone $tweetResultList;
 
-		$allGroups = UserGroup::all();
+		$selectedCaseGroup = ResearchCaseDim::find($caseID);
+		$allGroups = $selectedCaseGroup->userGroups;
 		$existMemberGroup = array();
 		foreach ($allGroups as $group) {
 			if(count($group->users)>0)	array_push($existMemberGroup, $group);
 		}
 
-		$slidebarLength = AnalysisController::prepareDataForSocialGraph($tweetResultListForSocialGraph, $startDate, $endDate, $socialNodes, $socialLinks, $socialTransitions);
+		$slidebarLength = AnalysisController::prepareDataForSocialGraph($tweetResultListForSocialGraph, $startDate, $endDate, $caseID, $socialNodes, $socialLinks, $socialTransitions);
 		$socialGraphData = new \stdClass();
 		$socialGraphData->nodes = $socialNodes;
 		$socialGraphData->links = $socialLinks;
