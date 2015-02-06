@@ -4,3 +4,4 @@
 /app/config/database.php
 /public/report/
 /public/reportImage/
+/public/reportCSV/

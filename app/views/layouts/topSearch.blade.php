@@ -106,8 +106,10 @@
                 ค้นหาผู้ใช้: {{$searchText}}
                 @endif
                 <span class="pull-right">
-                    <i class="fa fa-print" style="font-size:22px;"></i> 
-                    <a href="{{ URL::action('ReportController@getDownload',[$filename]) }}">
+                    <a href="{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}" style="text-decoration:none;">
+                        <i class="fa fa-file-excel-o" style="font-size:22px; color:rgb(10,100,10);"></i>
+                    </a>
+                    <a href="{{ URL::action('ReportController@getDownloadPDF',[$filename]) }}">
                         <i class="fa fa-file-pdf-o" style="font-size:22px; color:rgb(200,10,10);"></i>
                     </a> 
                 </span>

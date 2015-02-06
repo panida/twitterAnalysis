@@ -41,7 +41,8 @@ Route::post('/group/addMember/{groupid}', 'GroupManagementController@addMember')
 
 
 Route::get('report','HomeController@exportReport');
-Route::get('resultReport/{filename}','ReportController@getDownload');
+Route::get('resultReport/{filename}','ReportController@getDownloadPDF');
+Route::get('resultCSV/{filename}','ReportController@getDownloadCSV');
 Route::get('callForImage','ReportController@callForImage');
 Route::post('callForImage','ReportController@callForImage');
 
