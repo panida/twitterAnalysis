@@ -418,6 +418,8 @@ class AnalysisController extends BaseController {
 	}
 
 	public function analyseByText(){
+		$testStart = Carbon::now();
+		$testTimeArray = array();
 		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		$input = Input::all();
 		$caseID = $input['caseID'];
@@ -440,7 +442,7 @@ class AnalysisController extends BaseController {
 		$tweetDay = array();
 		$tweetHour = array();
 		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
-
+		$testTimeArray["groupTweet"] = Carbon::now()->diffInSeconds($testStart);
 		//prepare data for social graph
 		$socialNodes = array();
 		$socialLinks = array();
@@ -462,6 +464,7 @@ class AnalysisController extends BaseController {
 		$socialGraphData->transitions = $socialTransitions;
 		$socialGraphData->groups = $existMemberGroup;
 		$socialGraphData = json_encode($socialGraphData, JSON_UNESCAPED_UNICODE);
+		$testTimeArray["speedGraph"] = Carbon::now()->diffInSeconds($testStart);
 
 		$countAllTweet = sizeof($tweetResult);
 		if($countAllTweet==0){
@@ -763,7 +766,7 @@ class AnalysisController extends BaseController {
 				->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalBeRetweeted'))
 				->groupBy('usergroup.groupid')
 				->get();
-
+		$testTimeArray["queryDatabase"] = Carbon::now()->diffInSeconds($testStart);
 
 		$totalGroup = array();
 		foreach($tweetInterestCountList as $aGroup){
@@ -807,7 +810,7 @@ class AnalysisController extends BaseController {
 			// echo "</pre>";
 			// return View::make('blank_page');		
 
-
+		$testTimeArray["phpProcessTotalGroup"] = Carbon::now()->diffInSeconds($testStart);
 
         $topRetweetedList = array();
         $i = 0;
@@ -848,6 +851,7 @@ class AnalysisController extends BaseController {
 			// return View::make('blank_page');
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
         else $top10RetweetedList = array_slice($topRetweetedList, 0,10);
+        $testTimeArray["phpProcessTopRetweetedList"] = Carbon::now()->diffInSeconds($testStart);
 		// $countRetweetTime = array();
 		$contributorList = array();
 		$maxFol = -1;
@@ -875,40 +879,19 @@ class AnalysisController extends BaseController {
 		$countActTweet = 0;
 		$countActRetweet = 0;
 		$countActReply = 0;
-		// $tweetInterestUser = array();
-		// $retweetInterestUser = array();
-		// $replyInterestUser = array();
 		foreach($tweetResult as $tweet){
 			$aKey = $tweet->userstatisticskey;
 			if($tweet->activitytypekey==1){//tweet
 				$contributorList[$aKey]->tweetCount+=1; 
 				$countActTweet+=1;
-				// if($tweet->user->isinterested == "Yes"){
-				// 	foreach($tweet->user->groups as $aGroup){
-				// 		if(array_key_exists($aGroup->groupid, $tweetInterestUser)) $tweetInterestUser[$aGroup->groupid]+=1;
-				// 		else $tweetInterestUser[$aGroup->groupid]=1;
-				// 	}
-				// }
 			} 
 			else if($tweet->activitytypekey==2){//reply
 				$contributorList[$aKey]->replyCount+=1; 
 				$countActReply+=1;
-				// if($tweet->user->isinterested == "Yes"){
-				// 	foreach($tweet->user->groups as $aGroup){
-				// 		if(array_key_exists($aGroup->groupid, $replyInterestUser)) $replyInterestUser[$aGroup->groupid]+=1;
-				// 		else $replyInterestUser[$aGroup->groupid]=1;
-				// 	}
-				// }
 			} 
 			else{//retweet
 				$contributorList[$aKey]->retweetCount+=1;
 				$countActRetweet+=1;
-				// if($tweet->user->isinterested == "Yes"){
-				// 	foreach($tweet->user->groups as $aGroup){
-				// 		if(array_key_exists($aGroup->groupid, $retweetInterestUser)) $retweetInterestUser[$aGroup->groupid]+=1;
-				// 		else $retweetInterestUser[$aGroup->groupid]=1;
-				// 	}
-				// }
 			}  
 			$contributorList[$aKey]->allActivityCount+=1;
 			$sourceList[$tweet->sourcekey]+=1; 
@@ -981,7 +964,7 @@ class AnalysisController extends BaseController {
 						->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
 						->first();
 		$maxActivityUser = ['count'=>$contributorList[0]->allActivityCount,'screenname'=>$maxActUser->screenname,'pic'=>$maxActUser->profile_pic_url];
-
+		$testTimeArray["phpProcessContributorActivity"] = Carbon::now()->diffInSeconds($testStart);
 		$sourceProportion = array();
 		for($i = 1;$i<=5;$i+=1){
 			if(sizeof($sourceList)==0) break;
@@ -999,7 +982,7 @@ class AnalysisController extends BaseController {
 		$countAllContributor = sizeof($contributorList);
 		
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
-		
+		$testTimeArray["phpProcessSourceFinish"] = Carbon::now()->diffInSeconds($testStart);
 		//-------------------------GenImageForReport---------------
 		//-----------ActivityPic------------------
 		$jsonString = "{
@@ -1472,7 +1455,11 @@ class AnalysisController extends BaseController {
 		
 		$speedApplicationImageName = 'report'.$timestamp.'_speedApplication.png';
         HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'600');
-
+        $testTimeArray["callImage"] = Carbon::now()->diffInSeconds($testStart);
+   //              		                	echo "<pre>";
+   //   		var_dump($topFollowerList);
+			// echo "</pre>";
+			// return View::make('blank_page');
 		//-------------------------GenReport-----------------------	
 			
 		$filename = 'report'.$timestamp.'.pdf';
@@ -1595,7 +1582,7 @@ class AnalysisController extends BaseController {
 	    }
         //------------------OutputPage-----------------
         $fpdf->Output(public_path().'/report/'.$filename ,'F');
-
+        $testTimeArray["genPDF"] = Carbon::now()->diffInSeconds($testStart);
         //------------------Create CSV File---------------------
         $filenameCSV = 'report'.$timestamp.'.csv';
         $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
@@ -1648,6 +1635,11 @@ class AnalysisController extends BaseController {
         	}
         }
         fclose($file);
+        $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
+            echo "<pre>";
+     		var_dump($testTimeArray);
+			echo "</pre>";
+			return View::make('blank_page');
         //------------------------------------------------------
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
@@ -1796,37 +1788,6 @@ class AnalysisController extends BaseController {
 		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
 		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
 		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
-	// 	$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
- //                 ->select('twitter_analysis_fact.tweetkey', DB::raw('count(*) as totalRetweet'))
- //                 ->groupBy('twitter_analysis_fact.tweetkey')
- //                 ->orderBy('totalRetweet','desc')
- //                 ->get();
- // //                 	var_dump($tweetResultList->get());
-	// // return View::make('blank_page');
- //        $topFollowerList = $tweetResultList[6]
- //        		->orderBy('twitter_analysis_fact.number_of_follower','desc')
- //        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
- //        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
- //        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
- //        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
- //        		->where('original_fact.activitytypekey','<',3)        		
- //        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
- //        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
- //        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
- //        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
- //        		->select('user_dim.screenname as real_screenname',
- //        			'source_dim.sourcename as real_sourcename',
- //        			'tweet_detail_dim.created_at as real_created_at',
- //        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
- //        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
- //        			'twitter_analysis_fact.tweetkey as real_tweetkey',
- //        			'tweet_original.text as original_text',
- //        			'tweet_detail_original.created_at as original_created_at',
- //        			'source_original.sourcename as original_sourcename',
- //        			'user_original.name as original_name',
- //        			'user_original.screenname as original_screenname',
- //        			'user_original.profile_pic_url as original_pic')
- //        		->get();
 
         $timelineList = $tweetResultList[7]
         		->leftJoin('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')       		                
@@ -1858,118 +1819,6 @@ class AnalysisController extends BaseController {
         			'date_dim.thedate as thedate')
         		->get();
 
- //        $tweetInterestList = $tweetResultList[8]
- //        		->where('activitytypekey',1)
- //        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
- //        		->where('user_dim.isinterested','Yes')
- //        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
- //        		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
- //        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
- //        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
- //        		->orderBy('tweet_detail_dim.created_at','desc')        		
- //        		->select('user_dim.screenname as real_screenname',
- //        			'user_dim.name as real_name',
- //        			'user_dim.profile_pic_url as real_pic',
- //        			'source_dim.sourcename as real_sourcename',
- //        			'tweet_detail_dim.created_at as real_created_at',
- //        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
- //        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
- //        			'twitter_analysis_fact.tweetkey as real_tweetkey',
- //        			'tweet_dim.text as original_text',
- //        			'usergroup.groupid as groupid',
- //        			'usergroup.groupname as groupname',
- //        			'date_dim.abbr_nameofday as nameday',
- //        			'date_dim.date as date',
- //        			'date_dim.abbr_nameofmonth as month',
- //        			'date_dim.year as year',
- //        			'date_dim.thedate as thedate'
- //        			);        		
- //        $tweetInterestDetailList = $tweetInterestList->get();
- //        $tweetInterestCountList = $tweetInterestList
- //        							->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalTweet'))
-	// 				                ->groupBy('usergroup.groupid')
-	// 				        		->get();
-
-	// 	$replyInterestList = $tweetResultList[9]
- //        		->where('activitytypekey',2)
- //        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
- //        		->where('user_dim.isinterested','Yes')
- //        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
- //        		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
- //        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
- //        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
- //        		->orderBy('tweet_detail_dim.created_at','desc')        		
- //        		->select('user_dim.screenname as real_screenname',
- //        			'user_dim.name as real_name',
- //        			'user_dim.profile_pic_url as real_pic',
- //        			'source_dim.sourcename as real_sourcename',
- //        			'tweet_detail_dim.created_at as real_created_at',
- //        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
- //        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
- //        			'twitter_analysis_fact.tweetkey as real_tweetkey',
- //        			'tweet_dim.text as original_text',
- //        			'usergroup.groupid as groupid',
- //        			'usergroup.groupname as groupname',
- //        			'date_dim.abbr_nameofday as nameday',
- //        			'date_dim.date as date',
- //        			'date_dim.abbr_nameofmonth as month',
- //        			'date_dim.year as year',
- //        			'date_dim.thedate as thedate'
- //        			);        		
- //        $replyInterestDetailList = $replyInterestList->get();
- //        $replyInterestCountList = $replyInterestList
- //        							->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalReply'))
-	// 				                ->groupBy('usergroup.groupid')
-	// 				        		->get();
-
-
-	// 	$retweetInterestList = $tweetResultList[10]
-	// 			->where('twitter_analysis_fact.activitytypekey',3)   
- //        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')   
- //        		->where('user_dim.isinterested','Yes')
- //        		->leftJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
- //        		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')      		                
- //        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
- //        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
- //        		->orderBy('tweet_detail_dim.created_at','desc')
- //        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
- //        		->where('original_fact.activitytypekey','<',3)        		
- //        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
- //        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
- //        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
- //        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
- //        		->select('user_dim.screenname as real_screenname',
- //        			'source_dim.sourcename as real_sourcename',
- //        			'tweet_detail_dim.created_at as real_created_at',
- //        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
- //        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
- //        			'twitter_analysis_fact.tweetkey as real_tweetkey',
- //        			'tweet_original.text as original_text',
- //        			'tweet_detail_original.created_at as original_created_at',
- //        			'source_original.sourcename as original_sourcename',
- //        			'user_original.name as original_name',
- //        			'user_original.screenname as original_screenname',
- //        			'user_original.profile_pic_url as original_pic',
- //        			'usergroup.groupid as groupid',
- //        			'usergroup.groupname as groupname',
- //        			'date_dim.abbr_nameofday as nameday',
- //        			'date_dim.date as date',
- //        			'date_dim.abbr_nameofmonth as month',
- //        			'date_dim.year as year',
- //        			'date_dim.thedate as thedate');
-        		
- //        $retweetInterestDetailList = $retweetInterestList->get();
- //        $retweetInterestCountList = $retweetInterestList
- //        							->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalRetweet'))
-	// 				                ->groupBy('usergroup.groupid')
-	// 				        		->get();
-	// 	usort($tweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
-	// 	usort($retweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
-	// 	usort($replyInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
-	// 		// echo "<pre>";
- //   //   		var_dump($tweetInterestDetailList);
-	// 		// echo "</pre>";
-	// 		// return View::make('blank_page');
 			$topRetweetedList = $tweetResultList[11]
 				->where('twitter_analysis_fact.activitytypekey','<',3)   
 				->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
@@ -2046,107 +1895,11 @@ class AnalysisController extends BaseController {
 											->orderBy('groupid','asc') 
 											->get();
 
-			// echo "<pre>";
-   //   		var_dump($retweetInterestCountList);
-			// echo "</pre>";
-			// return View::make('blank_page');
-	// 	$totalGroup = array();
-	// 	foreach($tweetInterestCountList as $aGroup){
-	// 		$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
-	// 								  'groupname'=>$aGroup->groupname,
-	// 								  'tweetCount'=>$aGroup->totalTweet,
-	// 								  'retweetCount'=>0,
-	// 								  'replyCount'=>0];
-	// 	}
-	// 	foreach($retweetInterestCountList as $aGroup){
-	// 		if(array_key_exists($aGroup->groupid, $totalGroup)) 
-	// 			$totalGroup[$aGroup->groupid]['retweetCount'] = $aGroup->totalRetweet;
-	// 		else
-	// 			$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
-	// 								  'groupname'=>$aGroup->groupname,
-	// 								  'tweetCount'=>0,
-	// 								  'retweetCount'=>$aGroup->totalRetweet,
-	// 								  'replyCount'=>0];
-	// 	}
-	// 	foreach($replyInterestCountList as $aGroup){
-	// 		if(array_key_exists($aGroup->groupid, $totalGroup)) 
-	// 			$totalGroup[$aGroup->groupid]['replyCount'] = $aGroup->totalReply;
-	// 		else
-	// 			$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
-	// 								  'groupname'=>$aGroup->groupname,
-	// 								  'tweetCount'=>0,
-	// 								  'retweetCount'=>0,
-	// 								  'replyCount'=>$aGroup->totalReply];
-	// 	}
 
-	// 	ksort($totalGroup);
- //   //      	echo "<pre>";
- //   //   		var_dump($totalGroup);
-	// 		// echo "</pre>";
-	// 		// return View::make('blank_page');		
-
-
-
- //        $topRetweetedList = array();
- //        $i = 0;
- //        $retweetedCountOfUser = array();
- //        foreach($countRetweetTime as $aTweet){
- //        	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->tweetkey);
- //        	if(get_class($originalTweetFact)!=='TwitterAnalysisFact'){
- //        	var_dump($aTweet->tweetkey);
-	// 		return View::make('blank_page');}
- //        	$user = $originalTweetFact->user;
- //        	$date = $originalTweetFact->date;
- //        	$time = $originalTweetFact->time;
- //        	$detail = $originalTweetFact->tweetdetail;
- //        	$source = $originalTweetFact->source->sourcename;
- //        	$text = TweetDim::find($aTweet->tweetkey)->text;
- //        	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->tweetkey,
- //        								'text'=>$text,
- //        								'date'=>$date,
- //        								'time'=>$time,
- //        								'detail' =>$detail,
- //        								'source'=>$source,
- //        								'user'=>$user,
- //        								'retweetCount' => $aTweet->totalRetweet
-	// 								];
-	// 		if(array_key_exists($user->userid,$retweetedCountOfUser)) $retweetedCountOfUser[$user->userid]['count'] += $aTweet->totalRetweet;
-	// 		else $retweetedCountOfUser[$user->userid] = ['count'=>$aTweet->totalRetweet,'screenname'=>$user->screenname,'pic'=>$user->profile_pic_url];
-	// 		$i++;
- //        }
- //        $maxRTCount = -1;
- //        $maxRetweetedUser = NULL;
- //        foreach($retweetedCountOfUser as $aUser){
- //        	if($aUser['count']>$maxRTCount){
- //        		$maxRTCount = $aUser['count'];
- //        		$maxRetweetedUser = $aUser;
- //        	}
- //    	}
- //  	// 				var_dump($topRetweetedList);
-	// 		// return View::make('blank_page');
 		$top10RetweetedList = array();
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
         else $top10RetweetedList = array_slice($topRetweetedList, 0,10);
-	// 	// $countRetweetTime = array();
-	// 	$contributorList = array();
-	// 	$maxFol = -1;
-	// 	$maxUSKey = 0;
-	// 	foreach($contributorKeyList as $aKey){
-	// 		$contributorList[$aKey->userstatisticskey] = new ContributorData();	
-	// 		$contributorList[$aKey->userstatisticskey]->userstatisticskey = $aKey->userstatisticskey;
-	// 		$followerCount = UserStatisticsDim::find($aKey->userstatisticskey)->followers_count;
-	// 		$contributorList[$aKey->userstatisticskey]->followerCount = $followerCount;
-	// 		if($followerCount>$maxFol){
-	// 			$maxFol = $followerCount;
-	// 			$maxUSKey = $aKey->userstatisticskey;
-	// 		}
-	// 	}
-	// 	$maxFolUser = DB::table('user_statistics_dim')->where('userstatisticskey',$maxUSKey)
-	// 					->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
-	// 					->first();
-	// 	$maxFollowerUser = ['count'=>$maxFol,'screenname'=>$maxFolUser->screenname,'pic'=>$maxFolUser->profile_pic_url];
-	// 	// var_dump($topFollower);
-	// 	// return View::make('blank_page');
+
 		$sourceList = array();
 		foreach($sourceKeyList as $aKey){
 			$sourceList[$aKey->sourcekey] = 0;
@@ -2154,113 +1907,20 @@ class AnalysisController extends BaseController {
 		$countActTweet = 0;
 		$countActRetweet = 0;
 		$countActReply = 0;
-	// 	// $tweetInterestUser = array();
-	// 	// $retweetInterestUser = array();
-	// 	// $replyInterestUser = array();
+
 		foreach($tweetResult as $tweet){
-	// 		$aKey = $tweet->userstatisticskey;
 			if($tweet->activitytypekey==1){//tweet
-	// 			$contributorList[$aKey]->tweetCount+=1; 
 				$countActTweet+=1;
-	// 			// if($tweet->user->isinterested == "Yes"){
-	// 			// 	foreach($tweet->user->groups as $aGroup){
-	// 			// 		if(array_key_exists($aGroup->groupid, $tweetInterestUser)) $tweetInterestUser[$aGroup->groupid]+=1;
-	// 			// 		else $tweetInterestUser[$aGroup->groupid]=1;
-	// 			// 	}
-	// 			// }
 			} 
-			else if($tweet->activitytypekey==2){//reply
-	// 			$contributorList[$aKey]->replyCount+=1; 
-				$countActReply+=1;
-	// 			// if($tweet->user->isinterested == "Yes"){
-	// 			// 	foreach($tweet->user->groups as $aGroup){
-	// 			// 		if(array_key_exists($aGroup->groupid, $replyInterestUser)) $replyInterestUser[$aGroup->groupid]+=1;
-	// 			// 		else $replyInterestUser[$aGroup->groupid]=1;
-	// 			// 	}
-	// 			// }
+			else if($tweet->activitytypekey==2){//reply 
+				$countActReply+=1;	
 			} 
 			else{//retweet
-	// 			$contributorList[$aKey]->retweetCount+=1;
-				$countActRetweet+=1;
-	// 			// if($tweet->user->isinterested == "Yes"){
-	// 			// 	foreach($tweet->user->groups as $aGroup){
-	// 			// 		if(array_key_exists($aGroup->groupid, $retweetInterestUser)) $retweetInterestUser[$aGroup->groupid]+=1;
-	// 			// 		else $retweetInterestUser[$aGroup->groupid]=1;
-	// 			// 	}
-	// 			// }
+				$countActRetweet+=1;	
 			}  
-	// 		$contributorList[$aKey]->allActivityCount+=1;
 			$sourceList[$tweet->sourcekey]+=1; 
 		}
-	// 	// echo "<pre>";
-	// 	// var_dump($tweetInterestUser);
-	// 	// var_dump($retweetInterestUser);
-	// 	// var_dump($replyInterestUser);
-	// 	// echo "</pre>";
-	// 	// return View::make('blank_page');
-
-
-	// 	$TwUserList = array();
-	// 	$RtUserList = array();
-	// 	$RpUserList = array();
-	// 	$TwRtUserList = array();
-	// 	$RtRpUserList = array();
-	// 	$TwRpUserList = array();
-	// 	$TwRtRpUserList = array();
-	// 	usort($contributorList,"ContributorData::cmpByFollowerCountDesc");
-	// 	reset($contributorList);
-	// 	foreach($contributorList as $aUserStat){
-	// 		$tweetFact = TwitterAnalysisFact::findTweetByUserStat($aUserStat->userstatisticskey);
-	// 		$username = $tweetFact->user->screenname; 
-	// 		$userDisplayStat = ['screenname'=>$username,
-	// 							'tweetCount'=>$aUserStat->tweetCount,
-	// 							'retweetCount'=>$aUserStat->retweetCount,
-	// 							'replyCount'=>$aUserStat->replyCount,
-	// 							'followerCount'=>$aUserStat->followerCount];
-	// 		$TW = ($aUserStat->tweetCount > 0);
-	// 		$RT = ($aUserStat->retweetCount > 0);
-	// 		$RP = ($aUserStat->replyCount > 0);
-	// 		if($TW){
-	// 			array_push($TwUserList,$userDisplayStat);
-	// 		}
-	// 		if($RT){
-	// 			array_push($RtUserList,$userDisplayStat);
-	// 		}
-	// 		if($RP){
-	// 			array_push($RpUserList,$userDisplayStat);
-	// 		}
-	// 		if($TW or $RT){
-	// 			array_push($TwRtUserList,$userDisplayStat);
-	// 		}
-	// 		if($TW or $RP){
-	// 			array_push($TwRpUserList,$userDisplayStat);
-	// 		}
-	// 		if($RT or $RP){
-	// 			array_push($RtRpUserList,$userDisplayStat);
-	// 		}
-	// 		if($TW or $RT or $RP){
-	// 			array_push($TwRtRpUserList,$userDisplayStat);
-	// 		}
-	// 	}
-	// 	$perPage = 10;
-	// 	$TwUserList = array_chunk($TwUserList,$perPage);
-	// 	$RtUserList = array_chunk($RtUserList,$perPage);	
-	// 	$RpUserList = array_chunk($RpUserList,$perPage);
-	// 	$TwRtUserList = array_chunk($TwRtUserList,$perPage);
-	// 	$RtRpUserList = array_chunk($RtRpUserList,$perPage);
-	// 	$TwRpUserList = array_chunk($TwRpUserList,$perPage);
-	// 	$TwRtRpUserList = array_chunk($TwRtRpUserList,$perPage);
-	// 	// var_dump($TwUserList);
-	// 	// return View::make('blank_page');
-	// 	usort($contributorList,"ContributorData::cmpByAllActivityCountDesc");
-	// 	reset($contributorList);
-	// 	// var_dump($contributorList);
-	// 	// return View::make('blank_page');
-	// 	$maxActUser = DB::table('user_statistics_dim')->where('userstatisticskey',$contributorList[0]->userstatisticskey)
-	// 					->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
-	// 					->first();
-	// 	$maxActivityUser = ['count'=>$contributorList[0]->allActivityCount,'screenname'=>$maxActUser->screenname,'pic'=>$maxActUser->profile_pic_url];
-
+	
 		$sourceProportion = array();
 		for($i = 1;$i<=5;$i+=1){
 			if(sizeof($sourceList)==0) break;
@@ -2274,7 +1934,7 @@ class AnalysisController extends BaseController {
 									'count'=>array_sum($sourceList)];
 		}
 
-	// 	// ----- Statistics Tab -----
+	 	// ----- Statistics Tab -----
 		
 		$countAllContributor = sizeof($contributorKeyList);
 		
@@ -2347,12 +2007,6 @@ class AnalysisController extends BaseController {
 					->leftJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
 					->get();
 
-
-		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
-		// echo "<pre>";
-		// var_dump($hisGroup);
-		// echo "</pre>";
-		// return View::make('blank_page');
 		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 
 		//-------------------------GenImageForReport---------------
@@ -2927,27 +2581,11 @@ class AnalysisController extends BaseController {
 					'retweetInterestDetailList'=>$retweetInterestDetailList,
 					'retweetInterestCountList'=>$retweetInterestCountList,
 					'hisGroup'=>$hisGroup,
-					// 'topFollowerList'=>$topFollowerList,
 					'timelineList'=>$timelineList,
-					// 'recentFollowerList'=>$recent50Follower,
-					// 'maxFollowerUser'=>$maxFollowerUser,
-					// 'maxRetweetedUser' =>$maxRetweetedUser,
-					// 'maxActivityUser'=>$maxActivityUser,
 					'tweetMonth' => $tweetMonth,
 					'tweetWeek' => $tweetWeek,
 					'tweetDay' => $tweetDay,
 					'tweetHour' => $tweetHour,
-					// 'TwUserList'=>$TwUserList,
-					// 'RtUserList'=>$RtUserList, 
-					// 'RpUserList'=>$RpUserList, 
-					// 'TwRtUserList'=>$TwRtUserList,
-					// 'RtRpUserList'=>$RtRpUserList,
-					// 'TwRpUserList'=>$TwRpUserList, 
-					// 'TwRtRpUserList'=>$TwRtRpUserList,
-					// 'perPage'=>$perPage,
-					// 'tweetInterestDetailList'=>$tweetInterestDetailList,
-					// 'retweetInterestDetailList'=>$retweetInterestDetailList,
-					// 'replyInterestDetailList'=>$replyInterestDetailList,
 					'totalGroupDetail'=>$totalGroup,
 					'filename'=>$filename,
 					'filenameCSV'=>$filenameCSV
