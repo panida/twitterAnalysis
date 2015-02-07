@@ -12,7 +12,7 @@
 
                     <div class="col-lg-2 col-md-6 col-sm-6">
                         <h3>โดย</h3>
-                        {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), $type, ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                        {{ Form::select('type', array('text'=>'ข้อความ/ทวีต','user'=>'ชื่อผู้ใช้ทวิตเตอร์'), $type, ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
                     </div>
                 
                     <div class="col-lg-3 col-md-6 col-sm-6">  
@@ -101,9 +101,9 @@
 		<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">			
             <h1 class="page-header onlythaibold">
                 @if($type=='text')
-				ค้นหาข้อความ: {{$searchText}}
+				ค้นหาข้อความ/ทวีต: {{$searchText}}
                 @else
-                ค้นหาผู้ใช้: {{$searchText}}
+                ค้นหาผู้ใช้ทวิตเตอร์: {{$searchText}}
                 @endif
                 <span class="pull-right">
                     <a href="{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}" style="text-decoration:none;">

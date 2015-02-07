@@ -489,12 +489,12 @@ class AnalysisController extends BaseController {
 	        $x = $fpdf->GetX();
 			$y = $fpdf->GetY();
 	        if($input['type']=='text'){
-	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
 	        }
 	        else{
-	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
 	        }
-	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetXY($x + 50, $y);
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -510,10 +510,10 @@ class AnalysisController extends BaseController {
 	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
 	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
 	        if($input['type']=='text'){
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
 	        }
 	        else{
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
 	        }
 	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
 	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -1462,12 +1462,12 @@ class AnalysisController extends BaseController {
         $x = $fpdf->GetX();
 		$y = $fpdf->GetY();
         if($input['type']=='text'){
-        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
         }
         else{
-        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
         }
-        $fpdf->SetXY($x + 40, $y);
+        $fpdf->SetXY($x + 50, $y);
         $fpdf->SetFont('browa','',16);
         $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -1538,19 +1538,19 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.3 ผู้ที่มีส่วนร่วมมากที่สุด คือ @'.$maxActivityUser['screenname'].' (มีส่วนร่วม '.number_format($maxActivityUser['count']).' ครั้ง)'));
         if(count($totalGroup)==0){
         	$fpdf->SetFont('browa','B',16);
-	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดมีส่วนร่วมกับการค้นหานี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดมีส่วนร่วมกับการค้นหานี้'));
         }
         //------------------Page5----------------------
         else{
 	        $fpdf->AddPage();
 	        $fpdf->SetFont('browa','B',16);
-	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างวิจัยดังนี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ดังนี้'));
 	        $index = 0;
 	        foreach($totalGroup as $aGroup){
 	        	$fpdf->setX(35);
@@ -1558,7 +1558,7 @@ class AnalysisController extends BaseController {
 	        	$index++;
 	        }
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
 	        $fpdf->setX(25);
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.2  กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต'));
@@ -1572,10 +1572,10 @@ class AnalysisController extends BaseController {
         $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
         fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
         if($input['type']=='text'){
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
         }
         else{
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
         }
         fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
         fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -1601,7 +1601,7 @@ class AnalysisController extends BaseController {
         }
         //------------------Contributors--------------
         fputcsv($file,[]);
-        fputcsv($file,[iconv('UTF-8','cp874','3. กลุ่มตัวอย่างวิจัย')]);
+        fputcsv($file,[iconv('UTF-8','cp874','3. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์')]);
         fputcsv($file,['Group','Tweets','Retweets','Replies','BeRetweeted']);
         foreach ($totalGroup as $key => $aGroup) {
         	fputcsv($file,[iconv('UTF-8','cp874',$aGroup['groupname']),number_format($aGroup['tweetCount']),number_format($aGroup['retweetCount']),number_format($aGroup['replyCount']),number_format($aGroup['beRetweetedCount'])]);
@@ -1714,12 +1714,12 @@ class AnalysisController extends BaseController {
 	        $x = $fpdf->GetX();
 			$y = $fpdf->GetY();
 	        if($input['type']=='text'){
-	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
 	        }
 	        else{
-	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
 	        }
-	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetXY($x + 50, $y);
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -1734,10 +1734,10 @@ class AnalysisController extends BaseController {
 	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
 	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
 	        if($input['type']=='text'){
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
 	        }
 	        else{
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
 	        }
 	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
 	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -2404,12 +2404,12 @@ class AnalysisController extends BaseController {
         $x = $fpdf->GetX();
 		$y = $fpdf->GetY();
         if($input['type']=='text'){
-        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
         }
         else{
-        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
         }
-        $fpdf->SetXY($x + 40, $y);
+        $fpdf->SetXY($x + 50, $y);
         $fpdf->SetFont('browa','',16);
         $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -2470,11 +2470,11 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.3 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทแอพพลิเคชั่น'));
         $fpdf->Image(public_path().'/reportImage/'.$speedApplicationImageName,25);
         $fpdf->SetFont('browa','B',16);
-        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. กลุ่มตัวอย่างวิจัย'));
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
         $fpdf->SetFont('browa','',16);
         $fpdf->setX(25);
         if(count($hisGroup)==0){
-        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' ไม่อยู่ในกลุ่มตัวอย่างวิจัยใด'));	
+        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' ไม่อยู่ในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใด'));	
         }
         else{
         	$listOfGroup = '';
@@ -2487,10 +2487,10 @@ class AnalysisController extends BaseController {
         	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' เป็นหนึ่งในสมาชิกของกลุ่มตัวอย่าง '.$listOfGroup));	
         }
         $fpdf->setX(25);
-	    $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างวิจัยที่เกี่ยวข้อง'));
+	    $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่เกี่ยวข้อง'));
         if(count($totalGroup)==0){
         	$fpdf->setX(35);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดทำกิจกรรมเกี่ยวข้องกับผู้ใช้คนนี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดทำกิจกรรมเกี่ยวข้องกับผู้ใช้คนนี้'));
         }
         else{
         	$index = 0;
@@ -2509,10 +2509,10 @@ class AnalysisController extends BaseController {
         $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
         fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
         if($input['type']=='text'){
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
         }
         else{
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
         }
         fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
         fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -2528,7 +2528,7 @@ class AnalysisController extends BaseController {
        	}
         //------------------Contributors--------------
         fputcsv($file,[]);
-        fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างวิจัย')]);
+        fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์')]);
         fputcsv($file,['Group','Followee','Retweets']);
         foreach ($totalGroup as $key => $aGroup) {
         	fputcsv($file,[iconv('UTF-8','cp874',$aGroup['groupname']),number_format($aGroup['followeeCount']),number_format($aGroup['retweetCount'])]);

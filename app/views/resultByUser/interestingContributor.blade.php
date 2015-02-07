@@ -13,7 +13,7 @@
 		        		<a href="{{URL::to('/group/'.$aGroup->groupid)}}" target="blank">{{$aGroup->groupname}}</a>
 		        	@endforeach
 		        @else
-		        	&nbsp;ไม่อยู่ในกลุ่มตัวอย่างวิจัยใด
+		        	&nbsp;ไม่อยู่ในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใด
 		        @endif 
 		    </h2>
 		    <br>
@@ -21,8 +21,8 @@
 				<div class="panel-heading">
 					<h3 class="panel-title thaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
-						กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างวิจัยที่เกี่ยวข้อง&nbsp;
-                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งที่แสดงว่ามีสมาชิกในกลุ่มตัวอย่างวิจัยใดบ้างที่ติดตามผู้ใช้รายนี้ หรือรีทวีตข้อความของผู้ใช้รายนี้"></span>
+						กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่เกี่ยวข้อง&nbsp;
+                        <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งที่แสดงว่ามีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดบ้างที่ติดตามผู้ใช้รายนี้ หรือรีทวีตข้อความของผู้ใช้รายนี้"></span>
                     </h3>
 				</div>
 				<div class="panel-body">

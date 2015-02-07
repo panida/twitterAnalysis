@@ -34,8 +34,7 @@
 
 		<li class="active"><a href="#statistics" onmouseout="resize()" data-toggle="tab">ค่าสถิติเบื้องต้น</a></li>
 		<li><a href="#speedAndLifeCycle" onmouseout="resize()" data-toggle="tab">กราฟข้อมูลทวีต</a></li>
-		<!-- <li><a href="#follower" onmouseout="resize();valueChanged();" data-toggle="tab">ผู้ติดตาม</a></li> -->
-        <li><a href="#interestingContributor" onmouseout ="resize()" data-toggle="tab">กลุ่มตัวอย่างวิจัย</a></li>
+		<li><a href="#interestingContributor" onmouseout ="resize()" data-toggle="tab">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์</a></li>
 		<li><a href="#tweetTimeline" onmouseout="resize()" data-toggle="tab">รายการทวีตทั้งหมด</a></li>
 	</ul>
     <script type="text/javascript">
