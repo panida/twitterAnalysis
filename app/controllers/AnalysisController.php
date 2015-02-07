@@ -265,6 +265,10 @@ class AnalysisController extends BaseController {
 		} return ($a->real_created_at<$b->real_created_at)? 1:-1; 
 	} 
 
+	public static function cmpByNumberOfFollowerDesc($a, $b){
+		return $b->real_no_of_follower-$a->real_no_of_follower; 
+	}
+
 	function TransitionCMP($a, $b)
 	{
 	    return $a->count - $b->count;
@@ -535,8 +539,7 @@ class AnalysisController extends BaseController {
 		for($i=0;$i<=20;$i++) $tweetResultList[$i] = clone $tweetResultListTemp;   
         
 
-		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
-		$tweetOriginalKeyList = $tweetResultList[2]->select('twitter_analysis_fact.tweetkey')->distinct()->get();
+		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');		
 		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
 		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
 		$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
@@ -546,30 +549,30 @@ class AnalysisController extends BaseController {
                  ->get();
  //                 	var_dump($tweetResultList->get());
 	// return View::make('blank_page');
-        $topFollowerList = $tweetResultList[6]
-        		->orderBy('twitter_analysis_fact.number_of_follower','desc')
-        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
-        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
-        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
-        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
-        		->where('original_fact.activitytypekey','<',3)        		
-        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
-        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
-        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
-        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
-        		->select('user_dim.screenname as real_screenname',
-        			'source_dim.sourcename as real_sourcename',
-        			'tweet_detail_dim.created_at as real_created_at',
-        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
-        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
-        			'twitter_analysis_fact.tweetkey as real_tweetkey',
-        			'tweet_original.text as original_text',
-        			'tweet_detail_original.created_at as original_created_at',
-        			'source_original.sourcename as original_sourcename',
-        			'user_original.name as original_name',
-        			'user_original.screenname as original_screenname',
-        			'user_original.profile_pic_url as original_pic')
-        		->get();
+        // $topFollowerList = $tweetResultList[6]
+        // 		->orderBy('twitter_analysis_fact.number_of_follower','desc')
+        // 		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
+        // 		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
+        // 		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
+        // 		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
+        // 		->where('original_fact.activitytypekey','<',3)        		
+        // 		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+        // 		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+        // 		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+        // 		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+        // 		->select('user_dim.screenname as real_screenname',
+        // 			'source_dim.sourcename as real_sourcename',
+        // 			'tweet_detail_dim.created_at as real_created_at',
+        // 			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
+        // 			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
+        // 			'twitter_analysis_fact.tweetkey as real_tweetkey',
+        // 			'tweet_original.text as original_text',
+        // 			'tweet_detail_original.created_at as original_created_at',
+        // 			'source_original.sourcename as original_sourcename',
+        // 			'user_original.name as original_name',
+        // 			'user_original.screenname as original_screenname',
+        // 			'user_original.profile_pic_url as original_pic')
+        // 		->get();
 
         $timelineList = $tweetResultList[7]
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
@@ -601,6 +604,12 @@ class AnalysisController extends BaseController {
         			'date_dim.thedate as thedate')
         		->get();
 
+        $topFollowerList = array_merge(array(),$timelineList);
+        usort($topFollowerList,'AnalysisController::cmpByNumberOfFollowerDesc');
+   //              	echo "<pre>";
+   //   		var_dump($topFollowerList);
+			// echo "</pre>";
+			// return View::make('blank_page');
         $tweetInterestList = $tweetResultList[8]
         		->where('activitytypekey',1)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
@@ -1785,7 +1794,6 @@ class AnalysisController extends BaseController {
         
 
 		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
-		$tweetOriginalKeyList = $tweetResultList[2]->select('twitter_analysis_fact.tweetkey')->distinct()->get();
 		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
 		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
 	// 	$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
