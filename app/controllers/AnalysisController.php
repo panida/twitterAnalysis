@@ -605,6 +605,11 @@ class AnalysisController extends BaseController {
         		->where('activitytypekey',1)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
         		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->join('researchcase_usergroup_mapping', function($join)
+			        {
+			            $join->on('twitter_analysis_fact.researchcasekey','=','researchcase_usergroup_mapping.researchcasekey')
+			            	->on('group_user_mapping.groupid','=','researchcase_usergroup_mapping.groupid');
+			        })	        		
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -632,10 +637,29 @@ class AnalysisController extends BaseController {
 					                ->groupBy('usergroup.groupid')
 					        		->get();
 
+		// ->select(
+  //       			'tweet_dim.text as original_text',
+  //       			'twitter_analysis_fact.researchcasekey as twitter_analysis_fact_researchcasekey',
+  //       			'researchcase_usergroup_mapping.researchcasekey as researchcase_usergroup_mapping_researchcasekey',
+  //       			'group_user_mapping.groupid as group_user_mapping_groupid',
+  //       			'researchcase_usergroup_mapping.groupid as researchcase_usergroup_mapping_groupid',
+  //       			'user_dim.name as real_name'
+  //       			)
+  //       		->get();
+   //      	echo "<pre>";
+   //   		var_dump($tweetInterestDetailList);
+			// echo "</pre>";
+			// return View::make('blank_page');
+
 		$replyInterestList = $tweetResultList[9]
         		->where('activitytypekey',2)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
         		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->join('researchcase_usergroup_mapping', function($join)
+			        {
+			            $join->on('twitter_analysis_fact.researchcasekey','=','researchcase_usergroup_mapping.researchcasekey')
+			            	->on('group_user_mapping.groupid','=','researchcase_usergroup_mapping.groupid');
+			        })
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')       		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -665,9 +689,14 @@ class AnalysisController extends BaseController {
 
 
 		$retweetInterestList = $tweetResultList[10]
-				->where('twitter_analysis_fact.activitytypekey',3)   
+				->where('twitter_analysis_fact.activitytypekey',3)  
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')   
         		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->join('researchcase_usergroup_mapping', function($join)
+			        {
+			            $join->on('twitter_analysis_fact.researchcasekey','=','researchcase_usergroup_mapping.researchcasekey')
+			            	->on('group_user_mapping.groupid','=','researchcase_usergroup_mapping.groupid');
+			        })
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')      		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
@@ -711,6 +740,11 @@ class AnalysisController extends BaseController {
         		->where('twitter_analysis_fact.activitytypekey','<',3)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
         		->rightJoin('group_user_mapping','twitter_analysis_fact.userkey','=','group_user_mapping.userkey') 
+        		->join('researchcase_usergroup_mapping', function($join)
+			        {
+			            $join->on('twitter_analysis_fact.researchcasekey','=','researchcase_usergroup_mapping.researchcasekey')
+			            	->on('group_user_mapping.groupid','=','researchcase_usergroup_mapping.groupid');
+			        })
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')     
         		->leftJoin('twitter_analysis_fact as all_fact','tweet_dim.tweetkey','=','all_fact.tweetkey')
         		->where('all_fact.objectid','<>','twitter_analysis_fact.objectid')
@@ -721,10 +755,7 @@ class AnalysisController extends BaseController {
 				->groupBy('usergroup.groupid')
 				->get();
 
-			// echo "<pre>";
-   //   		var_dump($tweetInterestDetailList);
-			// echo "</pre>";
-			// return View::make('blank_page');
+
 		$totalGroup = array();
 		foreach($tweetInterestCountList as $aGroup){
 			$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
@@ -1962,6 +1993,8 @@ class AnalysisController extends BaseController {
 				->rightJoin('group_user_mapping','original_fact.userkey','=','group_user_mapping.userkey')
 				->rightJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
 				->where('group_user_mapping.groupid','<>',"NULL")
+				->leftJoin('researchcase_usergroup_mapping','researchcase_usergroup_mapping.groupid','=','group_user_mapping.groupid')
+				->where('researchcase_usergroup_mapping.researchcasekey',$caseID)
         		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
         		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
         		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
@@ -2247,6 +2280,8 @@ class AnalysisController extends BaseController {
 									->leftJoin('group_user_mapping','group_user_mapping.userkey','=','followee_mapping.userkey')
 									->leftJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
 									->where('group_user_mapping.groupid','<>',"NULL")
+									->leftJoin('researchcase_usergroup_mapping','researchcase_usergroup_mapping.groupid','=','group_user_mapping.groupid')
+									->where('researchcase_usergroup_mapping.researchcasekey',$caseID)
 									->select('user_dim.screenname as screenname',
 										'user_dim.name as name',
 										'user_dim.profile_pic_url as pic',
@@ -2287,7 +2322,19 @@ class AnalysisController extends BaseController {
 		
 		ksort($totalGroup);
 
-		$hisGroup = $user->groups;
+		// $hisGroup = $user->groups;
+		$hisGroup = DB::table('user_dim')
+					->where(function($query) use($searchText)
+			            {
+			                $query->where('user_dim.name','=',$searchText)
+							->orWhere('user_dim.screenname','=',$searchText);
+			            })
+					->leftJoin('group_user_mapping','group_user_mapping.userkey','=','user_dim.userkey')
+					->leftJoin('researchcase_usergroup_mapping','researchcase_usergroup_mapping.groupid','=','group_user_mapping.groupid')
+					->where('researchcase_usergroup_mapping.researchcasekey',$caseID)
+					->leftJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
+					->get();
+
 
 		// $recent50Follower = TwitterAPIHelper::getFollowerList($user->screenname);
 		// echo "<pre>";
