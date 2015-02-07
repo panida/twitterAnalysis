@@ -1605,7 +1605,11 @@ class AnalysisController extends BaseController {
         fputcsv($file,[]);
         fputcsv($file,[iconv('UTF-8','cp874','1. กราฟข้อมูลทวีต')]);
         fputcsv($file,['Date','Tweets','Retweets','Replies']);
-        	//--------Put Your Code Here--------------
+        $graphTweetLen = count($tweetDay[1][0]);
+       	for($i=0; $i<$graphTweetLen; $i+=1){
+       		fputcsv($file,[(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
+       	}
+        
         //------------------Contributors--------------
         fputcsv($file,[]);
         fputcsv($file,[iconv('UTF-8','cp874','2. บุคคลที่เกี่ยวข้องทั้งหมด')]);
@@ -2868,7 +2872,10 @@ class AnalysisController extends BaseController {
         fputcsv($file,[]);
         fputcsv($file,[iconv('UTF-8','cp874','1. กราฟข้อมูลทวีต')]);
         fputcsv($file,['Date','Tweets','Retweets','Replies']);
-        	//--------Put Your Code Here--------------
+       	$graphTweetLen = count($tweetDay[1][0]);
+       	for($i=0; $i<$graphTweetLen; $i+=1){
+       		fputcsv($file,[(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
+       	}
         //------------------Contributors--------------
         fputcsv($file,[]);
         fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างวิจัย')]);
