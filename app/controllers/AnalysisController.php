@@ -1607,7 +1607,7 @@ class AnalysisController extends BaseController {
         fputcsv($file,['Date','Tweets','Retweets','Replies']);
         $graphTweetLen = count($tweetDay[1][0]);
        	for($i=0; $i<$graphTweetLen; $i+=1){
-       		fputcsv($file,[(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
+       		fputcsv($file,[' '.(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
        	}
         
         //------------------Contributors--------------
@@ -2874,7 +2874,7 @@ class AnalysisController extends BaseController {
         fputcsv($file,['Date','Tweets','Retweets','Replies']);
        	$graphTweetLen = count($tweetDay[1][0]);
        	for($i=0; $i<$graphTweetLen; $i+=1){
-       		fputcsv($file,[(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
+       		fputcsv($file,[' '.(Carbon::createFromDate($tweetDay[1][0][$i]["year"], $tweetDay[1][0][$i]["month"], $tweetDay[1][0][$i]["day"])->toDateString()),$tweetDay[1][0][$i]["num_of_activity"],$tweetDay[1][1][$i]["num_of_activity"],$tweetDay[1][2][$i]["num_of_activity"]]);
        	}
         //------------------Contributors--------------
         fputcsv($file,[]);
