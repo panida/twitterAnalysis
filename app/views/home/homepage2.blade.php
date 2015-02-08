@@ -42,7 +42,7 @@
                     <div class="form-group top-buffer">
                         <label class="col-lg-4 col-md-4 col-sm-4 control-label">ค้นหาโดย</label>
                         <div class="col-lg-6 col-md-6 col-sm-6">
-                            {{ Form::select('type', array('text'=>'ข้อความ','user'=>'ชื่อผู้ใช้'), 'text', ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
+                            {{ Form::select('type', array('text'=>'ข้อความ/ทวีต','user'=>'ชื่อผู้ใช้ทวิตเตอร์'), 'text', ['class' => 'form-control', 'required' => 'required', 'style'=>'text-align:center;font-family:tahoma;']) }}
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
         <!-- Title -->
         <div class="row">
             <div class="col-lg-12 onlythaibold">
-                <h2>ทำความรู้จักกับเว็บของเรา</h2>
+                <h2>บริการของเรา</h2>
             </div>
         </div>
         <hr>

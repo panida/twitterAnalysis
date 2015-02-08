@@ -81,24 +81,24 @@
 			                        @foreach($topRetweetedList as $anOriginalTweet)
 			                            <li class="left clearfix">
 			                                <span class="chat-img pull-left">
-			                                    <a href="http://twitter.com/{{$anOriginalTweet['user']->screenname}}" target="blank" class="tweet_avatar2">
-			                                        <img src="{{$anOriginalTweet['user']->profile_pic_url}}" alt="{{$anOriginalTweet['user']->screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
+			                                    <a href="http://twitter.com/{{$anOriginalTweet->original_screenname}}" target="blank" class="tweet_avatar2">
+			                                        <img src="{{$anOriginalTweet->original_pic}}" alt="{{$anOriginalTweet->original_screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
 			                                    </a>
 			                                </span>
 			                                <div class="chat-body clearfix">
 			                                    <div class="header">
-			                                        <strong class="primary-font"><a href="http://twitter.com/{{$anOriginalTweet['user']->screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$anOriginalTweet['user']->name}}</a></strong> 
-			                                        <span style="color:#AAAAAA;">{{"@".$anOriginalTweet['user']->screenname}}</span>
+			                                        <strong class="primary-font"><a href="http://twitter.com/{{$anOriginalTweet->original_screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$anOriginalTweet->original_name}}</a></strong> 
+			                                        <span style="color:#AAAAAA;">{{"@".$anOriginalTweet->original_screenname}}</span>
 			                                        <small class="pull-right text-muted">
-			                                            <i class="fa fa-retweet fa-fw"></i> {{$anOriginalTweet['retweetCount']. " retweets"}}                                      
+			                                            <i class="fa fa-retweet fa-fw"></i> {{$anOriginalTweet->totalRetweet. " retweets"}}                                      
 			                                        </small>
 			                                    </div>
 			                                    <p>
-			                                        {{$anOriginalTweet['text']}}
+			                                        {{$anOriginalTweet->original_text}}
 			                                    </p>
 			                                    <small class="text-muted">
-			                                        <span class="glyphicon glyphicon-send"></span> {{$anOriginalTweet['source']}}
-			                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet['detail']->created_at}}
+			                                        <span class="glyphicon glyphicon-send"></span> {{$anOriginalTweet->original_sourcename}}
+			                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet->original_created_at}}
 			                                    </small>
 			                                </div>
 			                            </li>

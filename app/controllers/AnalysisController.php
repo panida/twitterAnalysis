@@ -269,6 +269,11 @@ class AnalysisController extends BaseController {
 		return $b->real_no_of_follower-$a->real_no_of_follower; 
 	}
 
+	public static function cmpByAllActivityCountDesc($a, $b){
+		if($a['allActivityCount']==$b['allActivityCount']) return 0;
+		else return ($a['allActivityCount']<$b['allActivityCount'])? 1:-1; 
+	} 
+
 	function TransitionCMP($a, $b)
 	{
 	    return $a->count - $b->count;
@@ -484,12 +489,12 @@ class AnalysisController extends BaseController {
 	        $x = $fpdf->GetX();
 			$y = $fpdf->GetY();
 	        if($input['type']=='text'){
-	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
 	        }
 	        else{
-	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
 	        }
-	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetXY($x + 50, $y);
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -505,10 +510,10 @@ class AnalysisController extends BaseController {
 	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
 	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
 	        if($input['type']=='text'){
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
 	        }
 	        else{
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
 	        }
 	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
 	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -543,39 +548,38 @@ class AnalysisController extends BaseController {
         
 
 		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');		
-		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
-		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
+		$countActList = $tweetResultList[2]					
+					->select(
+						'twitter_analysis_fact.activitytypekey',						
+						DB::raw('count(*) as totalNumber')
+						)
+					->groupBy('twitter_analysis_fact.activitytypekey')
+					->orderBy('twitter_analysis_fact.activitytypekey','asc')
+					->get();
+		$contributorKeyList = $tweetResultList[3]
+								->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+								->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
+								->select('user_dim.userkey',
+									'user_dim.screenname',
+									'twitter_analysis_fact.activitytypekey',
+									'user_statistics_dim.followers_count',
+									DB::raw('count(*) as totalNumber')
+									)
+								->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
+								->orderBy('user_statistics_dim.followers_count','desc')
+								->get();
+		$sourceKeyList = $tweetResultList[4]
+							->select('twitter_analysis_fact.sourcekey',
+									DB::raw('count(*) as totalNumber')
+								)
+							->groupBy('twitter_analysis_fact.sourcekey')
+							->orderBy('totalNumber','desc')
+							->get();
 		$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
                  ->select('twitter_analysis_fact.tweetkey', DB::raw('count(*) as totalRetweet'))
                  ->groupBy('twitter_analysis_fact.tweetkey')
                  ->orderBy('totalRetweet','desc')
                  ->get();
- //                 	var_dump($tweetResultList->get());
-	// return View::make('blank_page');
-        // $topFollowerList = $tweetResultList[6]
-        // 		->orderBy('twitter_analysis_fact.number_of_follower','desc')
-        // 		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
-        // 		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
-        // 		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
-        // 		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
-        // 		->where('original_fact.activitytypekey','<',3)        		
-        // 		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
-        // 		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
-        // 		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
-        // 		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
-        // 		->select('user_dim.screenname as real_screenname',
-        // 			'source_dim.sourcename as real_sourcename',
-        // 			'tweet_detail_dim.created_at as real_created_at',
-        // 			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
-        // 			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
-        // 			'twitter_analysis_fact.tweetkey as real_tweetkey',
-        // 			'tweet_original.text as original_text',
-        // 			'tweet_detail_original.created_at as original_created_at',
-        // 			'source_original.sourcename as original_sourcename',
-        // 			'user_original.name as original_name',
-        // 			'user_original.screenname as original_screenname',
-        // 			'user_original.profile_pic_url as original_pic')
-        // 		->get();
 
         $timelineList = $tweetResultList[7]
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
@@ -649,15 +653,6 @@ class AnalysisController extends BaseController {
 					                ->groupBy('usergroup.groupid')
 					        		->get();
 
-		// ->select(
-  //       			'tweet_dim.text as original_text',
-  //       			'twitter_analysis_fact.researchcasekey as twitter_analysis_fact_researchcasekey',
-  //       			'researchcase_usergroup_mapping.researchcasekey as researchcase_usergroup_mapping_researchcasekey',
-  //       			'group_user_mapping.groupid as group_user_mapping_groupid',
-  //       			'researchcase_usergroup_mapping.groupid as researchcase_usergroup_mapping_groupid',
-  //       			'user_dim.name as real_name'
-  //       			)
-  //       		->get();
    //      	echo "<pre>";
    //   		var_dump($tweetInterestDetailList);
 			// echo "</pre>";
@@ -811,98 +806,82 @@ class AnalysisController extends BaseController {
 			// return View::make('blank_page');		
 
 		$testTimeArray["phpProcessTotalGroup"] = Carbon::now()->diffInSeconds($testStart);
-
-        $topRetweetedList = array();
-        $i = 0;
-        $retweetedCountOfUser = array();
-        foreach($countRetweetTime as $aTweet){
-        	$originalTweetFact = TwitterAnalysisFact::findOriginalTweet($aTweet->tweetkey);
-        	if(get_class($originalTweetFact)!=='TwitterAnalysisFact'){
-        	var_dump($aTweet->tweetkey);
-			return View::make('blank_page');}
-        	$user = $originalTweetFact->user;
-        	$date = $originalTweetFact->date;
-        	$time = $originalTweetFact->time;
-        	$detail = $originalTweetFact->tweetdetail;
-        	$source = $originalTweetFact->source->sourcename;
-        	$text = TweetDim::find($aTweet->tweetkey)->text;
-        	$topRetweetedList[$i] = ['tweetkey'=>$aTweet->tweetkey,
-        								'text'=>$text,
-        								'date'=>$date,
-        								'time'=>$time,
-        								'detail' =>$detail,
-        								'source'=>$source,
-        								'user'=>$user,
-        								'retweetCount' => $aTweet->totalRetweet
-									];
-			if(array_key_exists($user->userid,$retweetedCountOfUser)) $retweetedCountOfUser[$user->userid]['count'] += $aTweet->totalRetweet;
-			else $retweetedCountOfUser[$user->userid] = ['count'=>$aTweet->totalRetweet,'screenname'=>$user->screenname,'pic'=>$user->profile_pic_url];
-			$i++;
-        }
-        $maxRTCount = -1;
-        $maxRetweetedUser = NULL;
-        foreach($retweetedCountOfUser as $aUser){
-        	if($aUser['count']>$maxRTCount){
-        		$maxRTCount = $aUser['count'];
-        		$maxRetweetedUser = $aUser;
+		$topRetweetedList = $tweetResultList[12]
+				->where('twitter_analysis_fact.activitytypekey','=',3)
+        		->leftJoin('twitter_analysis_fact as original_fact','twitter_analysis_fact.tweetkey','=','original_fact.tweetkey')
+        		->where('original_fact.activitytypekey','<',3)        		
+        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+        		->select(
+        			'tweet_original.text as original_text',
+        			'tweet_detail_original.created_at as original_created_at',
+        			'source_original.sourcename as original_sourcename',
+        			'user_original.userkey as original_userkey',
+        			'user_original.name as original_name',
+        			'user_original.screenname as original_screenname',
+        			'user_original.profile_pic_url as original_pic',
+        			DB::raw('count(*) as totalRetweet'))
+        		->groupBy('original_fact.tweetkey')
+        		->orderBy('totalRetweet','desc')
+        		->get();
+        $retweetedCountOfUser = array();  
+		$maxRTCount = -1;
+        $maxRetweetedUserKey = NULL;
+        foreach($topRetweetedList as $anOriginalTweet){
+			if(array_key_exists($anOriginalTweet->original_userkey,$retweetedCountOfUser)) $retweetedCountOfUser[$anOriginalTweet->original_userkey] += $anOriginalTweet->totalRetweet;
+			else $retweetedCountOfUser[$anOriginalTweet->original_userkey] = $anOriginalTweet->totalRetweet;
+			if($retweetedCountOfUser[$anOriginalTweet->original_userkey]>$maxRTCount){
+        		$maxRTCount = $retweetedCountOfUser[$anOriginalTweet->original_userkey];
+        		$maxRetweetedUserID = $anOriginalTweet->original_userkey;
         	}
-    	}
-  	// 				var_dump($topRetweetedList);
-			// return View::make('blank_page');
+        }
+        $maxRetweetedUser = ['count'=>$maxRTCount,'screenname'=>UserDim::find($maxRetweetedUserID)->screenname,'pic'=>UserDim::find($maxRetweetedUserID)->profile_pic_url];
+		 //        	echo "<pre>";
+   //   		var_dump($topRetweetedList);
+			// echo "</pre>";
+			// return View::make('blank_page');	
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
         else $top10RetweetedList = array_slice($topRetweetedList, 0,10);
         $testTimeArray["phpProcessTopRetweetedList"] = Carbon::now()->diffInSeconds($testStart);
-		// $countRetweetTime = array();
 		$contributorList = array();
-		$maxFol = -1;
-		$maxUSKey = 0;
-		foreach($contributorKeyList as $aKey){
-			$contributorList[$aKey->userstatisticskey] = new ContributorData();	
-			$contributorList[$aKey->userstatisticskey]->userstatisticskey = $aKey->userstatisticskey;
-			$followerCount = UserStatisticsDim::find($aKey->userstatisticskey)->followers_count;
-			$contributorList[$aKey->userstatisticskey]->followerCount = $followerCount;
-			if($followerCount>$maxFol){
-				$maxFol = $followerCount;
-				$maxUSKey = $aKey->userstatisticskey;
+		foreach($contributorKeyList as $aContributorAndType){
+			if(!array_key_exists($aContributorAndType->userkey,$contributorList)){
+				$contributorList[$aContributorAndType->userkey] = [	'userkey'=>$aContributorAndType->userkey,
+																	'screenname'=>$aContributorAndType->screenname,
+																	'followerCount'=>$aContributorAndType->followers_count,
+																	'tweetCount'=>0,
+																	'retweetCount'=>0,
+																	'replyCount'=>0,
+																	'allActivityCount'=>0
+																	];
 			}
+			if ($aContributorAndType->activitytypekey==3) {
+				$contributorList[$aContributorAndType->userkey]['retweetCount'] = $aContributorAndType->totalNumber;
+				$contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+			}
+			else if ($aContributorAndType->activitytypekey==1) {
+				$contributorList[$aContributorAndType->userkey]['tweetCount'] = $aContributorAndType->totalNumber;
+				$contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+			}
+			else {
+				$contributorList[$aContributorAndType->userkey]['replyCount'] = $aContributorAndType->totalNumber;
+				$contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+			}				
 		}
-		$maxFolUser = DB::table('user_statistics_dim')->where('userstatisticskey',$maxUSKey)
-						->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
-						->first();
-		$maxFollowerUser = ['count'=>$maxFol,'screenname'=>$maxFolUser->screenname,'pic'=>$maxFolUser->profile_pic_url];
-		// var_dump($topFollower);
-		// return View::make('blank_page');
+		reset($contributorList);
+		$maxFol_key = key($contributorList);
+		$maxFollowerUser = ['count'=>$contributorList[$maxFol_key]["followerCount"],'screenname'=>$contributorList[$maxFol_key]["screenname"],'pic'=>UserDim::find($maxFol_key)->profile_pic_url];
+		 //        	echo "<pre>";
+   //   		var_dump($contributorList);
+			// echo "</pre>";
+			// return View::make('blank_page');	
+
 		$sourceList = array();
 		foreach($sourceKeyList as $aKey){
-			$sourceList[$aKey->sourcekey] = 0;
+			$sourceList[$aKey->sourcekey] = $aKey->totalNumber;
 		}
-		$countActTweet = 0;
-		$countActRetweet = 0;
-		$countActReply = 0;
-		foreach($tweetResult as $tweet){
-			$aKey = $tweet->userstatisticskey;
-			if($tweet->activitytypekey==1){//tweet
-				$contributorList[$aKey]->tweetCount+=1; 
-				$countActTweet+=1;
-			} 
-			else if($tweet->activitytypekey==2){//reply
-				$contributorList[$aKey]->replyCount+=1; 
-				$countActReply+=1;
-			} 
-			else{//retweet
-				$contributorList[$aKey]->retweetCount+=1;
-				$countActRetweet+=1;
-			}  
-			$contributorList[$aKey]->allActivityCount+=1;
-			$sourceList[$tweet->sourcekey]+=1; 
-		}
-		// echo "<pre>";
-		// var_dump($tweetInterestUser);
-		// var_dump($retweetInterestUser);
-		// var_dump($replyInterestUser);
-		// echo "</pre>";
-		// return View::make('blank_page');
-
 
 		$TwUserList = array();
 		$RtUserList = array();
@@ -911,41 +890,40 @@ class AnalysisController extends BaseController {
 		$RtRpUserList = array();
 		$TwRpUserList = array();
 		$TwRtRpUserList = array();
-		usort($contributorList,"ContributorData::cmpByFollowerCountDesc");
-		reset($contributorList);
-		foreach($contributorList as $aUserStat){
-			$tweetFact = TwitterAnalysisFact::findTweetByUserStat($aUserStat->userstatisticskey);
-			$username = $tweetFact->user->screenname; 
-			$userDisplayStat = ['screenname'=>$username,
-								'tweetCount'=>$aUserStat->tweetCount,
-								'retweetCount'=>$aUserStat->retweetCount,
-								'replyCount'=>$aUserStat->replyCount,
-								'followerCount'=>$aUserStat->followerCount];
-			$TW = ($aUserStat->tweetCount > 0);
-			$RT = ($aUserStat->retweetCount > 0);
-			$RP = ($aUserStat->replyCount > 0);
+		// usort($contributorList,"ContributorData::cmpByFollowerCountDesc");
+		// reset($contributorList);
+		foreach($contributorList as $aUserStat){			
+			$TW = ($aUserStat['tweetCount'] > 0);
+			$RT = ($aUserStat['retweetCount'] > 0);
+			$RP = ($aUserStat['replyCount'] > 0);
 			if($TW){
-				array_push($TwUserList,$userDisplayStat);
+				array_push($TwUserList,$aUserStat);
 			}
 			if($RT){
-				array_push($RtUserList,$userDisplayStat);
+				array_push($RtUserList,$aUserStat);
 			}
 			if($RP){
-				array_push($RpUserList,$userDisplayStat);
+				array_push($RpUserList,$aUserStat);
 			}
 			if($TW or $RT){
-				array_push($TwRtUserList,$userDisplayStat);
+				array_push($TwRtUserList,$aUserStat);
 			}
 			if($TW or $RP){
-				array_push($TwRpUserList,$userDisplayStat);
+				array_push($TwRpUserList,$aUserStat);
 			}
 			if($RT or $RP){
-				array_push($RtRpUserList,$userDisplayStat);
+				array_push($RtRpUserList,$aUserStat);
 			}
 			if($TW or $RT or $RP){
-				array_push($TwRtRpUserList,$userDisplayStat);
+				array_push($TwRtRpUserList,$aUserStat);
 			}
 		}
+		$testTimeArray["phpProcessGroupActivityType"] = Carbon::now()->diffInSeconds($testStart);
+		// $print = json_encode($TwUserList);
+		//     echo "<pre>";
+  //    		var_dump($print);
+		// 	echo "</pre>";
+		// 	return View::make('blank_page');
 		$perPage = 10;
 		$TwUserList = array_chunk($TwUserList,$perPage);
 		$RtUserList = array_chunk($RtUserList,$perPage);	
@@ -954,17 +932,18 @@ class AnalysisController extends BaseController {
 		$RtRpUserList = array_chunk($RtRpUserList,$perPage);
 		$TwRpUserList = array_chunk($TwRpUserList,$perPage);
 		$TwRtRpUserList = array_chunk($TwRtRpUserList,$perPage);
-		// var_dump($TwUserList);
-		// return View::make('blank_page');
-		usort($contributorList,"ContributorData::cmpByAllActivityCountDesc");
+		
+		usort($contributorList,"AnalysisController::cmpByAllActivityCountDesc");
 		reset($contributorList);
-		// var_dump($contributorList);
-		// return View::make('blank_page');
-		$maxActUser = DB::table('user_statistics_dim')->where('userstatisticskey',$contributorList[0]->userstatisticskey)
-						->join('user_dim','user_dim.userid','=','user_statistics_dim.userid')
-						->first();
-		$maxActivityUser = ['count'=>$contributorList[0]->allActivityCount,'screenname'=>$maxActUser->screenname,'pic'=>$maxActUser->profile_pic_url];
-		$testTimeArray["phpProcessContributorActivity"] = Carbon::now()->diffInSeconds($testStart);
+			// 	    echo "<pre>";
+   //   		var_dump($contributorList);
+			// echo "</pre>";
+			// return View::make('blank_page');
+		$maxAct_key = key($contributorList);
+		$maxActivityUser = ['count'=>$contributorList[$maxAct_key]["allActivityCount"],'screenname'=>$contributorList[$maxAct_key]["screenname"],'pic'=>UserDim::find($contributorList[$maxAct_key]["userkey"])->profile_pic_url];
+		$testTimeArray["phpProcessContributorActivityChunk"] = Carbon::now()->diffInSeconds($testStart);
+		
+
 		$sourceProportion = array();
 		for($i = 1;$i<=5;$i+=1){
 			if(sizeof($sourceList)==0) break;
@@ -977,11 +956,16 @@ class AnalysisController extends BaseController {
 			$sourceProportion[6] = ['sourceName'=>'Others',
 									'count'=>array_sum($sourceList)];
 		}
+		$countAct = ['tweet'=>0,'retweet'=>0,'reply'=>0];
+		foreach($countActList as $anAct){
+			if($anAct->activitytypekey==1) $countAct['tweet'] = $anAct->totalNumber;
+			else if($anAct->activitytypekey==3) $countAct['retweet'] = $anAct->totalNumber;
+			else $countAct['reply'] = $anAct->totalNumber;
+		}
 
 		// ----- Statistics Tab -----
 		$countAllContributor = sizeof($contributorList);
 		
-		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 		$testTimeArray["phpProcessSourceFinish"] = Carbon::now()->diffInSeconds($testStart);
 		//-------------------------GenImageForReport---------------
 		//-----------ActivityPic------------------
@@ -1478,12 +1462,12 @@ class AnalysisController extends BaseController {
         $x = $fpdf->GetX();
 		$y = $fpdf->GetY();
         if($input['type']=='text'){
-        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
         }
         else{
-        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
         }
-        $fpdf->SetXY($x + 40, $y);
+        $fpdf->SetXY($x + 50, $y);
         $fpdf->SetFont('browa','',16);
         $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -1520,11 +1504,11 @@ class AnalysisController extends BaseController {
         $fpdf->SetAligns(array('C','L','L','C','C','C'));
         foreach($top10RetweetedList as $key=>$anOriginalTweet){
         	$fpdf->Row(array(@iconv('UTF-8','cp874//IGNORE',$key+1),
-        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet["user"]->name."\xA").@iconv('UTF-8','cp874//IGNORE',"@".$anOriginalTweet["user"]->screenname),
-        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['text']),
-        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['source']),
-        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['detail']->created_at),
-        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet['retweetCount'])
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->original_name."\xA").@iconv('UTF-8','cp874//IGNORE',"@".$anOriginalTweet->original_screenname),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->original_text),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->original_sourcename),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->original_created_at),
+        					@iconv('UTF-8','cp874//IGNORE',$anOriginalTweet->totalRetweet)
         	));        	
         }
         //------------------Page3----------------------
@@ -1554,19 +1538,19 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.3 ผู้ที่มีส่วนร่วมมากที่สุด คือ @'.$maxActivityUser['screenname'].' (มีส่วนร่วม '.number_format($maxActivityUser['count']).' ครั้ง)'));
         if(count($totalGroup)==0){
         	$fpdf->SetFont('browa','B',16);
-	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดมีส่วนร่วมกับการค้นหานี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดมีส่วนร่วมกับการค้นหานี้'));
         }
         //------------------Page5----------------------
         else{
 	        $fpdf->AddPage();
 	        $fpdf->SetFont('browa','B',16);
-	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874','4. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างวิจัยดังนี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','สำหรับกราฟในข้อ 4.1 และ 4.2 Group หมายเลขต่างๆ หมายถึงกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ดังนี้'));
 	        $index = 0;
 	        foreach($totalGroup as $aGroup){
 	        	$fpdf->setX(35);
@@ -1574,7 +1558,7 @@ class AnalysisController extends BaseController {
 	        	$index++;
 	        }
 	        $fpdf->setX(25);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างวิจัย'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.1 กราฟแสดงจำนวนทวีตแบ่งตามกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
 	        $fpdf->Image(public_path().'/reportImage/'.$interestingContributor1ImageName,25);
 	        $fpdf->setX(25);
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','4.2  กราฟแสดงจำนวนทวีตแบ่งตามประเภทของทวีต'));
@@ -1588,10 +1572,10 @@ class AnalysisController extends BaseController {
         $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
         fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
         if($input['type']=='text'){
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
         }
         else{
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
         }
         fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
         fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -1617,7 +1601,7 @@ class AnalysisController extends BaseController {
         }
         //------------------Contributors--------------
         fputcsv($file,[]);
-        fputcsv($file,[iconv('UTF-8','cp874','3. กลุ่มตัวอย่างวิจัย')]);
+        fputcsv($file,[iconv('UTF-8','cp874','3. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์')]);
         fputcsv($file,['Group','Tweets','Retweets','Replies','BeRetweeted']);
         foreach ($totalGroup as $key => $aGroup) {
         	fputcsv($file,[iconv('UTF-8','cp874',$aGroup['groupname']),number_format($aGroup['tweetCount']),number_format($aGroup['retweetCount']),number_format($aGroup['replyCount']),number_format($aGroup['beRetweetedCount'])]);
@@ -1636,6 +1620,7 @@ class AnalysisController extends BaseController {
         }
         fclose($file);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
+
         //------------------------------------------------------
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
@@ -1726,12 +1711,12 @@ class AnalysisController extends BaseController {
 	        $x = $fpdf->GetX();
 			$y = $fpdf->GetY();
 	        if($input['type']=='text'){
-	        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
 	        }
 	        else{
-	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+	        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
 	        }
-	        $fpdf->SetXY($x + 40, $y);
+	        $fpdf->SetXY($x + 50, $y);
 	        $fpdf->SetFont('browa','',16);
 	        $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
 	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -1746,10 +1731,10 @@ class AnalysisController extends BaseController {
 	        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
 	        fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
 	        if($input['type']=='text'){
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
 	        }
 	        else{
-	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+	        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
 	        }
 	        fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
 	        fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -1783,7 +1768,23 @@ class AnalysisController extends BaseController {
 
 		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
 		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
-		$sourceKeyList = $tweetResultList[4]->select('twitter_analysis_fact.sourcekey')->distinct()->get();
+		$countActList = $tweetResultList[2]					
+					->select(
+						'twitter_analysis_fact.activitytypekey',						
+						DB::raw('count(*) as totalNumber')
+						)
+					->groupBy('twitter_analysis_fact.activitytypekey')
+					->orderBy('twitter_analysis_fact.activitytypekey','asc')
+					->get();
+		// var_dump($countActList);
+		// return View::make('blank_page');
+		$sourceKeyList = $tweetResultList[4]
+							->select('twitter_analysis_fact.sourcekey',
+									DB::raw('count(*) as totalNumber')
+								)
+							->groupBy('twitter_analysis_fact.sourcekey')
+							->orderBy('totalNumber','desc')
+							->get();
 
         $timelineList = $tweetResultList[7]
         		->leftJoin('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')       		                
@@ -1898,25 +1899,9 @@ class AnalysisController extends BaseController {
 
 		$sourceList = array();
 		foreach($sourceKeyList as $aKey){
-			$sourceList[$aKey->sourcekey] = 0;
+			$sourceList[$aKey->sourcekey] = $aKey->totalNumber;
 		}
-		$countActTweet = 0;
-		$countActRetweet = 0;
-		$countActReply = 0;
-
-		foreach($tweetResult as $tweet){
-			if($tweet->activitytypekey==1){//tweet
-				$countActTweet+=1;
-			} 
-			else if($tweet->activitytypekey==2){//reply 
-				$countActReply+=1;	
-			} 
-			else{//retweet
-				$countActRetweet+=1;	
-			}  
-			$sourceList[$tweet->sourcekey]+=1; 
-		}
-	
+			
 		$sourceProportion = array();
 		for($i = 1;$i<=5;$i+=1){
 			if(sizeof($sourceList)==0) break;
@@ -1930,6 +1915,12 @@ class AnalysisController extends BaseController {
 									'count'=>array_sum($sourceList)];
 		}
 
+		$countAct = ['tweet'=>0,'retweet'=>0,'reply'=>0];
+		foreach($countActList as $anAct){
+			if($anAct->activitytypekey==1) $countAct['tweet'] = $anAct->totalNumber;
+			else if($anAct->activitytypekey==3) $countAct['retweet'] = $anAct->totalNumber;
+			else $countAct['reply'] = $anAct->totalNumber;
+		}
 	 	// ----- Statistics Tab -----
 		
 		$countAllContributor = sizeof($contributorKeyList);
@@ -2002,8 +1993,6 @@ class AnalysisController extends BaseController {
 					->where('researchcase_usergroup_mapping.researchcasekey',$caseID)
 					->leftJoin('usergroup','usergroup.groupid','=','group_user_mapping.groupid')
 					->get();
-
-		$countAct = ['tweet'=>$countActTweet,'retweet'=>$countActRetweet,'reply'=>$countActReply];
 
 		//-------------------------GenImageForReport---------------
 		//-----------ActivityPic------------------
@@ -2412,12 +2401,12 @@ class AnalysisController extends BaseController {
         $x = $fpdf->GetX();
 		$y = $fpdf->GetY();
         if($input['type']=='text'){
-        	$fpdf->MultiCell(40,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยข้อความ/ทวีต : '));
         }
         else{
-        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ : '));
+        	$fpdf->MultiCell(50,10,iconv('UTF-8','cp874','ค้นหาโดยชื่อผู้ใช้ทวิตเตอร์ : '));
         }
-        $fpdf->SetXY($x + 40, $y);
+        $fpdf->SetXY($x + 50, $y);
         $fpdf->SetFont('browa','',16);
         $fpdf->MultiCell(0,10,iconv('UTF-8','cp874',$searchText));
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','(ค้นหาจากกรณีศึกษา '.ResearchCaseDim::find($caseID)->name.' ตั้งแต่วันที่ '.$startDate.' ถึงวันที่ '.$endDate.')'));
@@ -2478,11 +2467,11 @@ class AnalysisController extends BaseController {
         $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','2.3 กราฟปริมาณข้อมูลทวิตเตอร์แบ่งตามประเภทแอพพลิเคชั่น'));
         $fpdf->Image(public_path().'/reportImage/'.$speedApplicationImageName,25);
         $fpdf->SetFont('browa','B',16);
-        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. กลุ่มตัวอย่างวิจัย'));
+        $fpdf->MultiCell(0,15,iconv('UTF-8','cp874','3. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์'));
         $fpdf->SetFont('browa','',16);
         $fpdf->setX(25);
         if(count($hisGroup)==0){
-        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' ไม่อยู่ในกลุ่มตัวอย่างวิจัยใด'));	
+        	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' ไม่อยู่ในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใด'));	
         }
         else{
         	$listOfGroup = '';
@@ -2495,10 +2484,10 @@ class AnalysisController extends BaseController {
         	$fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.1  @'.$user->screenname.' เป็นหนึ่งในสมาชิกของกลุ่มตัวอย่าง '.$listOfGroup));	
         }
         $fpdf->setX(25);
-	    $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างวิจัยที่เกี่ยวข้อง'));
+	    $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','3.2 กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่เกี่ยวข้อง'));
         if(count($totalGroup)==0){
         	$fpdf->setX(35);
-	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างวิจัยใดทำกิจกรรมเกี่ยวข้องกับผู้ใช้คนนี้'));
+	        $fpdf->MultiCell(0,8,iconv('UTF-8','cp874','ไม่มีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดทำกิจกรรมเกี่ยวข้องกับผู้ใช้คนนี้'));
         }
         else{
         	$index = 0;
@@ -2517,10 +2506,10 @@ class AnalysisController extends BaseController {
         $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"w");
         fputcsv($file, [iconv('UTF-8','cp874','รายงานผลการวิเคราะห์ข้อมูลทวิตเตอร์โดยระบบ CU.Tweet')]);
         if($input['type']=='text'){
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ข้อความ/ทวีต')]);
         }
         else{
-        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้')]);
+        	fputcsv($file, [iconv('UTF-8','cp874','ค้นหาโดย'),iconv('UTF-8','cp874','ชื่อผู้ใช้ทวิตเตอร์')]);
         }
         fputcsv($file,[iconv('UTF-8','cp874','คำค้นหา'),iconv('UTF-8','cp874',$searchText)]);
         fputcsv($file,[iconv('UTF-8','cp874','ค้นหาจากกรณีศึกษา '),iconv('UTF-8','cp874',ResearchCaseDim::find($caseID)->name)]);
@@ -2536,7 +2525,7 @@ class AnalysisController extends BaseController {
        	}
         //------------------Contributors--------------
         fputcsv($file,[]);
-        fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างวิจัย')]);
+        fputcsv($file,[iconv('UTF-8','cp874','2. กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์')]);
         fputcsv($file,['Group','Followee','Retweets']);
         foreach ($totalGroup as $key => $aGroup) {
         	fputcsv($file,[iconv('UTF-8','cp874',$aGroup['groupname']),number_format($aGroup['followeeCount']),number_format($aGroup['retweetCount'])]);

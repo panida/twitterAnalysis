@@ -63,14 +63,14 @@
 
     <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
         <h1 class="page-header onlythaibold">
-            จัดการกลุ่มตัวอย่างวิจัย
+            จัดการกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์
         </h1>
 
         <div class="row">
             <div class="col-lg-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-group fa-fw"></i> กลุ่มตัวอย่างวิจัยทั้งหมด</h2>
+                        <h2 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-group fa-fw"></i> กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ทั้งหมด</h2>
                     </div>
                     <div class="panel-body onlythaibold" style="font-size:18px;">
                         <div class="list-group">

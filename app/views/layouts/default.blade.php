@@ -131,7 +131,7 @@
 	                        <a href="{{URL::to('/databaseDetail')}}" class="onlythaibold" style="font-size:20px;">ชุดฐานข้อมูล</a>
 	                    </li>
 	                    <li>
-	                        <a href="{{URL::to('/groupManagement')}}" class="onlythaibold" style="font-size:20px;">จัดการกลุ่มตัวอย่างวิจัย</a>
+	                        <a href="{{URL::to('/groupManagement')}}" class="onlythaibold" style="font-size:20px;">จัดการกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์</a>
 	                    </li>
 	                    <li>
 	                        <a href="{{URL::to('/contact')}}" class="onlythaibold" style="font-size:20px;">ติดต่อ</a>

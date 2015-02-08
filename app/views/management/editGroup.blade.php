@@ -38,7 +38,7 @@
                 {{ Form::submit('บันทึกการแก้ไข', array('class'=>'btn btn-primary'))}}
                 &nbsp;
                 <a href="{{{ URL::to('deleteGroup/'.$groupDetail->groupid) }}}">
-                    <button type="button" class="btn btn-danger" onclick="return confirm('หากลบกลุ่มตัวอย่างนี้แล้วจะไม่สามารถเรียกคือนข้อมูลใดๆเกี่ยวกับกลุ่มตัวอย่างนี้ได้ คุณมั่นใจที่จะลบกลุ่มตัวอย่างวิจัยนี้ใช่หรือไม่')">ลบกลุ่มตัวอย่างนี้</button>
+                    <button type="button" class="btn btn-danger" onclick="return confirm('หากลบกลุ่มตัวอย่างนี้แล้วจะไม่สามารถเรียกคือนข้อมูลใดๆเกี่ยวกับกลุ่มตัวอย่างนี้ได้ คุณมั่นใจที่จะลบกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์นี้ใช่หรือไม่')">ลบกลุ่มตัวอย่างนี้</button>
                 </a>
             </div>
         </div>
