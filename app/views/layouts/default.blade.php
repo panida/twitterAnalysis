@@ -119,8 +119,8 @@
 	                </a>
 	            </div>
 	            <!-- Collect the nav links, forms, and other content for toggling -->
-	            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	                <ul class="nav navbar-nav">
+	            <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+	                <ul class="nav navbar-nav navbar-left">
 	                    <li>
 	                        <a href="{{URL::to('/')}}" class="onlythaibold" style="font-size:20px;">หน้าแรก</a>
 	                    </li>
@@ -137,6 +137,12 @@
 	                        <a href="{{URL::to('/contact')}}" class="onlythaibold" style="font-size:20px;">ติดต่อ</a>
 	                    </li>
 	                </ul>
+	                <ul class="nav navbar-nav navbar-right">
+	                	<li>
+	                		<a href="{{URL::to('logout')}}" class="onlythaibold" style="font-size:20px;">ออกจากระบบ</a>
+	                	</li>
+	                </ul>
+
 	            </div>
 	            <!-- /.navbar-collapse -->
 	        </div>

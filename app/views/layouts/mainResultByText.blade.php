@@ -85,7 +85,6 @@ $(function(){
 });
 </script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
-<!-- <script src="http://code.highcharts.com/highcharts.js"></script> -->
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script src="http://code.highcharts.com/modules/data.js"></script>

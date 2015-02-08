@@ -1636,10 +1636,6 @@ class AnalysisController extends BaseController {
         }
         fclose($file);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
-            echo "<pre>";
-     		var_dump($testTimeArray);
-			echo "</pre>";
-			return View::make('blank_page');
         //------------------------------------------------------
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
