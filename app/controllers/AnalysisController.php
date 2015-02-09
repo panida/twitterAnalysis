@@ -30,7 +30,7 @@ class AnalysisController extends BaseController {
 		$currentResultIndex = 0;
 		$currentDate = clone $startDate;
 		$currentSize = 0;
-		$tweetApplicationGroupByHour = array(array(),array());
+		$tweetApplicationGroupByHour = array(array(),array(),array(),array());
 		$tweetTypeGroupByHour = array(array(),array(),array());
 		$tweetGroupByHour = array();
 		while($currentDate->diffInHours($endDate,false) >= 0){
@@ -54,7 +54,7 @@ class AnalysisController extends BaseController {
 				));
 			}
 
-			for($i = 0; $i<2; $i+=1){
+			for($i = 0; $i<4; $i+=1){
 				array_push($tweetApplicationGroupByHour[$i], array(
 					"dateTime" => clone $currentDate,
 					"year" => $currentDate->year,
@@ -74,11 +74,17 @@ class AnalysisController extends BaseController {
 				$tweetGroupByHour[$currentSize]["num_of_activity"] +=  $tweetGroup[$currentResultIndex]->num_of_activity;
 				$tweetTypeGroupByHour[$tweetGroup[$currentResultIndex]->activitytypekey-1][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
 
-				if($tweetGroup[$currentResultIndex]->sourcetype == 'web'){
+				if($tweetGroup[$currentResultIndex]->sourcetype == 'Twitter'){
 					$tweetApplicationGroupByHour[0][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
 				}
-				else if($tweetGroup[$currentResultIndex]->sourcetype == 'mobile'){
+				else if($tweetGroup[$currentResultIndex]->sourcetype == 'Facebook'){
 					$tweetApplicationGroupByHour[1][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
+				}
+				else if($tweetGroup[$currentResultIndex]->sourcetype == 'Official news'){
+					$tweetApplicationGroupByHour[2][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
+				}
+				else if($tweetGroup[$currentResultIndex]->sourcetype == 'Other'){
+					$tweetApplicationGroupByHour[3][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
 				}
 				$currentResultIndex+=1;
 
@@ -90,7 +96,7 @@ class AnalysisController extends BaseController {
 
 		//--------------------------- Day -----------------------------------------------
 
-		$tweetApplicationGroupByDay = array(array(),array());
+		$tweetApplicationGroupByDay = array(array(),array(),array(),array());
 		$tweetGroupByDay = array();
 		$tweetTypeGroupByDay = array(array(),array(),array());
 		$currentDate = clone $startDate;
@@ -115,7 +121,7 @@ class AnalysisController extends BaseController {
 				));
 			}
 
-			for($i = 0; $i<2; $i+=1){
+			for($i = 0; $i<4; $i+=1){
 				array_push($tweetApplicationGroupByDay[$i], array(
 					"dateTime" => clone $currentDate,
 					"year" => $currentDate->year,
@@ -131,7 +137,7 @@ class AnalysisController extends BaseController {
 				for($i = 0; $i<3; $i+=1){
 					$tweetTypeGroupByDay[$i][$currentSize]["num_of_activity"] += $tweetTypeGroupByHour[$i][$currentGroupInHourInx]["num_of_activity"];
 				}
-				for($i = 0; $i<2; $i+=1){
+				for($i = 0; $i<4; $i+=1){
 					$tweetApplicationGroupByDay[$i][$currentSize]["num_of_activity"] += $tweetApplicationGroupByHour[$i][$currentGroupInHourInx]["num_of_activity"];
 				}
 				$currentGroupInHourInx += 1;
@@ -143,7 +149,7 @@ class AnalysisController extends BaseController {
 
 		//--------------------------- Month -----------------------------------------------
 		
-		$tweetApplicationGroupByMonth = array(array(),array());
+		$tweetApplicationGroupByMonth = array(array(),array(),array(),array());
 		$tweetGroupByMonth = array();
 		$tweetTypeGroupByMonth = array(array(),array(),array());
 		$currentDate = clone $startDate;
@@ -170,7 +176,7 @@ class AnalysisController extends BaseController {
 				));
 			}
 
-			for($i = 0; $i<2; $i+=1){
+			for($i = 0; $i<4; $i+=1){
 				array_push($tweetApplicationGroupByMonth[$i], array(
 					"dateTime" => clone $currentDate,
 					"year" => $currentDate->year,
@@ -187,7 +193,7 @@ class AnalysisController extends BaseController {
 					$tweetTypeGroupByMonth[$i][$currentSize]["num_of_activity"] += $tweetTypeGroupByDay[$i][$currentGroupInDayInx]["num_of_activity"];
 				}
 
-				for($i = 0; $i<2; $i+=1){
+				for($i = 0; $i<4; $i+=1){
 					$tweetApplicationGroupByMonth[$i][$currentSize]["num_of_activity"] += $tweetApplicationGroupByDay[$i][$currentGroupInDayInx]["num_of_activity"];
 				}
 
@@ -200,7 +206,7 @@ class AnalysisController extends BaseController {
 
 		//--------------------------- Week -----------------------------------------------
 
-		$tweetApplicationGroupByWeek = array(array(),array());
+		$tweetApplicationGroupByWeek = array(array(),array(),array(),array());
 		$tweetGroupByWeek = array();
 		$tweetTypeGroupByWeek = array(array(),array(),array());
 		$currentDate = clone $startDate;
@@ -229,7 +235,7 @@ class AnalysisController extends BaseController {
 					"num_of_activity" => 0
 				));
 			}
-			for($i = 0; $i<2; $i+=1){
+			for($i = 0; $i<4; $i+=1){
 				array_push($tweetApplicationGroupByWeek[$i], array(
 					"startDay" => $startDateTime->day,
 					"endDay" => $endDateTime->endOfWeek()->day,
@@ -245,7 +251,7 @@ class AnalysisController extends BaseController {
 				for($i = 0; $i<3; $i+=1){
 					$tweetTypeGroupByWeek[$i][$currentSize]["num_of_activity"] += $tweetTypeGroupByDay[$i][$currentGroupInDayInx]["num_of_activity"];
 				}
-				for($i = 0; $i<2; $i+=1){
+				for($i = 0; $i<4; $i+=1){
 					$tweetApplicationGroupByWeek[$i][$currentSize]["num_of_activity"] += $tweetApplicationGroupByDay[$i][$currentGroupInDayInx]["num_of_activity"];
 				}
 
@@ -1214,7 +1220,7 @@ class AnalysisController extends BaseController {
 		$dayDataForType .= ']}]';
 
 		//-------------- Application -------------
-		$dayDataForApplication = "[{name: 'Web', data:[";
+		$dayDataForApplication = "[{name: 'Twitter', data:[";
 		$length = count($tweetDay[2][0]);
 		$countLength = 0;
 		foreach($tweetDay[2][0] as $tweetByDay){
@@ -1223,10 +1229,28 @@ class AnalysisController extends BaseController {
 			$countLength += 1;
 			if($countLength < $length)	$dayDataForApplication .= ',';
 		}
-		$dayDataForApplication .= "]},{name: 'Mobile', data:[";
+		$dayDataForApplication .= "]},{name: 'Facebook', data:[";
 		$length = count($tweetDay[2][1]);
 		$countLength = 0;
 		foreach($tweetDay[2][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Official news', data:[";
+		$length = count($tweetDay[2][2]);
+		$countLength = 0;
+		foreach($tweetDay[2][2] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Others', data:[";
+		$length = count($tweetDay[2][3]);
+		$countLength = 0;
+		foreach($tweetDay[2][3] as $tweetByDay){
 			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
 			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
 			$countLength += 1;
@@ -1291,7 +1315,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					area: {
 						marker: {
-							radius: 3,
+							radius: 0,
 						}
 					}
 				},
@@ -1369,7 +1393,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					line: {
 						marker: {
-							radius: 3,
+							radius: 0,
 						}
 					}
 				},
@@ -1430,7 +1454,7 @@ class AnalysisController extends BaseController {
 				plotOptions: {
 					line: {
 						marker: {
-							radius: 3
+							radius: 0
 						}
 					}
 				},
@@ -2168,7 +2192,7 @@ class AnalysisController extends BaseController {
 		$dayDataForType .= ']}]';
 
 		//-------------- Application -------------
-		$dayDataForApplication = "[{name: 'Web', data:[";
+		$dayDataForApplication = "[{name: 'Twitter', data:[";
 		$length = count($tweetDay[2][0]);
 		$countLength = 0;
 		foreach($tweetDay[2][0] as $tweetByDay){
@@ -2177,10 +2201,28 @@ class AnalysisController extends BaseController {
 			$countLength += 1;
 			if($countLength < $length)	$dayDataForApplication .= ',';
 		}
-		$dayDataForApplication .= "]},{name: 'Mobile', data:[";
+		$dayDataForApplication .= "]},{name: 'Facebook', data:[";
 		$length = count($tweetDay[2][1]);
 		$countLength = 0;
 		foreach($tweetDay[2][1] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Official news', data:[";
+		$length = count($tweetDay[2][2]);
+		$countLength = 0;
+		foreach($tweetDay[2][2] as $tweetByDay){
+			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
+			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
+			$countLength += 1;
+			if($countLength < $length)	$dayDataForApplication .= ',';
+		}
+		$dayDataForApplication .= "]},{name: 'Others', data:[";
+		$length = count($tweetDay[2][3]);
+		$countLength = 0;
+		foreach($tweetDay[2][3] as $tweetByDay){
 			$tweetDayDate = Carbon::createFromDate($tweetByDay["year"], $tweetByDay["month"], $tweetByDay["day"]);   
 			$dayDataForApplication .=  '['.($tweetDayDate->timestamp*1000).','.$tweetByDay['num_of_activity'].']';
 			$countLength += 1;

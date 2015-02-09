@@ -385,6 +385,7 @@ $(function() {
 					align: 'center',
 					layout: "horizontal",
 					verticalAlign: "top",
+					x: -20,
 					borderWidth: 1
 					
 				},
@@ -397,12 +398,20 @@ $(function() {
 					}
 				},
 				series: [{
-						name: 'Web',
+						name: 'Twitter',
 						data: dataForSerie[0],
 					},
 					{
-						name: 'Mobile',
+						name: 'Facebook',
 						data: dataForSerie[1],
+					},
+					{
+						name: 'Official news',
+						data: dataForSerie[2],
+					},
+					{
+						name: 'Others',
+						data: dataForSerie[3],
 					}
 				]
 			}
@@ -432,12 +441,18 @@ $(function() {
 			hourData.push(hourDataForType);
 
 			//----------------------------------- Application ------------------------------------------------------
-			var hourDataForApplication = [[],[]];
+			var hourDataForApplication = [[],[],[],[]];
 			@foreach($tweetHour[2][0] as $tweetByHour)
 				hourDataForApplication[0].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
 			@endforeach
 			@foreach($tweetHour[2][1] as $tweetByHour)
 				hourDataForApplication[1].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetHour[2][2] as $tweetByHour)
+				hourDataForApplication[2].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetHour[2][3] as $tweetByHour)
+				hourDataForApplication[3].push([Date.UTC({{$tweetByHour["year"]}},{{$tweetByHour["month"]}}-1, {{$tweetByHour["day"]}}, {{$tweetByHour["hour"]}}), {{$tweetByHour["num_of_activity"]}}]);
 			@endforeach
 			hourData.push(hourDataForApplication);
 		}
@@ -465,12 +480,18 @@ $(function() {
 			dayData.push(dayDataForType);
 
 			//----------------------------------- Application ------------------------------------------------------
-			var dayDataForApplication = [[],[]];
+			var dayDataForApplication = [[],[],[],[]];
 			@foreach($tweetDay[2][0] as $tweetByDay)
 				dayDataForApplication[0].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
 			@endforeach
 			@foreach($tweetDay[2][1] as $tweetByDay)
 				dayDataForApplication[1].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetDay[2][2] as $tweetByDay)
+				dayDataForApplication[2].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetDay[2][3] as $tweetByDay)
+				dayDataForApplication[3].push([Date.UTC({{$tweetByDay["year"]}},{{$tweetByDay["month"]}}-1, {{$tweetByDay["day"]}}), {{$tweetByDay["num_of_activity"]}}]);
 			@endforeach
 			dayData.push(dayDataForApplication);
 		}
@@ -498,12 +519,18 @@ $(function() {
 			weekData.push(weekDataForType);
 
 			//----------------------------------- Application ------------------------------------------------------
-			var weekDataForApplication = [[],[]];
+			var weekDataForApplication = [[],[],[],[]];
 			@foreach($tweetWeek[2][0] as $tweetByWeek)
 				weekDataForApplication[0].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
 			@endforeach
 			@foreach($tweetWeek[2][1] as $tweetByWeek)
 				weekDataForApplication[1].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetWeek[2][2] as $tweetByWeek)
+				weekDataForApplication[2].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetWeek[2][3] as $tweetByWeek)
+				weekDataForApplication[3].push([Date.UTC({{$tweetByWeek["year"]}},{{$tweetByWeek["month"]}}-1, {{$tweetByWeek["startDay"]}}), {{$tweetByWeek["num_of_activity"]}}]);
 			@endforeach
 			weekData.push(weekDataForApplication);
 		}
@@ -531,12 +558,18 @@ $(function() {
 			monthData.push(monthDataForType);
 
 			//----------------------------------- Application ------------------------------------------------------
-			var monthDataForApplication = [[],[]];
+			var monthDataForApplication = [[],[],[],[]];
 			@foreach($tweetMonth[2][0] as $tweetByMonth)
 				monthDataForApplication[0].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
 			@endforeach
 			@foreach($tweetMonth[2][1] as $tweetByMonth)
 				monthDataForApplication[1].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetMonth[2][2] as $tweetByMonth)
+				monthDataForApplication[2].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
+			@endforeach
+			@foreach($tweetMonth[2][3] as $tweetByMonth)
+				monthDataForApplication[3].push([Date.UTC({{$tweetByMonth["year"]}},{{$tweetByMonth["month"]}}-1), {{$tweetByMonth["num_of_activity"]}}]);
 			@endforeach
 			monthData.push(monthDataForApplication);
 		}
