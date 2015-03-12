@@ -3,6 +3,7 @@
 class HighchartsAPI
 {		
 	public static function callForImage($filename,$jsonString,$width){
+		//using highchart api outside
 		extract($_POST);
 		// $jsonString = "{
 		// 			  	title:{
@@ -54,6 +55,17 @@ class HighchartsAPI
 	    $fp = fopen($saveto,'x');
 	    fwrite($fp, $raw);
 	    fclose($fp);
+	    // HighchartsAPI::callForImagePhantom($filename,$jsonString,$width);
 	}	
 
+	public static function callForImagePhantom($filename,$jsonString,$width){
+		//using phantomjs
+		$filenameJSON = substr($filename,0,-4).'.json';
+		$file = fopen(public_path().'/reportImage/'.$filenameJSON,"w");
+		fwrite($file, $jsonString);
+		fclose($file);
+		exec("phantomjs js/phantomjs/highcharts-convert.js -infile ".public_path()."/reportImage/".$filenameJSON." -outfile ".public_path()."/reportImage/".$filename." -type image/png -width ".$width." -constr Chart");
+		// exec("phantomjs js/phantomjs/highcharts-convert.js -infile public/reportCSV/report2015-03-12_13-58-28_1532_interestingContributor2Chart.png.json -outfile public/reportCSV/report2015-03-12_13-58-28_1532_hello.png -type image/png -width 600 -constr Chart");
+		// exec("phantomjs js/testPhantom.js");
+	}
 }

@@ -973,6 +973,7 @@ class AnalysisController extends BaseController {
 		$countAllContributor = sizeof($contributorList);
 		
 		$testTimeArray["phpProcessSourceFinish"] = Carbon::now()->diffInSeconds($testStart);
+
 		//-------------------------GenImageForReport---------------
 		//-----------ActivityPic------------------
 		$jsonString = "{
@@ -1003,6 +1004,7 @@ class AnalysisController extends BaseController {
 				}";
 		$activityImageName = 'report'.$timestamp.'_activityChart.png';
         HighchartsAPI::callForImage($activityImageName,$jsonString,'450');
+
         //-----------DevicePic------------------
 		$jsonString = "{
 			  	title:{
@@ -1644,7 +1646,10 @@ class AnalysisController extends BaseController {
         }
         fclose($file);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
-
+   //              		            echo "<pre>";
+   //   		var_dump($testTimeArray);
+			// echo "</pre>";
+			// return View::make('blank_page');
         //------------------------------------------------------
 		$result = ['type'=>$input['type'],
 					'caseID' => $caseID,
