@@ -1,0 +1,4 @@
+<h2>jQuery and AJAX is FUN!!!</h2>
+<p id="p1">This is some text in a paragraph1.</p>
+<p class="p2">This is some text in a paragraph2.</p>
+<p class="p1">This is some text in a paragraph3.</p>

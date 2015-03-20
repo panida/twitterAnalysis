@@ -122,8 +122,8 @@
                     <div class="caption">
                         <h2>วิเคราะห์</h2>
                         <h4 style="font-family:thaisansneue;">วิเคราะห์ค่าทางสถิติ อัตราการแพร่กระจายของทวีต เครื่องมือที่ใช้ รวมถึงบุคคลที่มีอิทธิพลจากการค้นหาครั้งนั้นๆ</h4>
-                        <p>
-                            <a href="#" class="btn btn-primary">อ่านต่อ</a> 
+                        <p id="resultAJAX">
+                            <a id="testAJAX" class="btn btn-primary">อ่านต่อ</a> 
                         </p>
                     </div>
                 </div>
@@ -174,6 +174,9 @@
             $("#datepicker1").val(cases[$("#selectCase").val()]['startdate']);
             $("#datepicker2").val(cases[$("#selectCase").val()]['enddate']);
         });
+        $("#testAJAX").click(function(){
+            $("#resultAJAX").load("./public/demo_test2.txt .p1");
+        }); 
         </script>
 @stop
 
