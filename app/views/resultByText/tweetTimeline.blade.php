@@ -88,49 +88,80 @@
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
+		else{
+			beforeButton = $('<div id="timelinePage1"></div>');
+			$("#timelineSeeMore").before(beforeButton);
+	        $("#timelinePage1").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").hide();
+		}
 
-		var beforeButton = $('<div id="topRetweetedPage0"></div>');
+		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
         $("#topRetweetedPage0").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
+		else{
+			beforeButton = $('<div id="topRetweetedPage1"></div>');
+			$("#topRetweetedSeeMore").before(beforeButton);
+	        $("#topRetweetedPage1").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").hide();
+		}
 
-		var beforeButton = $('<div id="topFollowerPage0"></div>');
+		beforeButton = $('<div id="topFollowerPage0"></div>');
 		$("#topFollowerSeeMore").before(beforeButton);
         $("#topFollowerPage0").load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
         if({{$topFollowerLastPage}}==0){
 			$("#topFollowerSeeMore").remove();
 		}
+		else{
+			beforeButton = $('<div id="topFollowerPage1"></div>');
+			$("#topFollowerSeeMore").before(beforeButton);
+	        $("#topFollowerPage1").load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
+	        $("#topFollowerPage1").hide();
+		}
 	});
 	var timelinePage = 1;
 	$("#timelineSeeMore").click(function(){
-		var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
-		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage"+timelinePage).load("./public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
-        timelinePage+=1;
-	    if(timelinePage>{{$timelineLastPage}}){
+		$("#timelinePage"+timelinePage).show();
+		timelinePage+=1;
+		if(timelinePage>{{$timelineLastPage}}){
 			$("#timelineSeeMore").remove();
 		}
+		else{
+			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
+			$("#timelineSeeMore").before(beforeButton);
+	        $("#timelinePage"+timelinePage).load("./public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+        	$("#timelinePage"+timelinePage).hide();
+        }
+	    
     });
     var topRetweetedPage = 1;
 	$("#topRetweetedSeeMore").click(function(){
-		var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
-		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage"+topRetweetedPage).load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
-        topRetweetedPage+=1;
+		$("#topRetweetedPage"+topRetweetedPage).show();
+		topRetweetedPage+=1;
 	    if(topRetweetedPage>{{$topRetweetedLastPage}}){
 			$("#topRetweetedSeeMore").remove();
 		}
+		else{
+			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
+			$("#topRetweetedSeeMore").before(beforeButton);
+	        $("#topRetweetedPage"+topRetweetedPage).load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	    	$("#topRetweetedPage"+topRetweetedPage).hide();
+	    }    
     });
     var topFollowerPage = 1;
 	$("#topFollowerSeeMore").click(function(){
-		var beforeButton = $('<div id="topFollowerPage'+topFollowerPage+'"></div>');
-		$("#topFollowerSeeMore").before(beforeButton);
-        $("#topFollowerPage"+topFollowerPage).load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
-        topFollowerPage+=1;
+		$("#topFollowerPage"+topFollowerPage).show();
+		topFollowerPage+=1;
 	    if(topFollowerPage>{{$topFollowerLastPage}}){
 			$("#topFollowerSeeMore").remove();
 		}
+		else{
+			var beforeButton = $('<div id="topFollowerPage'+topFollowerPage+'"></div>');
+			$("#topFollowerSeeMore").before(beforeButton);
+	        $("#topFollowerPage"+topFollowerPage).load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
+	    	$("#topFollowerPage"+topFollowerPage).hide();
+	    }    
     });
 </script>
