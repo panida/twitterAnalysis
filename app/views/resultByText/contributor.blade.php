@@ -43,7 +43,7 @@
 					            </div>
 					        </div>
 					    </div>
-					    <a href="http://twitter.com/mmppz" target="blank">
+					    <a href="http://twitter.com/{{$maxRetweetedUser['screenname']}}" target="blank">
 					        <div class="panel-footer">
 					            <span class="pull-left">{{"@".$maxRetweetedUser['screenname']}}</a></span>
 					            <!-- <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->

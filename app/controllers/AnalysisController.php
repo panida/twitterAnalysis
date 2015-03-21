@@ -760,6 +760,7 @@ class AnalysisController extends BaseController {
 			        })
         		->leftJoin('usergroup','group_user_mapping.groupid','=','usergroup.groupid')     
         		->leftJoin('twitter_analysis_fact as all_fact','tweet_dim.tweetkey','=','all_fact.tweetkey')
+        		->where('all_fact.activitytypekey',3)
         		->where('all_fact.objectid','<>','twitter_analysis_fact.objectid')
 				->leftJoin('date_dim as all_fact_date_dim','all_fact.datekey','=','all_fact_date_dim.datekey')
 				->where('all_fact_date_dim.thedate','>=',new DateTime($startDate))
@@ -835,6 +836,7 @@ class AnalysisController extends BaseController {
         $retweetedCountOfUser = array();  
 		$maxRTCount = -1;
         $maxRetweetedUserKey = NULL;
+        $maxRetweetedUserID = NULL;
         foreach($topRetweetedList as $anOriginalTweet){
 			if(array_key_exists($anOriginalTweet->original_userkey,$retweetedCountOfUser)) $retweetedCountOfUser[$anOriginalTweet->original_userkey] += $anOriginalTweet->totalRetweet;
 			else $retweetedCountOfUser[$anOriginalTweet->original_userkey] = $anOriginalTweet->totalRetweet;
@@ -843,7 +845,10 @@ class AnalysisController extends BaseController {
         		$maxRetweetedUserID = $anOriginalTweet->original_userkey;
         	}
         }
-        $maxRetweetedUser = ['count'=>$maxRTCount,'screenname'=>UserDim::find($maxRetweetedUserID)->screenname,'pic'=>UserDim::find($maxRetweetedUserID)->profile_pic_url];
+        if($maxRetweetedUserID != NULL)
+        	$maxRetweetedUser = ['count'=>$maxRTCount,'screenname'=>UserDim::find($maxRetweetedUserID)->screenname,'pic'=>UserDim::find($maxRetweetedUserID)->profile_pic_url];
+		else
+			$maxRetweetedUser = ['count'=>0,'screenname'=>'-','pic'=>'-'];
 		 //        	echo "<pre>";
    //   		var_dump($topRetweetedList);
 			// echo "</pre>";
