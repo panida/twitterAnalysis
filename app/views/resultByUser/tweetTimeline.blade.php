@@ -21,44 +21,7 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-									{{-- */$nowdate = NULL;/* --}}
-			                		@foreach($timelineList as $key=>$aTweet)
-			                			@if($key==0 or $nowdate!==$aTweet->thedate)
-			                			{{-- */$nowdate = $aTweet->thedate;/* --}}
-			                			<li class="left clearfix">
-			                    			<p style="font-family:thaisansneue; color:rgb(50,150,50); font-size:18px;"><i class="glyphicon glyphicon-calendar"></i>{{$aTweet->nameday." ".$aTweet->date." ".$aTweet->month." ".$aTweet->year}}</p>
-			                    		</li>
-			                    		@endif
-			                            <li class="left clearfix">
-			                                <span class="chat-img pull-left">
-			                                    <a href="http://twitter.com/{{$aTweet->original_screenname}}" target="blank" class="tweet_avatar2">
-			                                        <img src="{{$aTweet->original_pic}}" alt="{{$aTweet->original_screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
-			                                    </a>
-			                                </span>
-			                                <div class="chat-body clearfix">
-			                                    <div class="header">
-			                                        <strong class="primary-font"><a href="http://twitter.com/{{$aTweet->original_screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$aTweet->original_name}}</a></strong> 
-			                                        <span style="color:#AAAAAA;">{{"@".$aTweet->original_screenname}}</span>
-			                                    </div>
-			                                    <p>
-			                                        {{$aTweet->original_text}}
-			                                    </p>
-			                                    <small class="text-muted">
-			                                        <span class="glyphicon glyphicon-send"></span> {{$aTweet->original_sourcename}}
-			                                        <i class="fa fa-clock-o fa-fw"></i> {{$aTweet->original_created_at}}
-			                                    </small>
-			                                    @if($aTweet->real_activitytypekey==3)
-			                                    <br>
-			                                    <small class="text-muted">
-			                                    	<i class="fa fa-retweet fa-fw"></i> Retweeted by <a href="http://twitter.com/{{$aTweet->real_screenname}}" target="blank" class="tweet_screen_name2 screen_name" style="color:rgb(100,100,100)">{{$aTweet->real_screenname}}</a>
-				                                	<span class="glyphicon glyphicon-send"></span> {{$aTweet->real_sourcename}}
-				                                    <i class="fa fa-clock-o fa-fw"></i> {{$aTweet->real_created_at}}                                 
-					                            </small>
-					                            @endif
-			                                </div>
-			                            </li>
-			                        @endforeach	
-
+									<a id="timelineSeeMore" class="btn btn-default">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -77,31 +40,7 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-			                        @foreach($topRetweetedList as $anOriginalTweet)
-			                            <li class="left clearfix">
-			                                <span class="chat-img pull-left">
-			                                    <a href="http://twitter.com/{{$anOriginalTweet->screenname}}" target="blank" class="tweet_avatar2">
-			                                        <img src="{{$anOriginalTweet->pic}}" alt="{{$anOriginalTweet->screenname}}" class="avatar" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png';">
-			                                    </a>
-			                                </span>
-			                                <div class="chat-body clearfix">
-			                                    <div class="header">
-			                                        <strong class="primary-font"><a href="http://twitter.com/{{$anOriginalTweet->screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$anOriginalTweet->name}}</a></strong> 
-			                                        <span style="color:#AAAAAA;">{{"@".$anOriginalTweet->screenname}}</span>
-			                                        <small class="pull-right text-muted">
-			                                            <i class="fa fa-retweet fa-fw"></i> {{($anOriginalTweet->totalRetweet-1). " retweets"}}                                     
-			                                        </small>
-			                                    </div>
-			                                    <p>
-			                                        {{$anOriginalTweet->text}}
-			                                    </p>
-			                                    <small class="text-muted">
-			                                        <span class="glyphicon glyphicon-send"></span> {{$anOriginalTweet->sourcename}}
-			                                        <i class="fa fa-clock-o fa-fw"></i> {{$anOriginalTweet->created_at}}
-			                                    </small>
-			                                </div>
-			                            </li>
-			                        @endforeach
+			                        <a id="topRetweetedSeeMore" class="btn btn-default">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -120,3 +59,62 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(function() {
+		var beforeButton = $('<div id="timelinePage0"></div>');
+		$("#timelineSeeMore").before(beforeButton);
+        $("#timelinePage0").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        if({{$timelineLastPage}}==0){
+			$("#timelineSeeMore").remove();
+		}
+		else{
+			beforeButton = $('<div id="timelinePage1"></div>');
+			$("#timelineSeeMore").before(beforeButton);
+	        $("#timelinePage1").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").hide();
+		}
+
+		beforeButton = $('<div id="topRetweetedPage0"></div>');
+		$("#topRetweetedSeeMore").before(beforeButton);
+        $("#topRetweetedPage0").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        if({{$topRetweetedLastPage}}==0){
+			$("#topRetweetedSeeMore").remove();
+		}
+		else{
+			beforeButton = $('<div id="topRetweetedPage1"></div>');
+			$("#topRetweetedSeeMore").before(beforeButton);
+	        $("#topRetweetedPage1").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").hide();
+		}
+	});
+	var timelinePage = 1;
+	$("#timelineSeeMore").click(function(){
+		$("#timelinePage"+timelinePage).show();
+		timelinePage+=1;
+		if(timelinePage>{{$timelineLastPage}}){
+			$("#timelineSeeMore").remove();
+		}
+		else{
+			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
+			$("#timelineSeeMore").before(beforeButton);
+	        $("#timelinePage"+timelinePage).load("./public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+        	$("#timelinePage"+timelinePage).hide();
+        }
+	    
+    });
+    var topRetweetedPage = 1;
+	$("#topRetweetedSeeMore").click(function(){
+		$("#topRetweetedPage"+topRetweetedPage).show();
+		topRetweetedPage+=1;
+	    if(topRetweetedPage>{{$topRetweetedLastPage}}){
+			$("#topRetweetedSeeMore").remove();
+		}
+		else{
+			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
+			$("#topRetweetedSeeMore").before(beforeButton);
+	        $("#topRetweetedPage"+topRetweetedPage).load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	    	$("#topRetweetedPage"+topRetweetedPage).hide();
+	    }    
+    });
+
+</script>
