@@ -3,7 +3,7 @@
 		<div class="row thaibold">
             <div class="col-lg-10 col-lg-offset-1">
             	<div class="col-lg-4 col-md-6 col-sm-6">
-            		<h3 style="text-align:center;">มีผู้ติดตามมากที่สุด&nbsp;
+            		<h3 class="onlythaibold" style="text-align:center;">มีผู้ติดตามมากที่สุด&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="ผู้ใช้ที่มีผู้จำนวนติดตามมากที่สุดในบรรดาผู้ใช้เผยแพร่ที่ทวีตที่มีคำค้นหา"></span>
                     </h3>
 					<div class="panel panel-red">
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-6">
-					<h3 style="text-align:center;">ถูกรีทวีตมากที่สุด&nbsp;
+					<h3 class="onlythaibold" style="text-align:center;">ถูกรีทวีตมากที่สุด&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="ผู้ใช้ที่ทวีตข้อความที่มีคำค้นหาและข้อความเหล่านั้นถูกรีทวีตต่อรวมมากที่สุด"></span>
                     </h3>
 					<div class="panel panel-primary">

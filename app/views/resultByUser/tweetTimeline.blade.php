@@ -4,7 +4,7 @@
 			
 			
             <div class="col-lg-8 col-md-8 col-sm-8">                 
-            	<p class="col-lg-3 col-md-3 col-sm-3 thaibold" style="font-size:22px;">แสดงผลเรียงตาม </p>               
+            	<p class="col-lg-3 col-md-3 col-sm-3 onlythaibold" style="font-size:22px;">แสดงผลเรียงตาม </p>               
                 <ul id="pillMenu" class="nav nav-pills" style="font-family:thaisansneue; font-size:20px;">
 				  	<li class="active"><a href="#time" data-toggle="tab">Timeline</a></li>
 				  	<li><a href="#retweet" data-toggle="tab">Total Retweets</a></li>
@@ -17,11 +17,11 @@
 		            <div class="col-lg-12 col-md-12 col-sm-12">
 			            <div class="panel panel-green">
 			                <div class="panel-heading">
-			                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> รายการทวีตเรียงตามเวลา</h3>
+			                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> รายการทวีตเรียงตามเวลา</h3>
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-									<a id="timelineSeeMore" class="btn btn-default">See more</a>
+									<a id="timelineSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -36,11 +36,11 @@
 			    	<div class="col-lg-12 col-md-12 col-sm-12">
 			            <div class="panel panel-green">
 			                <div class="panel-heading">
-			                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> รายการทวีตเรียงตามจำนวนรีทวีต</h3>
+			                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> รายการทวีตเรียงตามจำนวนรีทวีต</h3>
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-			                        <a id="topRetweetedSeeMore" class="btn btn-default">See more</a>
+			                        <a id="topRetweetedSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -63,27 +63,27 @@
 	$(function() {
 		var beforeButton = $('<div id="timelinePage0"></div>');
 		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage0").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        $("#timelinePage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="timelinePage1"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage1").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
 	        $("#timelinePage1").hide();
 		}
 
 		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage0").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        $("#topRetweetedPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topRetweetedPage1"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage1").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
 	        $("#topRetweetedPage1").hide();
 		}
 	});
@@ -97,7 +97,7 @@
 		else{
 			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage"+timelinePage).load("./public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+	        $("#timelinePage"+timelinePage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
         	$("#timelinePage"+timelinePage).hide();
         }
 	    
@@ -112,7 +112,7 @@
 		else{
 			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage"+topRetweetedPage).load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	        $("#topRetweetedPage"+topRetweetedPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
 	    }    
     });

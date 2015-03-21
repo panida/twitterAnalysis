@@ -1,27 +1,27 @@
 <div id="page-wrapper">
     <div class="container-fluid top-buffer">
-        <div class="row thaibold">
+        <div class="row onlythaibold">
             <div class="col-lg-10 col-lg-offset-1">
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวนทวีตทั้งหมด &nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนทวีตในกรณีศึกษาทั้งหมดของผู้ใช้ค้นหา"></span>
                     </h3>
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-comment" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllTweet)}}</h2><h3>ทวีต</h3></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 thaibold"><h2>{{number_format($countAllTweet)}}</h2><h3>ทวีต</h3></div>
                 </div> 
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวน<a href="{{'https://twitter.com/'.$user->screenname.'/followers'}}" target="blank" style="color:#333;">ผู้ติดตามทั้งหมด</a> &nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนผู้ติดตามทั้งหมดของผู้ใช้ค้นหา"></span>
                     </h3>                    
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-user" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllFollower)}}</h2><h3>คน</h3></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 thaibold"><h2>{{number_format($countAllFollower)}}</h2><h3>คน</h3></div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <h3>จำนวนครั้งการเข้าถึง &nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="จำนวนผู้ติดตามรวมของทุกทวีตที่ค้นหาได้"></span>
                     </h3>
                     <div class="col-lg-6 col-md-6 col-sm-6"><span class="glyphicon glyphicon-eye-open" style="font-size:80px;" aria-hidden="true"></span></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6"><h2>{{number_format($countAllImpression)}}</h2><h3>ครั้ง</h3></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 thaibold"><h2>{{number_format($countAllImpression)}}</h2><h3>ครั้ง</h3></div>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนประเภทของทวีต</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนประเภทของทวีต</h3>
                 </div>
                 <div class="panel-body">
                     <div id="activity" style="height:350px"></div>
@@ -39,7 +39,7 @@
             </div>
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนแอพพลิเคชั่นที่ใช้</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> สัดส่วนแอพพลิเคชั่นที่ใช้</h3>
                 </div>
                 <div class="panel-body">
                     <div id="device" style="height:350px"></div>
@@ -51,7 +51,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title thaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> 10 ทวีตที่ถูกรีทวีตสูงสุดในช่วงเวลาที่ค้นหา</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> 10 ทวีตที่ถูกรีทวีตสูงสุดในช่วงเวลาที่ค้นหา</h3>
                 </div>
                 <div class="panel-body" style="min-height: 825px; max-height: 825px; overflow-y: scroll;">
                     <ul class="chat">

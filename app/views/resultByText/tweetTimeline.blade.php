@@ -22,7 +22,7 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">	
-			                        <a id="timelineSeeMore" class="btn btn-default">See more</a>
+			                        <a id="timelineSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
 			                    </ul>			                    
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -41,7 +41,7 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-			                        <a id="topRetweetedSeeMore" class="btn btn-default">See more</a>
+			                        <a id="topRetweetedSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -62,7 +62,7 @@
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
 			                    <ul class="chat">
-		                        	<a id="topFollowerSeeMore" class="btn btn-default">See more</a>
+		                        	<a id="topFollowerSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
 			                    </ul>
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
@@ -84,40 +84,40 @@
 	$(function() {
 		var beforeButton = $('<div id="timelinePage0"></div>');
 		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage0").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        $("#timelinePage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="timelinePage1"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage1").load("./public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
 	        $("#timelinePage1").hide();
 		}
 
 		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage0").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        $("#topRetweetedPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topRetweetedPage1"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage1").load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
 	        $("#topRetweetedPage1").hide();
 		}
 
 		beforeButton = $('<div id="topFollowerPage0"></div>');
 		$("#topFollowerSeeMore").before(beforeButton);
-        $("#topFollowerPage0").load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
+        $("#topFollowerPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
         if({{$topFollowerLastPage}}==0){
 			$("#topFollowerSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topFollowerPage1"></div>');
 			$("#topFollowerSeeMore").before(beforeButton);
-	        $("#topFollowerPage1").load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
+	        $("#topFollowerPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
 	        $("#topFollowerPage1").hide();
 		}
 	});
@@ -131,7 +131,7 @@
 		else{
 			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage"+timelinePage).load("./public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+	        $("#timelinePage"+timelinePage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
         	$("#timelinePage"+timelinePage).hide();
         }
 	    
@@ -146,7 +146,7 @@
 		else{
 			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage"+topRetweetedPage).load("./public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	        $("#topRetweetedPage"+topRetweetedPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
 	    }    
     });
@@ -160,7 +160,7 @@
 		else{
 			var beforeButton = $('<div id="topFollowerPage'+topFollowerPage+'"></div>');
 			$("#topFollowerSeeMore").before(beforeButton);
-	        $("#topFollowerPage"+topFollowerPage).load("./public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
+	        $("#topFollowerPage"+topFollowerPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
 	    	$("#topFollowerPage"+topFollowerPage).hide();
 	    }    
     });

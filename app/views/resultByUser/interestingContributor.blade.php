@@ -19,7 +19,7 @@
 		    <br>
 			<div class="panel panel-green">
 				<div class="panel-heading">
-					<h3 class="panel-title thaibold" style="font-size:20px;">
+					<h3 class="panel-title onlythaibold" style="font-size:20px;">
 						<i class="fa fa-long-arrow-right"></i> 
 						กราฟแสดงจำนวนกิจกรรมของกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่เกี่ยวข้อง&nbsp;
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งที่แสดงว่ามีสมาชิกในกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ใดบ้างที่ติดตามผู้ใช้รายนี้ หรือรีทวีตข้อความของผู้ใช้รายนี้"></span>
