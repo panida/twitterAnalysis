@@ -164,7 +164,7 @@ class GroupManagementController extends BaseController {
 			$processedUser->protected = 'yes';
 			$processedUser->save();
 		}
-		sleep(6);
+		sleep(61);
 		$job->delete();
 
 	}
