@@ -6,19 +6,30 @@ class AnalysisController extends BaseController {
 	public $testTimeArray = array();
 	public function groupTweetForTweetGraph($allTweetQuery, $startDate,$endDate, &$tweetMonth, &$tweetWeek, &$tweetDay, &$tweetHour){
 		global $testStart, $testTimeArray;
+		// $allTweetQuery = $allTweetQuery
+		// 	->select(DB::raw('
+		// 		count(*) as num_of_activity,
+		// 		date_dim.date, date_dim.month,
+		// 		date_dim.year,time_dim.hour,
+		// 		activitytypekey, source_dim.sourcetype'))
+		// 	->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
+		// 	->join('source_dim', 'twitter_analysis_fact.sourcekey', '=', 'source_dim.sourcekey')
+		// 	->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'activitytypekey', 'source_dim.sourcekey')
+		// 	->orderBy('date_dim.year','ASC')
+		// 	->orderBy('date_dim.month','ASC')
+		// 	->orderBy('date_dim.date','ASC')
+		// 	->orderBy('time_dim.hour','ASC');
 		$allTweetQuery = $allTweetQuery
 			->select(DB::raw('
 				count(*) as num_of_activity,
-				date_dim.date, date_dim.month,
-				date_dim.year,time_dim.hour,
-				activitytypekey, source_dim.sourcetype'))
-			->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
-			->join('source_dim', 'twitter_analysis_fact.sourcekey', '=', 'source_dim.sourcekey')
-			->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'activitytypekey', 'source_dim.sourcekey')
-			->orderBy('date_dim.year','ASC')
-			->orderBy('date_dim.month','ASC')
-			->orderBy('date_dim.date','ASC')
-			->orderBy('time_dim.hour','ASC');
+				date_date as date, date_month as month,
+				date_year as year, time_hour as hour,
+				activitytypekey, source_sourcetype as sourcetype'))
+			->groupBy('date_year', 'date_month', 'date_date','time_hour', 'activitytypekey', 'sourcekey')
+			->orderBy('date_year','ASC')
+			->orderBy('date_month','ASC')
+			->orderBy('date_date','ASC')
+			->orderBy('time_hour','ASC');
 		$tweetGroup = $allTweetQuery->get();
 		//$allTweetByDay = $allTweetByHour->groupBy('date_dim.date', 'date_dim.month', 'date_dim.year');
 		//echo $startDate;
@@ -449,17 +460,17 @@ class AnalysisController extends BaseController {
 		$startDate = $input['startDate'];
 		$endDate = $input['endDate'];
 		if($input['type']=='text'){
-			// $now = memory_get_usage();
-			// $testMem["beforeView"] = $now - $prev;
-			// $testTimeArray["beforeView"] = Carbon::now()->diffInSeconds($testStart);
-			// $prev = $now;
-			// $viewName = TwitterAnalysisFact::createViewByText($searchText,$startDate,$endDate,$caseID);
-			// $now = memory_get_usage();
-			// $testTimeArray["afterView"] = Carbon::now()->diffInSeconds($testStart);
-			// $testMem["afterView"] = $now - $prev;
-			// $prev = $now;
-			$tweetResultList = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);
-			//$tweetResultList = DB::table($viewName);
+			$now = memory_get_usage();
+			$testMem["beforeView"] = $now - $prev;
+			$testTimeArray["beforeView"] = Carbon::now()->diffInSeconds($testStart);
+			$prev = $now;
+			$viewName = TwitterAnalysisFact::createViewByText($searchText,$startDate,$endDate,$caseID);
+			$now = memory_get_usage();
+			$testTimeArray["afterView"] = Carbon::now()->diffInSeconds($testStart);
+			$testMem["afterView"] = $now - $prev;
+			$prev = $now;
+			//$tweetResultList = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);
+			$tweetResultList = DB::table($viewName);
 		}
 		else{
 			$tweetResultList = TwitterAnalysisFact::searchByUser($searchText,$startDate,$endDate,$caseID);
@@ -485,18 +496,18 @@ class AnalysisController extends BaseController {
 		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
 		$testTimeArray["groupTweet"] = Carbon::now()->diffInSeconds($testStart);
 		$testTimeArray["beforeprint"] = Carbon::now()->diffInSeconds($testStart);
-		// echo "<pre>";
-  //    		var_dump($testTimeArray);
-		// 	echo "</pre>";
-		// 	//return View::make('blank_page');
-  //       //------------------------------------------------------
+		echo "<pre>";
+     		var_dump($testTimeArray);
+			echo "</pre>";
+			//return View::make('blank_page');
+        //------------------------------------------------------
         
-		// echo "<pre>";
- 	// 	var_dump($testMem);
-		// echo "</pre>";
+		echo "<pre>";
+ 		var_dump($testMem);
+		echo "</pre>";
 
-		// echo memory_get_usage();
-		// return View::make('blank_page');
+		echo memory_get_usage();
+		return View::make('blank_page');
 		//---mem
 		$now = memory_get_usage();
 		$testMem["Prepare_For_TweetGraph"] = $now - $prev;
