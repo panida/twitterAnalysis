@@ -2,13 +2,14 @@
 
 class AjaxFile
 {		
-	public static function generateTimelineFile($timestamp,$timelineList){
+	public static function generateTimelineFile($timestamp,$timelineList,$writeMode){
 		$filenameTimeline = 'timeline'.$timestamp.'.txt';
-        $file = fopen(public_path().'/ajaxFile/'.$filenameTimeline,"w");
+        $file = fopen(public_path().'/ajaxFile/'.$filenameTimeline,$writeMode);
 		$nowdate = NULL;
 		foreach($timelineList as $key=>$aTweet){
-			$pageNo = floor($key/20);
-			if($key==0 or $nowdate!==$aTweet->thedate){
+			if($writeMode=="w") $pageNo = floor($key/20);
+			else $pageNo = 50+floor($key/20);
+            if($key==0 or $nowdate!==$aTweet->thedate){
 				$nowdate = $aTweet->thedate;
 				fwrite($file,
 				'<li class="left clearfix timelineP'.$pageNo.'">

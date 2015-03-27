@@ -54,6 +54,8 @@ Route::get('resultReport/{filename}','ReportController@getDownloadPDF')->before(
 Route::get('resultCSV/{filename}','ReportController@getDownloadCSV')->before('auth');
 Route::get('callForImage','ReportController@callForImage')->before('auth');
 Route::post('callForImage','ReportController@callForImage')->before('auth');
+Route::get('generateCSV','ReportController@generateCSV')->before('auth');
+Route::post('generateCSV','ReportController@generateCSV')->before('auth');
 
 Route::any('test', function(){
 	return View::make('test');

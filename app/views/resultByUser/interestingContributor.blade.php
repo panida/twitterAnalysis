@@ -139,9 +139,11 @@
 				                <h4 class="panel-title">
 				                    <a data-toggle="collapse" data-parent="#accordion1" href="{{'#collapse1-'.$aUser->groupid}}" style="font-size:20px;">{{$aUser->groupname}}</a>
 				                    <p class="pull-right">
-				                    	<i class="fa fa-user fa-fw"></i> {{$followeeInterestCountList[$index]['totalCountInAGroup']}} user
+				                    	<i class="fa fa-user fa-fw"></i> {{$followeeInterestCountList[$index]['totalCountInAGroup']}}
 				                    	@if($followeeInterestCountList[$index]['totalCountInAGroup']>1)
-				                    		s
+				                    		users
+				                    	@else
+				                    		user
 				                    	@endif
                                     </p>
 				                </h4>
@@ -196,9 +198,11 @@
 				                <h4 class="panel-title">
 				                    <a data-toggle="collapse" data-parent="#accordion1" href="{{'#collapse2-'.$aTweet->groupid}}" style="font-size:20px;">{{$aTweet->groupname}}</a>
 				                    <p class="pull-right">
-				                    	<i class="fa fa-retweet fa-fw"></i> {{$retweetInterestCountList[$index]->totalCountInAGroup}} retweet
+				                    	<i class="fa fa-retweet fa-fw"></i> {{$retweetInterestCountList[$index]->totalCountInAGroup}}
 				                    	@if($retweetInterestCountList[$index]->totalCountInAGroup>1)
-				                    		s
+				                    		retweets
+				                    	@else
+				                    		retweet
 				                    	@endif
                                     </p>
 				                </h4>

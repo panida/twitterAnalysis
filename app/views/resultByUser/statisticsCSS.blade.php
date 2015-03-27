@@ -39,6 +39,11 @@
 
 <script type="text/javascript">
 	$(function () {
+		Highcharts.setOptions({
+		    lang: {
+		        thousandsSep: ','
+		    }
+		});
 	    $('#device').highcharts({
 	        chart: {
 	            type: 'pie',
@@ -113,7 +118,7 @@
 	            enabled: false
 	        },
 	        tooltip: {
-	            pointFormat: '<b>{point.y:.0f} ({point.percentage:.1f}%)</b>'
+	            pointFormat: '<b>{point.y:,.0f} ({point.percentage:.1f}%)</b>'
 	        },
 	        plotOptions: {
 	            pie: {

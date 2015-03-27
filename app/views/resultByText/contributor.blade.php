@@ -38,7 +38,7 @@
 					                <a href="http://twitter.com/{{$maxRetweetedUser['screenname']}}" target="blank" class="avatar" target="_blank"><img src="{{$maxRetweetedUser['pic']}}" alt="{{$maxRetweetedUser['screenname']}}" onerror="if (this.src != 'http://a0.twimg.com/sticky/default_profile_images/default_profile_6_normal.png') this.src = 'http://a0.twimg.com/sticky/default_profile_images/default_profile_3_normal.png';"/></a>
 					            </div>
 					            <div class="col-xs-9 text-right">
-					            	<div class="huge">{{$maxRetweetedUser['count']}}</div>
+					            	<div class="huge">{{number_format($maxRetweetedUser['count'])}}</div>
 					                <div>retweets</div>
 					            </div>
 					        </div>

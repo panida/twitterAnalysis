@@ -591,6 +591,7 @@ class AnalysisController extends BaseController {
 
 			
 			$result = ['type'=>$input['type'],
+					'timestamp' => $timestamp,
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
@@ -637,29 +638,26 @@ class AnalysisController extends BaseController {
 								->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
 								->orderBy('user_statistics_dim.followers_count','desc')
 								->get();
-		$sourceKeyList = $tweetResultList[4]
+		$sourceKeyList = 	$tweetResultList[4]
 							->select('twitter_analysis_fact.sourcekey',
 									DB::raw('count(*) as totalNumber')
 								)
 							->groupBy('twitter_analysis_fact.sourcekey')
 							->orderBy('totalNumber','desc')
+							->take(5)
 							->get();
-		$countRetweetTime = $tweetResultList[5]->where('twitter_analysis_fact.activitytypekey','=','3')
-                 ->select('twitter_analysis_fact.tweetkey', DB::raw('count(*) as totalRetweet'))
-                 ->groupBy('twitter_analysis_fact.tweetkey')
-                 ->orderBy('totalRetweet','desc')
-                 ->get();
 
          //---mem
 			$now = memory_get_usage();
-			$testMem["before_timeline"] = $now - $prev;
+			$testMem["efore_timeline"] = $now - $prev;
 			$prev = $now;
-
+		echo $countAllTweet;
         $timelineList = $tweetResultList[7]
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
         		->orderBy('tweet_detail_dim.created_at','desc')
+        		->take(1000)
         		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
         		->where('original_fact.activitytypekey','<',3)        		
         		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
@@ -683,8 +681,9 @@ class AnalysisController extends BaseController {
         			'date_dim.abbr_nameofmonth as month',
         			'date_dim.year as year',
         			'date_dim.thedate as thedate')
+
         		->get();
-       	
+       	$testTimeArray["beforesort"] = Carbon::now()->diffInSeconds($testStart);
        	//---mem
 			$now = memory_get_usage();
 			$testMem["after_timeline"] = $now - $prev;
@@ -819,11 +818,11 @@ class AnalysisController extends BaseController {
 					                ->groupBy('usergroup.groupid')
 					        		->get();
 		
-
+		
 		usort($tweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
 		usort($retweetInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
 		usort($replyInterestDetailList,"AnalysisController::cmpByGroupidAscTimeDesc");
-		
+		$testTimeArray["aftersort"] = Carbon::now()->diffInSeconds($testStart);
 		$beRetweetedInterestCountList = $tweetResultList[11]
         		->where('twitter_analysis_fact.activitytypekey','<',3)
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
@@ -968,11 +967,7 @@ class AnalysisController extends BaseController {
 			// echo "</pre>";
 			// return View::make('blank_page');	
 
-		$sourceList = array();
-		foreach($sourceKeyList as $aKey){
-			$sourceList[$aKey->sourcekey] = $aKey->totalNumber;
-		}
-
+		
 		$TwUserList = array();
 		$RtUserList = array();
 		$RpUserList = array();
@@ -1038,18 +1033,17 @@ class AnalysisController extends BaseController {
 		$testMem["contributor"] = $now - $prev;
 		$prev = $now;
 
+		$i=1;
+        $sourceSum = 0;
 		$sourceProportion = array();
-		for($i = 1;$i<=5;$i+=1){
-			if(sizeof($sourceList)==0) break;
-			$maxs = array_keys($sourceList, max($sourceList));
-			$sourceProportion[$i] = ['sourceName'=>SourceDim::find($maxs[0])->sourcename,
-									'count'=>max($sourceList)];
-			unset($sourceList[$maxs[0]]);
+		foreach($sourceKeyList as $aKey){
+			$sourceProportion[$i] = ['sourceName'=> SourceDim::find($aKey->sourcekey)->sourcename,
+									'count'=> $aKey->totalNumber];
+			$sourceSum += $aKey->totalNumber;
+			$i+=1;
 		}
-		if(sizeof($sourceList)>0) {
-			$sourceProportion[6] = ['sourceName'=>'Others',
-									'count'=>array_sum($sourceList)];
-		}
+		if($i==6)	$sourceProportion[6] = ['sourceName' => 'Others',
+									'count' => $countAllTweet-$sourceSum];
 		$countAct = ['tweet'=>0,'retweet'=>0,'reply'=>0];
 		foreach($countActList as $anAct){
 			if($anAct->activitytypekey==1) $countAct['tweet'] = $anAct->totalNumber;
@@ -1561,7 +1555,7 @@ class AnalysisController extends BaseController {
 			// echo "</pre>";
 			// return View::make('blank_page');
         //-------------------------GenTweetTimeline-----------------------	
-        $filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList);
+        $filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList,"w");
 		//-------------------------GenTweetTopRetweetedList-----------------------	
         $filenameTopRetweetedList = AjaxFile::generateTopRetweetedFileSearchByText($timestamp,$topRetweetedList);
 		//-------------------------GenTweetTopFollowerList-----------------------	
@@ -1742,27 +1736,28 @@ class AnalysisController extends BaseController {
         }
         fclose($file);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
-                		            echo "<pre>";
-     		var_dump($testTimeArray);
-			echo "</pre>";
-			//return View::make('blank_page');
-        //------------------------------------------------------
+  //               		            echo "<pre>";
+  //    		var_dump($testTimeArray);
+		// 	echo "</pre>";
+		// 	//return View::make('blank_page');
+  //       //------------------------------------------------------
         
-        //---mem
-		$now = memory_get_usage();
-		$testMem["pdf_and_csv"] = $now - $prev;
-		$prev = $now;
+  //       //---mem
+		// $now = memory_get_usage();
+		// $testMem["pdf_and_csv"] = $now - $prev;
+		// $prev = $now;
 
-		echo "<pre>";
- 		var_dump($testMem);
-		echo "</pre>";
+		// echo "<pre>";
+ 	// 	var_dump($testMem);
+		// echo "</pre>";
 
-		echo memory_get_usage();
-		return View::make('blank_page');
+		// echo memory_get_usage();
+		// return View::make('blank_page');
 
 
 
 		$result = ['type'=>$input['type'],
+					'timestamp' => $timestamp,
 					'caseID' => $caseID,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
 					'cases'=> ResearchCaseDim::caseData(),
@@ -1892,6 +1887,7 @@ class AnalysisController extends BaseController {
 	        fclose($file);
 	        //------------------------------------------------------
 			$result = ['type'=>$input['type'],
+					'timestamp' => $timestamp,
 					'caseID' => $caseID,
 					'searchText'=>$searchText,
 					'startDate'=>$startDate,
@@ -1930,6 +1926,7 @@ class AnalysisController extends BaseController {
 								)
 							->groupBy('twitter_analysis_fact.sourcekey')
 							->orderBy('totalNumber','desc')
+							->take(5)
 							->get();
 
         $timelineList = $tweetResultList[7]
@@ -1937,6 +1934,7 @@ class AnalysisController extends BaseController {
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
         		->orderBy('tweet_detail_dim.created_at','desc')
+        		->take(1000)
         		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
         		->where('original_fact.activitytypekey','<',3)        		
         		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
@@ -2043,23 +2041,17 @@ class AnalysisController extends BaseController {
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;
         else $top10RetweetedList = array_slice($topRetweetedList, 0,10);
 
-		$sourceList = array();
-		foreach($sourceKeyList as $aKey){
-			$sourceList[$aKey->sourcekey] = $aKey->totalNumber;
-		}
-			
+        $i=1;
+        $sourceSum = 0;
 		$sourceProportion = array();
-		for($i = 1;$i<=5;$i+=1){
-			if(sizeof($sourceList)==0) break;
-			$maxs = array_keys($sourceList, max($sourceList));
-			$sourceProportion[$i] = ['sourceName'=>SourceDim::find($maxs[0])->sourcename,
-									'count'=>max($sourceList)];
-			unset($sourceList[$maxs[0]]);
+		foreach($sourceKeyList as $aKey){
+			$sourceProportion[$i] = ['sourceName'=> SourceDim::find($aKey->sourcekey)->sourcename,
+									'count'=> $aKey->totalNumber];
+			$sourceSum += $aKey->totalNumber;
+			$i+=1;
 		}
-		if(sizeof($sourceList)>0) {
-			$sourceProportion[6] = ['sourceName'=>'Others',
-									'count'=>array_sum($sourceList)];
-		}
+		if($i==6)	$sourceProportion[6] = ['sourceName' => 'Others',
+									'count' => $countAllTweet-$sourceSum];
 
 		$countAct = ['tweet'=>0,'retweet'=>0,'reply'=>0];
 		foreach($countActList as $anAct){
@@ -2548,7 +2540,7 @@ class AnalysisController extends BaseController {
         HighchartsAPI::callForImage($speedApplicationImageName,$jsonString,'600');
 		
         //-------------------------GenTweetTimeline-----------------------	
-		$filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList);
+		$filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList,"w");
 		//-------------------------GenTweetTopRetweetedList-----------------------	
         $filenameTopRetweetedList = AjaxFile::generateTopRetweetedFileSearchByUser($timestamp,$topRetweetedList);
 		//-------------------------GenReport-----------------------				
@@ -2713,6 +2705,7 @@ class AnalysisController extends BaseController {
         //---------------------------------------------
 
 		$result = ['type'=>$input['type'],
+					'timestamp' => $timestamp,
 					'caseID' => $caseID,
 					'researchCase' => ResearchCaseDim::lists('name', 'researchcasekey'),
 					'cases'=> ResearchCaseDim::caseData(),

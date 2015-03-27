@@ -106,8 +106,8 @@
                 ค้นหาผู้ใช้ทวิตเตอร์: {{$searchText}}
                 @endif
                 <span class="pull-right">
-                    <a href="{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}" style="text-decoration:none;">
-                        <i class="fa fa-file-excel-o" style="font-size:22px; color:rgb(10,100,10);"></i>
+                    <a id="csvTag" href="javascript:alert('ขณะนี้ระบบกำลังจัดเตรียมไฟล์ กรุณาลองอีกครั้งเมื่อสัญลักษณ์เป็นสีเขียว')" style="text-decoration:none;">
+                        <i id ="csvLogo" class="fa fa-file-excel-o" style="font-size:22px; color:rgb(200,200,200);"></i>
                     </a>
                     <a href="{{ URL::action('ReportController@getDownloadPDF',[$filename]) }}">
                         <i class="fa fa-file-pdf-o" style="font-size:22px; color:rgb(200,10,10);"></i>
@@ -116,3 +116,48 @@
 			</h1>            
 		</div>
 	</div>
+
+     <script type="text/javascript">
+
+            $(function() {
+                if({{$countAllTweet}}>1000){                    
+                    $.post("/twitterAnalysis/generateCSV",
+                    {caseID: "{{$caseID}}",
+                    timestamp:"{{$timestamp}}",
+                    type: "{{$type}}",
+                    searchText:"{{$searchText}}",
+                    startDate:"{{$startDate}}",
+                    endDate:"{{$endDate}}",
+                    filename:"{{$filenameCSV}}" }
+                    ,
+                    function(data, status){
+                        if(status=='success'){
+                            $('#csvLogo').css('color','rgb(10,100,10)');
+                            $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
+                        }
+                    });
+                }
+                else{
+                    $('#csvLogo').css('color','rgb(10,100,10)');
+                    $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
+                }
+            });
+
+
+
+    // $("#tt").click(function(e){
+    //     console.log('hey');
+    //     e.preventDefault();
+    //     $.post("/twitterAnalysis/generateCSV",
+    //         {caseID: "{{$caseID}}",
+    //         type: "{{$type}}",
+    //         searchText:"{{$searchText}}",
+    //         startDate:"{{$startDate}}",
+    //         endDate:"{{$endDate}}",
+    //         filename:"{{$filenameCSV}}" }
+    //         // ,
+    //         // function(data, status){
+    //         //     alert("Data: " + data + "\nStatus: " + status);
+    //         // });
+    // });
+    // </script>
