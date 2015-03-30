@@ -4,7 +4,7 @@ class AnalysisController extends BaseController {
 
 	public $testStart=0;
 	public $testTimeArray = array();
-	public function groupTweetForTweetGraph($allTweetQuery, $startDate,$endDate, &$tweetMonth, &$tweetWeek, &$tweetDay, &$tweetHour){
+	public function groupTweetForTweetGraph($allTweetQuery, $startDate,$endDate, &$tweetMonth, &$tweetWeek, &$tweetDay, &$tweetHour, &$datetimeTop1000){
 		global $testStart, $testTimeArray;
 		$allTweetQuery = $allTweetQuery
 			->select(DB::raw('
@@ -20,10 +20,42 @@ class AnalysisController extends BaseController {
 			->orderBy('date_dim.date','ASC')
 			->orderBy('time_dim.hour','ASC');
 		$tweetGroup = $allTweetQuery->get();
+
+		// $allTweetQuery1 = clone $allTweetQuery;
+		// $allTweetQuery = $allTweetQuery
+		// 	->select(DB::raw('
+		// 		count(*) as num_of_activity,
+		// 		date_dim.date, date_dim.month,
+		// 		date_dim.year,time_dim.hour,
+		// 		activitytypekey'))
+		// 	->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
+		// 	->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'activitytypekey')
+		// 	->orderBy('date_dim.year','ASC')
+		// 	->orderBy('date_dim.month','ASC')
+		// 	->orderBy('date_dim.date','ASC')
+		// 	->orderBy('time_dim.hour','ASC');
+		// $tweetGroup = $allTweetQuery->get();
+
+		// $allTweetQuery1 = $allTweetQuery1
+		// 	->select(DB::raw('
+		// 		count(*) as num_of_activity,
+		// 		date_dim.date, date_dim.month,
+		// 		date_dim.year,time_dim.hour,
+		// 		source_dim.sourcetype'))
+		// 	->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
+		// 	->join('source_dim', 'twitter_analysis_fact.sourcekey', '=', 'source_dim.sourcekey')
+		// 	->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'source_dim.sourcekey')
+		// 	->orderBy('date_dim.year','ASC')
+		// 	->orderBy('date_dim.month','ASC')
+		// 	->orderBy('date_dim.date','ASC')
+		// 	->orderBy('time_dim.hour','ASC');
+		// $tweetGroup1 = $allTweetQuery1->get();
 		//$allTweetByDay = $allTweetByHour->groupBy('date_dim.date', 'date_dim.month', 'date_dim.year');
 		//echo $startDate;
 
 		$testTimeArray["query"] = Carbon::now()->diffInSeconds($testStart);
+
+		//return 1;
 
 		//--------------------------- Hour -----------------------------------------------
 
@@ -37,6 +69,15 @@ class AnalysisController extends BaseController {
 		$tweetApplicationGroupByHour = array(array(),array(),array(),array());
 		$tweetTypeGroupByHour = array(array(),array(),array());
 		$tweetGroupByHour = array();
+
+		$datetimeTop1000 = array( "dateTime" => clone $currentDate, 
+									"year" => $currentDate->year, 
+									"month" => $currentDate->month, 
+									"day" => $currentDate->day, 
+									"hour" => $currentDate->hour ); 
+		//var_dump($datetimeTop1000)
+		$sumForTop1000 =0; 
+		$top1000Flag = true;
 		while($currentDate->diffInHours($endDate,false) >= 0){
 			array_push($tweetGroupByHour, array(
 				"dateTime" => clone $currentDate,
@@ -76,6 +117,16 @@ class AnalysisController extends BaseController {
 				$tweetGroup[$currentResultIndex]->hour == $currentDate->hour){
 				
 				$tweetGroupByHour[$currentSize]["num_of_activity"] +=  $tweetGroup[$currentResultIndex]->num_of_activity;
+				$sumForTop1000 += $tweetGroup[$currentResultIndex]->num_of_activity; 
+				if($top1000Flag && $sumForTop1000 >=1000){ 
+					$datetimeTop1000 = array( "dateTime" => clone $currentDate, 
+												"year" => $currentDate->year, 
+												"month" => $currentDate->month, 
+												"day" => $currentDate->day, 
+												"hour" => $currentDate->hour ); 
+					//var_dump($datetimeTop1000);
+					$top1000Flag = false; 
+				}
 				$tweetTypeGroupByHour[$tweetGroup[$currentResultIndex]->activitytypekey-1][$currentSize]["num_of_activity"] += $tweetGroup[$currentResultIndex]->num_of_activity;
 
 				if($tweetGroup[$currentResultIndex]->sourcetype == 'Twitter'){
@@ -421,6 +472,42 @@ class AnalysisController extends BaseController {
 
 	}
 
+	public function findTop1000Follower(&$allTweetQuery){
+		global $testStart,$testTimeArray;
+		$allTweetQuery1 = clone $allTweetQuery;
+		$right = $allTweetQuery1->max('twitter_analysis_fact.number_of_follower');
+		$testTimeArray["maxFollower"] = Carbon::now()->diffInSeconds($testStart);
+		$left = 0;
+		var_dump($left);
+		var_dump($right);
+		if($left == $right)	return $left;
+		$i=0;
+		while($right-$left>1){
+			$mid = floor(($left+$right)/2);
+			$temp = clone $allTweetQuery;
+			$numberOfTweet = $temp->select(DB::raw('count(*) as num_tweet'))
+								->where('twitter_analysis_fact.number_of_follower','>=',$mid)
+								->get();
+			
+			$testTimeArray["queryCount".$i] = Carbon::now()->diffInSeconds($testStart);
+			$i+=1;
+			$numberOfTweet = $numberOfTweet[0]->num_tweet;
+			if($numberOfTweet >=1000 && $numberOfTweet <= 2000){
+				return $mid;
+			}
+			else if($numberOfTweet >2000){
+				$left = $mid + 1;
+			}
+			else $right = $mid-1;
+		}
+		$numberOfTweet = $allTweetQuery->select(DB::raw('count(*) as num_tweet'))
+								->where('twitter_analysis_fact.number_of_follower','>=',$left)
+								->get();
+		$numberOfTweet = $numberOfTweet[0]->num_tweet;
+		if($numberOfTweet >= 1000)	return $left;
+		else return $right;
+
+	}
 
 	public function analyse(){		
 		$input = Input::all();
@@ -482,13 +569,17 @@ class AnalysisController extends BaseController {
 		$tweetWeek = array();
 		$tweetDay = array();
 		$tweetHour = array();
-		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour);
+		$datetimeTop1000 = array();
+		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour,$datetimeTop1000);
+		//var_dump($datetimeTop1000);
+		//return View::make('blank_page');
 		$testTimeArray["groupTweet"] = Carbon::now()->diffInSeconds($testStart);
 		$testTimeArray["beforeprint"] = Carbon::now()->diffInSeconds($testStart);
+
 		// echo "<pre>";
   //    		var_dump($testTimeArray);
 		// 	echo "</pre>";
-		// 	//return View::make('blank_page');
+		// 	return View::make('blank_page');
   //       //------------------------------------------------------
         
 		// echo "<pre>";
@@ -604,6 +695,11 @@ class AnalysisController extends BaseController {
 			return View::make('layouts.notFound',$result);
 		}
 		
+		// echo "<pre>";
+  //    		var_dump($testTimeArray);
+		// 	echo "</pre>";
+		// 	return View::make('blank_page');
+			
 		
 
         						// ->get();
@@ -626,7 +722,88 @@ class AnalysisController extends BaseController {
 					->get();
 		
 
-		$contributorKeyList = $tweetResultList[3]
+		// $contributorKeyList = $tweetResultList[3]
+		// 						->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+		// 						->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
+		// 						->select('user_dim.userkey',
+		// 							'user_dim.screenname',
+		// 							'twitter_analysis_fact.activitytypekey',
+		// 							'user_statistics_dim.followers_count',
+		// 							DB::raw('count(*) as totalNumber')
+		// 							)
+		// 						->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
+		// 						->orderBy('user_statistics_dim.followers_count','desc')
+		// 						->take(10000)
+		// 						->get();
+		// $contributorKeyList = $tweetResultList[3]
+		// 					->select('twitter_analysis_fact.userkey',
+		// 						'twitter_analysis_fact.activitytypekey',
+		// 						DB::raw('count(*) as totalNumber')
+		// 						)
+		// 					->groupBy('twitter_analysis_fact.userkey','twitter_analysis_fact.activitytypekey')
+		// 					->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
+		// 					->orderBy('user_statistics_dim.followers_count','desc')
+		// 					->take(10000)
+		// 					->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+		// 					->select('twitter_analysis_fact.userkey',
+		// 						'user_dim.screenname',
+		// 						'twitter_analysis_fact.activitytypekey',
+		// 						'user_statistics_dim.followers_count',
+		// 						DB::raw('count(*) as totalNumber')
+		// 						)														
+		// 					->get();
+		// $countAllContributor = $tweetResultList[14]
+		// 					->select('twitter_analysis_fact.userkey')
+		// 					->orderBy('twitter_analysis_fact.userkey')
+		// 					->distinct()
+		// 					->count();
+		$countAllContributor = $tweetResultList[15]
+							->select(DB::raw('count(distinct twitter_analysis_fact.userstatisticskey) as countAllContributor'))
+							->get();
+		$countAllContributor = $countAllContributor[0]->countAllContributor;
+			// echo "<pre>";
+			// var_dump($countAllContributor);
+			// echo "</pre>";
+			// return View::make('blank_page');
+		if($countAllContributor>10000){
+			$limitFollowerCount = $tweetResultList[13]
+								->select('twitter_analysis_fact.userstatisticskey')
+								->groupBy('twitter_analysis_fact.userstatisticskey')
+								->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
+								->orderBy('user_statistics_dim.followers_count','desc')
+								->select('user_statistics_dim.followers_count')
+								->skip(9999)
+								->take(1)
+								->get();
+			
+			$limitFollowerCount = $limitFollowerCount[0]->followers_count;		
+			
+			$contributorKeyList = $tweetResultList[15]
+								->select('twitter_analysis_fact.userkey',
+									'twitter_analysis_fact.userstatisticskey',
+									'twitter_analysis_fact.activitytypekey',
+									DB::raw('count(*) as totalNumber')
+									)
+								->join('user_statistics_dim', function($join) use($limitFollowerCount)
+							        {
+							            $join->on('twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey');
+							            $join->on('user_statistics_dim.followers_count','>=',DB::raw($limitFollowerCount));
+							        })						
+								
+								->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+								->select('twitter_analysis_fact.userkey',
+									'user_dim.screenname',
+									'twitter_analysis_fact.activitytypekey',
+									'user_statistics_dim.followers_count',
+									DB::raw('count(*) as totalNumber')
+									)	
+								->groupBy('twitter_analysis_fact.userkey','twitter_analysis_fact.activitytypekey')
+								->orderBy('user_statistics_dim.followers_count','desc')	
+								// ->orderBy('twitter_analysis_fact.userkey','asc')													
+								->get();
+		}
+		else{
+			$contributorKeyList = $tweetResultList[3]
 								->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
 								->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
 								->select('user_dim.userkey',
@@ -637,7 +814,13 @@ class AnalysisController extends BaseController {
 									)
 								->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
 								->orderBy('user_statistics_dim.followers_count','desc')
+								->take(30000)
 								->get();
+		}
+		// echo "<pre>";
+		// var_dump($contributorKeyList);
+		// echo "</pre>";
+		// return View::make('blank_page');
 		$sourceKeyList = 	$tweetResultList[4]
 							->select('twitter_analysis_fact.sourcekey',
 									DB::raw('count(*) as totalNumber')
@@ -649,17 +832,28 @@ class AnalysisController extends BaseController {
 
          //---mem
 			$now = memory_get_usage();
-			$testMem["efore_timeline"] = $now - $prev;
+			$testMem["before_timeline"] = $now - $prev;
 			$prev = $now;
-		echo $countAllTweet;
+
+		$testTimeArray["beforetimeline"] = Carbon::now()->diffInSeconds($testStart);
+
+		 //              	echo "<pre>";
+   //   		var_dump($testTimeArray);
+			// echo "</pre>";
+			// return View::make('blank_page');
+			
+		//echo $countAllTweet;
+
+
         $timelineList = $tweetResultList[7]
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
+        		->where('tweet_detail_dim.created_at','<=',new DateTime(''.$datetimeTop1000["year"].'-'.$datetimeTop1000["month"].'-'.$datetimeTop1000["day"].' '.$datetimeTop1000["hour"].":00"))
         		->orderBy('tweet_detail_dim.created_at','desc')
         		->take(1000)
-        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
-        		->where('original_fact.activitytypekey','<',3)        		
+        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetid','=','original_fact.objectid')
+        		//->where('original_fact.activitytypekey','<',3)        		
         		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
         		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
         		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
@@ -689,6 +883,42 @@ class AnalysisController extends BaseController {
 			$testMem["after_timeline"] = $now - $prev;
 			$prev = $now;
 
+		$num_tweet = AnalysisController::findTop1000Follower($tweetResultList[17]);
+		//return View::make('blank_page');
+		$testTimeArray["bsearch"] = Carbon::now()->diffInSeconds($testStart);
+		$follower_list = $tweetResultList[16]
+        		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
+        		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
+        		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
+        		->where('twitter_analysis_fact.number_of_follower','>=',$num_tweet)
+        		->orderBy('twitter_analysis_fact.number_of_follower','desc')
+        		->take(1000)
+        		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetid','=','original_fact.objectid')
+        		//->where('original_fact.activitytypekey','<',3)        		
+        		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+        		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+        		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+        		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+        		->select('user_dim.screenname as real_screenname',
+        			'source_dim.sourcename as real_sourcename',
+        			'tweet_detail_dim.created_at as real_created_at',
+        			'twitter_analysis_fact.number_of_follower as real_no_of_follower',
+        			'twitter_analysis_fact.activitytypekey as real_activitytypekey',
+        			'twitter_analysis_fact.tweetkey as real_tweetkey',
+        			'tweet_original.text as original_text',
+        			'tweet_detail_original.created_at as original_created_at',
+        			'source_original.sourcename as original_sourcename',
+        			'user_original.name as original_name',
+        			'user_original.screenname as original_screenname',
+        			'user_original.profile_pic_url as original_pic',
+        			'date_dim.abbr_nameofday as nameday',
+        			'date_dim.date as date',
+        			'date_dim.abbr_nameofmonth as month',
+        			'date_dim.year as year',
+        			'date_dim.thedate as thedate')
+        		->get();
+
+        $testTimeArray["followerList"] = Carbon::now()->diffInSeconds($testStart);
         $topFollowerList = array_merge(array(),$timelineList);
         usort($topFollowerList,'AnalysisController::cmpByNumberOfFollowerDesc');
    //              	echo "<pre>";
@@ -730,7 +960,19 @@ class AnalysisController extends BaseController {
         							->select('usergroup.groupid','usergroup.groupname as groupname', DB::raw('count(*) as totalTweet'))
 					                ->groupBy('usergroup.groupid')
 					        		->get();
+		// echo $countAllTweet;
+		// 	echo "<pre>";
+  //    		var_dump($testTimeArray);
+		// 	echo "</pre>";
+		// 	//return View::make('blank_page');
+  //       //------------------------------------------------------
 
+		// echo "<pre>";
+ 	// 	var_dump($testMem);
+		// echo "</pre>";
+
+		// echo memory_get_usage();
+		// return View::make('blank_page');
    //      	echo "<pre>";
    //   		var_dump($tweetInterestDetailList);
 			// echo "</pre>";
@@ -844,6 +1086,8 @@ class AnalysisController extends BaseController {
 				->get();
 		$testTimeArray["queryDatabase"] = Carbon::now()->diffInSeconds($testStart);
 
+		
+
 		$totalGroup = array();
 		foreach($tweetInterestCountList as $aGroup){
 			$totalGroup[$aGroup->groupid] = ['groupid'=>$aGroup->groupid, 
@@ -886,15 +1130,45 @@ class AnalysisController extends BaseController {
 			// echo "</pre>";
 			// return View::make('blank_page');		
 		//---mem
-		$now = memory_get_usage();
-		$testMem["interested_list"] = $now - $prev;
-		$prev = $now;
-
+		
 		$testTimeArray["phpProcessTotalGroup"] = Carbon::now()->diffInSeconds($testStart);
-		$topRetweetedList = $tweetResultList[12]
+		// $topRetweetedList = $tweetResultList[12]
+		// 		->where('twitter_analysis_fact.activitytypekey','=',3)
+  //       		->leftJoin('twitter_analysis_fact as original_fact','twitter_analysis_fact.tweetkey','=','original_fact.tweetkey')
+  //       		->where('original_fact.activitytypekey','<',3)        		
+  //       		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
+  //       		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
+  //       		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
+  //       		->leftJoin('tweet_dim as tweet_original','original_fact.tweetkey','=','tweet_original.tweetkey')
+  //       		->select(
+  //       			'tweet_original.text as original_text',
+  //       			'tweet_detail_original.created_at as original_created_at',
+  //       			'source_original.sourcename as original_sourcename',
+  //       			'user_original.userkey as original_userkey',
+  //       			'user_original.name as original_name',
+  //       			'user_original.screenname as original_screenname',
+  //       			'user_original.profile_pic_url as original_pic',
+  //       			DB::raw('count(*) as totalRetweet'))
+  //       		->groupBy('original_fact.tweetkey')
+  //       		->orderBy('totalRetweet','desc')
+  //       		->take(1000)
+  //       		->get();
+
+        $topRetweetedList = $tweetResultList[12]
 				->where('twitter_analysis_fact.activitytypekey','=',3)
-        		->leftJoin('twitter_analysis_fact as original_fact','twitter_analysis_fact.tweetkey','=','original_fact.tweetkey')
-        		->where('original_fact.activitytypekey','<',3)        		
+				->select(
+        			'twitter_analysis_fact.tweetkey',
+        			DB::raw('count(*) as totalRetweet'))
+        		->groupBy('twitter_analysis_fact.tweetkey')
+        		->orderBy('totalRetweet','desc')
+        		->take(1000)
+        		->join('twitter_analysis_fact as original_fact', function($join)
+			        {
+			            $join->on('twitter_analysis_fact.tweetkey','=','original_fact.tweetkey')
+			            	->where('original_fact.activitytypekey','<',3);
+			        })
+        		// ->leftJoin('twitter_analysis_fact as original_fact','twitter_analysis_fact.tweetkey','=','original_fact.tweetkey')
+        		// ->where('original_fact.activitytypekey','<',3)        		
         		->leftJoin('user_dim as user_original','original_fact.userkey','=','user_original.userkey')
         		->leftJoin('source_dim as source_original','original_fact.sourcekey','=','source_original.sourcekey')
         		->leftJoin('tweet_detail_dim as tweet_detail_original','original_fact.tweetdetailkey','=','tweet_detail_original.tweetdetailkey')
@@ -909,8 +1183,8 @@ class AnalysisController extends BaseController {
         			'user_original.profile_pic_url as original_pic',
         			DB::raw('count(*) as totalRetweet'))
         		->groupBy('original_fact.tweetkey')
-        		->orderBy('totalRetweet','desc')
         		->get();
+
         $retweetedCountOfUser = array();  
 		$maxRTCount = -1;
         $maxRetweetedUserKey = NULL;
@@ -966,7 +1240,22 @@ class AnalysisController extends BaseController {
    //   		var_dump($contributorList);
 			// echo "</pre>";
 			// return View::make('blank_page');	
+		// $now = memory_get_usage();
+		
+		// $prev = $now;
+		// echo $countAllTweet;
+		// 	echo "<pre>";
+  //    		var_dump($testTimeArray);
+		// 	echo "</pre>";
+		// 	//return View::make('blank_page');
+  //       //------------------------------------------------------
 
+		// echo "<pre>";
+ 	// 	var_dump($testMem);
+		// echo "</pre>";
+
+		// echo memory_get_usage();
+		// return View::make('blank_page');
 		
 		$TwUserList = array();
 		$RtUserList = array();
@@ -1052,7 +1341,7 @@ class AnalysisController extends BaseController {
 		}
 
 		// ----- Statistics Tab -----
-		$countAllContributor = sizeof($contributorList);
+		// $countAllContributor = sizeof($contributorList);
 
 		
 		
@@ -1736,23 +2025,25 @@ class AnalysisController extends BaseController {
         }
         fclose($file);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
-  //               		            echo "<pre>";
-  //    		var_dump($testTimeArray);
-		// 	echo "</pre>";
-		// 	//return View::make('blank_page');
-  //       //------------------------------------------------------
+                		            echo "<pre>";
+      		var_dump($testTimeArray);
+			echo "</pre>";
+			//return View::make('blank_page');
+        //------------------------------------------------------
         
-  //       //---mem
-		// $now = memory_get_usage();
-		// $testMem["pdf_and_csv"] = $now - $prev;
-		// $prev = $now;
+        //---mem
+		$now = memory_get_usage();
+		$testMem["pdf_and_csv"] = $now - $prev;
+		$prev = $now;
 
-		// echo "<pre>";
- 	// 	var_dump($testMem);
-		// echo "</pre>";
+		echo "<pre>";
+ 	  	var_dump($testMem);
+		echo "</pre>";
 
-		// echo memory_get_usage();
-		// return View::make('blank_page');
+		echo memory_get_usage()."\n";
+
+		echo $countAllTweet."\n".$countAllContributor;
+		return View::make('blank_page');
 
 
 
@@ -1909,7 +2200,7 @@ class AnalysisController extends BaseController {
         
 
 		$countAllImpression = $tweetResultList[1]->sum('twitter_analysis_fact.number_of_follower');
-		$contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
+		// $contributorKeyList = $tweetResultList[3]->select('twitter_analysis_fact.userstatisticskey')->distinct()->get();
 		$countActList = $tweetResultList[2]					
 					->select(
 						'twitter_analysis_fact.activitytypekey',						
@@ -2061,7 +2352,7 @@ class AnalysisController extends BaseController {
 		}
 	 	// ----- Statistics Tab -----
 		
-		$countAllContributor = sizeof($contributorKeyList);
+		// $countAllContributor = sizeof($contributorKeyList);
 		
 		$countAllFollower = 0;
 		$user = UserDim::where('name', '=', $searchText)
@@ -2714,7 +3005,7 @@ class AnalysisController extends BaseController {
 					'endDate'=>$endDate,
 					'user'=>$user,
 					'countAllTweet'=>$countAllTweet,
-					'countAllContributor'=>$countAllContributor,
+					// 'countAllContributor'=>$countAllContributor,
 					'countAllFollower'=>$countAllFollower,
 					'countAllImpression'=>$countAllImpression,
 					'countAct'=> $countAct,

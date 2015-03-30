@@ -3,15 +3,16 @@
 class DatabaseManagementController extends BaseController {
 	public function saveGroupsOfCase(){
 		$input = Input::all();
-		$keys = explode(",", $input['interestingGroups'][0]);
-		echo $keys[0];
-		ResearchcaseUsergroupMapping::where('researchcasekey','=',intval($keys[0]))->delete();
-		foreach ($input['interestingGroups'] as $group) {
-			$keys = explode(",", $group);
-			$mapping = new ResearchcaseUsergroupMapping;
-			$mapping->researchcasekey = intval($keys[0]);
-			$mapping->groupid = intval($keys[1]);
-			$mapping->save();
+		$key = intval($input["researchcasekey"]);
+		ResearchcaseUsergroupMapping::where('researchcasekey','=',intval($key))->delete();
+		if(array_key_exists("interestingGroups", $input)){
+			foreach ($input['interestingGroups'] as $group) {
+				$keys = explode(",", $group);
+				$mapping = new ResearchcaseUsergroupMapping;
+				$mapping->researchcasekey = intval($keys[0]);
+				$mapping->groupid = intval($keys[1]);
+				$mapping->save();
+			}
 		}
 		return Redirect::action('DatabaseManagementController@editGroupsOfCase')->with('notice', 'บันทึกสำเร็จ');
 	}

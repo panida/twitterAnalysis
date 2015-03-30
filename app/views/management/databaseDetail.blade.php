@@ -70,7 +70,9 @@
                         <li>รายละเอียดกรณีศึกษา : {{$aCase->description}}</li>
                         <li>
                             <form action="{{ URL::to('addGroupOfCase') }}" method="post">
+                                
                                 <label for="interestingGroup">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์ที่สนใจ : </label>
+                                <input type="text" name="researchcasekey" value="{{$aCase->researchcasekey}}" style="visibility:hidden"/>
                                 <select id="interestingGroup" multiple="multiple" name="interestingGroups[]" size="4" title="-----เพิ่มกลุ่มตัวอย่าง-----">
                                     @foreach($userGroups as $group)
                                     <option value="{{$aCase->researchcasekey.','.$group->groupid}}">{{$group->groupname}}</option> 
