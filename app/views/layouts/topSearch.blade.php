@@ -43,6 +43,7 @@
                         ])}}                                     
                         <!-- {{ Form::text('endDate', null, ['class' => 'form-control', 'placeholder' => 'วันที่สิ้นสุด', 'required' => 'required', 'style'=>'font-family:tahoma;']) }} -->
                     </div>
+                    {{Form::hidden('oldSearchText',$searchText)}}
                 
                     <div class="col-lg-1 col-md-6 col-sm-6">
                         <h3>&nbsp;</h3>

@@ -56,7 +56,10 @@ Route::get('callForImage','ReportController@callForImage')->before('auth');
 Route::post('callForImage','ReportController@callForImage')->before('auth');
 Route::get('generateCSV','ReportController@generateCSV')->before('auth');
 Route::post('generateCSV','ReportController@generateCSV')->before('auth');
-
+Route::get('generateAjaxText2','ReportController@generateAjaxText2')->before('auth');
+Route::post('generateAjaxText2','ReportController@generateAjaxText2')->before('auth');
+Route::get('generateAjaxText3','ReportController@generateAjaxText3')->before('auth');
+Route::post('generateAjaxText3','ReportController@generateAjaxText3')->before('auth');
 Route::any('test', function(){
 	return View::make('test');
 })->before('auth');

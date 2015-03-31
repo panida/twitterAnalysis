@@ -103,7 +103,10 @@
         <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12">
             <div class="panel panel-green">
                 <div class="panel-heading">
-                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด</h3>
+                    <h3 class="panel-title onlythaibold" style="font-size:20px;">
+                    	<i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด
+                    	<span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="แสดงผลเฉพาะ 1,000 คนแรกที่มีผู้ติดตามมากที่สุด หากต้องการดูรายชื่อทั้งหมด สามารถดาวน์โหลดได้จาก ไฟล์ .csv"></span>
+                    </h3>
                 </div>
                 <div class="panel-body" style="min-height: 570px; max-height: 570px; overflow-y: scroll;">
                     <div class="row onlythaibold" style="font-size:20px;">

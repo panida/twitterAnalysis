@@ -150,6 +150,18 @@
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
 	    }    
     });
+    $("#topRetweetedSeeMore").click(function(){
+		if(topRetweetedPage==30){
+			$.post("/twitterAnalysis/generateAjaxText2",
+                    {caseID: "{{$caseID}}",
+                    timestamp:"{{$timestamp}}",
+                    type: "{{$type}}",
+                    searchText:"{{$searchText}}",
+                    startDate:"{{$startDate}}",
+                    endDate:"{{$endDate}}",
+                    filename:"{{$filenameCSV}}" });
+		}
+    });
     var topFollowerPage = 1;
 	$("#topFollowerSeeMore").click(function(){
 		$("#topFollowerPage"+topFollowerPage).show();
@@ -163,5 +175,17 @@
 	        $("#topFollowerPage"+topFollowerPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
 	    	$("#topFollowerPage"+topFollowerPage).hide();
 	    }    
+    });
+    $("#topFollowerSeeMore").click(function(){
+		if(topFollowerPage==30){
+			$.post("/twitterAnalysis/generateAjaxText3",
+                    {caseID: "{{$caseID}}",
+                    timestamp:"{{$timestamp}}",
+                    type: "{{$type}}",
+                    searchText:"{{$searchText}}",
+                    startDate:"{{$startDate}}",
+                    endDate:"{{$endDate}}",
+                    filename:"{{$filenameCSV}}" });
+		}
     });
 </script>

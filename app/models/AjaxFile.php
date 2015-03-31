@@ -55,12 +55,13 @@ class AjaxFile
 		return $filenameTimeline;
 	}
 
-	public static function generateTopRetweetedFileSearchByText($timestamp,$topRetweetedList){
+	public static function generateTopRetweetedFileSearchByText($timestamp,$topRetweetedList,$writeMode){
 		$filenameTopRetweetedList = 'topRetweetedList'.$timestamp.'.txt';
-        $file = fopen(public_path().'/ajaxFile/'.$filenameTopRetweetedList,"w");
+        $file = fopen(public_path().'/ajaxFile/'.$filenameTopRetweetedList,$writeMode);
 		$key = 0;
 		foreach($topRetweetedList as $anOriginalTweet){
-			$pageNo = floor($key/20);			
+            if($writeMode=="w") $pageNo = floor($key/20);
+            else $pageNo = 50+floor($key/20);			
 			fwrite($file,
 				'<li class="left clearfix topRetweetedP'.$pageNo.'">
                     <span class="chat-img pull-left">
@@ -92,12 +93,13 @@ class AjaxFile
 		return $filenameTopRetweetedList;
 	}
 
-	public static function generateTopFollowerFile($timestamp,$topFollowerList){
+	public static function generateTopFollowerFile($timestamp,$topFollowerList,$writeMode){
 		$filenameTopFollowerList = 'topFollowerList'.$timestamp.'.txt';
-        $file = fopen(public_path().'/ajaxFile/'.$filenameTopFollowerList,"w");
+        $file = fopen(public_path().'/ajaxFile/'.$filenameTopFollowerList,$writeMode);
 		$key = 0;
 		foreach($topFollowerList as $aTweet){
-			$pageNo = floor($key/20);			
+			if($writeMode=="w") $pageNo = floor($key/20);
+            else $pageNo = 50+floor($key/20);			
 			fwrite($file,
 				'<li class="left clearfix topFollowerP'.$pageNo.'">
                     <span class="chat-img pull-left">
