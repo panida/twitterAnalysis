@@ -12,7 +12,9 @@
             ติดต่อ
         </h1>
         <p class="onlythaibold" style="font-size:20px;">
-            หากมีข้อสงสัยในการใช้งานระบบ กรุณาติดต่อ ___    
+            หากพบข้อผิดพลาดของระบบหรือมีข้อสงสัยในการใช้งาน กรุณาติดต่อ<br/>
+            - คุณปิยวัฒน์ (ตุ้ย) Email:plkumjorn@gmail.com<br/>
+            - คุณพนิดา (ชมพู่) Email:cp.panida@gmail.com  
         </p>
         
         <hr>

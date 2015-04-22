@@ -2155,9 +2155,9 @@ class AnalysisController extends BaseController {
         }
         fclose($file2);
         $testTimeArray["genCSV"] = Carbon::now()->diffInSeconds($testStart);
-            echo "<pre>";
-      		var_dump($testTimeArray);
-			echo "</pre>";
+   //          echo "<pre>";
+   //    		var_dump($testTimeArray);
+			// echo "</pre>";
 			//return View::make('blank_page');
         //------------------------------------------------------
         $filenameCSV = 'report'.$timestamp.'.csv';
@@ -2166,13 +2166,13 @@ class AnalysisController extends BaseController {
 		// $testMem["pdf_and_csv"] = $now - $prev;
 		// $prev = $now;
 
-		echo "<pre>";
- 	  	var_dump($testMem);
-		echo "</pre>";
+		// echo "<pre>";
+ 	//   	var_dump($testMem);
+		// echo "</pre>";
 
-		echo memory_get_usage()."\n";
+		// echo memory_get_usage()."\n";
 
-		echo $countAllTweet."\n".$countAllContributor;
+		// echo $countAllTweet."\n".$countAllContributor;
 		//return View::make('blank_page');
 
 
@@ -2362,7 +2362,7 @@ class AnalysisController extends BaseController {
 		// echo "<pre>";
 		// var_dump($temp);
 		// echo "</pre>";
-		var_dump($datetimeTop1000);
+		//var_dump($datetimeTop1000);
 			$timelineList = $tweetResultList[6]
 							->join('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')       		                
 			        		->join('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
@@ -2423,7 +2423,7 @@ class AnalysisController extends BaseController {
         		->leftJoin('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')       		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
         		->leftJoin('tweet_detail_dim','twitter_analysis_fact.tweetdetailkey','=','tweet_detail_dim.tweetdetailkey')
-        		->orderBy('tweet_detail_dim.created_at','desc')
+        		
         		->leftJoin('twitter_analysis_fact as original_fact','tweet_dim.tweetkey','=','original_fact.tweetkey')
         		->where('original_fact.activitytypekey','=',3)        		
         		->leftJoin('date_dim as original_fact_date_dim','original_fact.datekey','=','original_fact_date_dim.datekey')
@@ -2456,10 +2456,12 @@ class AnalysisController extends BaseController {
         			'original_fact_date_dim.year as year',
         			'original_fact_date_dim.thedate as thedate',
         			'usergroup.groupid as groupid',
-					'usergroup.groupname as groupname')
-				->orderBy('groupid','asc')
-				->orderBy('original_fact_date_dim.thedate','desc');
-
+					'usergroup.groupname as groupname')				
+				
+				->orderBy('usergroup.groupid','ASC')
+				->orderBy('original_fact_date_dim.thedate','desc')
+				->orderBy('tweet_detail_dim.created_at','desc');
+				
     		$retweetInterestList2 = clone $retweetInterestList;
 			$retweetInterestDetailList = $retweetInterestList
 											->get();
@@ -2472,7 +2474,11 @@ class AnalysisController extends BaseController {
 											->groupBy('usergroup.groupid')
 											->orderBy('groupid','asc') 
 											->get();
-
+			// echo "<pre>";
+			// var_dump($retweetInterestCountList);
+			// var_dump($retweetInterestDetailList);
+			// echo "</pre>";
+			// return View::make('blank_page');
 
 		$top10RetweetedList = array();
         if(sizeof($topRetweetedList)<=10) $top10RetweetedList = $topRetweetedList;

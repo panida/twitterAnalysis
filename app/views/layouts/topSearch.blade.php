@@ -121,7 +121,7 @@
      <script type="text/javascript">
 
             $(function() {
-                if({{$countAllTweet}}>1000){                    
+                //if({{$countAllTweet}}>1000){                    
                     $.post("/twitterAnalysis/generateCSV",
                     {caseID: "{{$caseID}}",
                     timestamp:"{{$timestamp}}",
@@ -137,11 +137,11 @@
                             $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
                         }
                     });
-                }
-                else{
-                    $('#csvLogo').css('color','rgb(10,100,10)');
-                    $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
-                }
+                // }
+                // else{
+                //     $('#csvLogo').css('color','rgb(10,100,10)');
+                //     $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
+                // }
             });
 
 
