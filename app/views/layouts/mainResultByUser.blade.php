@@ -2,7 +2,12 @@
 @section('customCSS')
 	<!-- Custom CSS -->
 	<link href="{{URL::asset('css/sb-admin.css')}}" rel="stylesheet">
-
+    <style>
+        .chat-img img{
+            width:48px;
+            height: 48px;
+        }
+    </style>
 	<!-- Custom Fonts -->
 	
 	<!-- statistics CSS-->

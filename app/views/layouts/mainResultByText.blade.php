@@ -3,7 +3,12 @@
 	<!-- Custom CSS -->
 	<link href="{{URL::asset('css/sb-admin.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{URL::asset('css/d3.slider.css')}}" />
-
+    <style>
+    .chat-img img{
+        width:48px;
+        height: 48px;
+    }
+    </style>
 	<!-- Custom Fonts -->
 	
 	<!-- statistics CSS-->
