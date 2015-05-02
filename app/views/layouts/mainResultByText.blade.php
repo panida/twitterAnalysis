@@ -82,6 +82,7 @@
 
 
 @section('footer')
+        <div class="loader"></div>
         <footer>
             <div class="row">
                 <div class="col-lg-12">
@@ -96,7 +97,10 @@
 <script>
 $(function(){
     // if($('.nav-pills').tabdrop('layout')==false)
-        $('.nav-pills').tabdrop({text: 'More'});    
+        $('.nav-pills').tabdrop({text: 'More'});   
+        $("#searchButton").click(function(){
+            $(".loader").show();
+        }); 
 });
 </script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
