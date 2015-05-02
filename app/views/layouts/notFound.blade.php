@@ -19,9 +19,10 @@
 
 
 @section('footer')
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 		<footer>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12" style="padding:0;">
                     <hr>
                     <p>Copyright &copy; CU.Tweet 2014</p>
                 </div>

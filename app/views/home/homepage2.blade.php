@@ -146,6 +146,7 @@
             </div>
 
         </div>
+        <hr>
         <!-- /.row -->
 
         
@@ -186,7 +187,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <hr>
+                    
                     <p>Copyright &copy; CU.Tweet 2014</p>
                 </div>
             </div>
