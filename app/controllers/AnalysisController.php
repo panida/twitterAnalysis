@@ -594,9 +594,13 @@ class AnalysisController extends BaseController {
 			}
 		}
 		$caseID = $input['caseID'];
-		$searchText = $input['searchText'];
+		$searchText = trim($input['searchText']);
 		$startDate = $input['startDate'];
 		$endDate = $input['endDate'];
+			// 	echo "<pre>";
+   //   		var_dump($searchText);
+			// echo "</pre>";
+			// return View::make('blank_page');
 		if($input['type']=='text'){
 			// $now = memory_get_usage();
 			// $testMem["beforeView"] = $now - $prev;
@@ -2234,7 +2238,7 @@ class AnalysisController extends BaseController {
 		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		$input = Input::all();
 		$caseID = $input['caseID'];
-		$searchText = $input['searchText'];
+		$searchText = trim($input['searchText']);
 		$startDate = $input['startDate'];
 		$endDate = $input['endDate'];
 		if($input['type']=='text'){
