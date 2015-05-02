@@ -67,7 +67,7 @@
                                         <strong class="primary-font"><a href="http://twitter.com/{{$anOriginalTweet->screenname}}" target="blank" class="tweet_screen_name2 screen_name">{{$anOriginalTweet->name}}</a></strong> 
                                         <span style="color:#AAAAAA;">{{"@".$anOriginalTweet->screenname}}</span>
                                         <small class="pull-right text-muted">
-                                            <i class="fa fa-retweet fa-fw"></i> {{($anOriginalTweet->totalRetweet-1). " retweets"}}                                      
+                                            <i class="fa fa-retweet fa-fw"></i> {{number_format($anOriginalTweet->totalRetweet-1). " retweets"}}                                      
                                         </small>
                                     </div>
                                     <p>
