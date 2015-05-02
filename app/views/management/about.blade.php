@@ -22,13 +22,14 @@
                 <li>ฟังก์ชันดูข้อมูลทั่วไป จะบอกข้อมูลทั่วไป เช่น <a href="{{URL::to('/databaseDetail')}}">ชุดฐานข้อมูลที่มีอยู่ทั้งหมด</a> เป็นต้น</li>
             </ol>
         </p>
-        <hr>
+        
 
 @stop
 
 @section('footer')
         <!-- Footer -->
         <footer>
+            <hr>
             <div class="row">
                 <div class="col-lg-12">
                     <p>Copyright &copy; CU.Tweet 2014</p>

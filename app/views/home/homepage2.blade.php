@@ -9,6 +9,18 @@
             background-color:rgba(200,210,250,0.5);
         }
 
+        .thumbnailFunction{
+            padding-top: 20px; 
+            height: 280px;
+        }
+        .thumbnail{
+            margin-bottom: 0px;
+        }
+
+        .hero-feature{
+            margin-bottom: 0px;
+        }
+
     </style>
 @stop
 
@@ -104,7 +116,7 @@
         <div class="row text-center col-md-10 col-md-offset-1 onlythaibold">
 
             <div class="col-md-4 col-sm-6 hero-feature">
-                <div class="thumbnail">
+                <div class="thumbnail thumbnailFunction">
                     <img class="top-buffer" src="http://assets3.tweetreach.com/images/home_search.png?1418759198" alt="">
                     <div class="caption">
                         <h2>ค้นหา</h2>
@@ -114,7 +126,7 @@
             </div>
 
             <div class="col-md-4 col-sm-6 hero-feature">
-                <div class="thumbnail">
+                <div class="thumbnail thumbnailFunction">
                     <img class="top-buffer" src="http://assets1.tweetreach.com/images/home_analyze.png?1418759198" alt="">
                     <div class="caption">
                         <h2>วิเคราะห์</h2>
@@ -124,14 +136,11 @@
             </div>
 
             <div class="col-md-4 col-sm-6 hero-feature">
-                <div class="thumbnail">
+                <div class="thumbnail thumbnailFunction">
                     <img class="top-buffer" src="http://assets0.tweetreach.com/images/home_report.png?1418759198" alt="">
                     <div class="caption">
                         <h2>รายงานผล</h2>
                         <h4 style="font-family:thaisansneue;">แสดงผลด้วยกราฟและแผนภูมิแบบ Interactive ง่ายต่อการเข้าใจ อีกทั้งสามารถ export รายงานออกเป็นไฟล์ pdf ได้อีกด้วย</h4>
-                        <p>
-                            <a href="{{{ URL::to('report') }}}" class="btn btn-primary" target="blank">อ่านต่อ</a> 
-                        </p>
                     </div>
                 </div>
             </div>
@@ -139,7 +148,7 @@
         </div>
         <!-- /.row -->
 
-        <hr>
+        
         <style>
         .input-group .form-control{
             z-index: 0;
@@ -177,6 +186,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
+                    <hr>
                     <p>Copyright &copy; CU.Tweet 2014</p>
                 </div>
             </div>
