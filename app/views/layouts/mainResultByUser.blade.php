@@ -69,6 +69,16 @@
 
 
 @section('footer')
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <p>Copyright &copy; CU.Tweet 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
 <script src="{{URL::asset('js/bootstrap-tabdrop.js')}}"></script>
 <script>
 $(function(){
