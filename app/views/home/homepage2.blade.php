@@ -94,13 +94,13 @@
                     </div>
                     <div class="form-group top-buffer">
                         <div class="col-sm-offset-4 col-sm-4">
-                            {{Form::submit("ค้นหา",array("class"=>"btn btn-default","style"=>"background-color:#00aa00; color:white; font-size:23px;"))}}
+                            {{Form::submit("ค้นหา",array("class"=>"btn btn-default","id"=>"searchButton","style"=>"background-color:#00aa00; color:white; font-size:23px;"))}}
                         </div>
                     </div>
                 </form>
             </header>
         </div>
-
+        <div class="loader"></div>
         <hr>
 
         <!-- Title -->
@@ -178,7 +178,9 @@
             $("#datepicker1").val(cases[$("#selectCase").val()]['startdate']);
             $("#datepicker2").val(cases[$("#selectCase").val()]['enddate']);
         });
- 
+        $("#searchButton").click(function(){
+            $(".loader").show();
+        });
         </script>
 @stop
 

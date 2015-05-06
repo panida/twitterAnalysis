@@ -47,7 +47,7 @@
                 
                     <div class="col-lg-1 col-md-6 col-sm-6">
                         <h3>&nbsp;</h3>
-                    	<button type="submit" class="btn btn-default" style="background-color:#00aa00; color:white;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    	<button type="submit" class="btn btn-default" id="searchButton" style="background-color:#00aa00; color:white;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </div>
                 </div>
             </form>
@@ -107,7 +107,13 @@
                 ค้นหาผู้ใช้ทวิตเตอร์: {{$searchText}}
                 @endif
                 <span class="pull-right">
+                    @if($countAllTweet<=100000)
                     <a id="csvTag" href="javascript:alert('ขณะนี้ระบบกำลังจัดเตรียมไฟล์ กรุณาลองอีกครั้งเมื่อสัญลักษณ์เป็นสีเขียว')" style="text-decoration:none;">
+                    @elseif($countAllTweet<=500000)
+                    <a id="csvTag" href="javascript:alert('ไฟล์รีพอร์ทมีขนาดใหญ่เกินไปและอาจประสบปัญหาในการดาวน์โหลด ควรเปลี่ยนคำค้นหาหรือช่วงเวลาการค้นหาให้เฉพาะเจาะจงยิ่งขึ้น')" style="text-decoration:none;">
+                    @else
+                    <a id="csvTag" href="javascript:alert('ไฟล์รีพอร์ทมีขนาดใหญ่เกินไปและไม่สามารถดาวน์โหลดได้ ควรเปลี่ยนคำค้นหาหรือช่วงเวลาการค้นหาให้เฉพาะเจาะจงยิ่งขึ้น')" style="text-decoration:none;">
+                    @endif
                         <i id ="csvLogo" class="fa fa-file-excel-o" style="font-size:22px; color:rgb(200,200,200);"></i>
                     </a>
                     <a href="{{ URL::action('ReportController@getDownloadPDF',[$filename]) }}">
@@ -117,11 +123,11 @@
 			</h1>            
 		</div>
 	</div>
-
+    
      <script type="text/javascript">
 
             $(function() {
-                //if({{$countAllTweet}}>1000){                    
+                if({{$countAllTweet}}<=500000){                    
                     $.post("/twitterAnalysis/generateCSV",
                     {caseID: "{{$caseID}}",
                     timestamp:"{{$timestamp}}",
@@ -137,7 +143,10 @@
                             $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
                         }
                     });
-                // }
+                }
+                $("#searchButton").click(function(){
+                    $(".loader").show();
+                });
                 // else{
                 //     $('#csvLogo').css('color','rgb(10,100,10)');
                 //     $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");

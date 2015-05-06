@@ -33,8 +33,8 @@ class AjaxFile
                             $aTweet->original_text.
                         '</p>
                         <small class="text-muted">
-                            <span class="glyphicon glyphicon-send"></span>'.$aTweet->original_sourcename.'
-                            <i class="fa fa-clock-o fa-fw"></i>'.$aTweet->original_created_at.
+                            <span class="glyphicon glyphicon-send"></span>'.$aTweet->original_sourcename.
+                            ' <i class="fa fa-clock-o fa-fw"></i>'.$aTweet->original_created_at.
                         '</small>'
 			);               			
 			if($aTweet->real_activitytypekey==3){
@@ -43,7 +43,7 @@ class AjaxFile
                     <small class="text-muted">
                     	<i class="fa fa-retweet fa-fw"></i> Retweeted by <a href="http://twitter.com/'.$aTweet->real_screenname.'" target="blank" class="tweet_screen_name2 screen_name" style="color:rgb(100,100,100)">'.$aTweet->real_screenname.'</a>
                     	<span class="glyphicon glyphicon-send"></span>'.$aTweet->real_sourcename.
-                        '<i class="fa fa-clock-o fa-fw"></i>'.$aTweet->real_created_at.                                
+                        ' <i class="fa fa-clock-o fa-fw"></i>'.$aTweet->real_created_at.                                
                     '</small>'
 				);
 				
@@ -82,7 +82,7 @@ class AjaxFile
                         '</p>
                         <small class="text-muted">
                             <span class="glyphicon glyphicon-send"></span>'.$anOriginalTweet->original_sourcename.
-                            '<i class="fa fa-clock-o fa-fw"></i>'.$anOriginalTweet->original_created_at.
+                            ' <i class="fa fa-clock-o fa-fw"></i>'.$anOriginalTweet->original_created_at.
                         '</small>
                     </div>
                 </li>'     
@@ -120,16 +120,16 @@ class AjaxFile
                         '</p>
                         <small class="text-muted">
                             <span class="glyphicon glyphicon-send"></span>'.$aTweet->original_sourcename.
-                            '<i class="fa fa-clock-o fa-fw"></i>'.$aTweet->original_created_at.
+                            ' <i class="fa fa-clock-o fa-fw"></i>'.$aTweet->original_created_at.
                         '</small>' 
 			); 
 			if($aTweet->real_activitytypekey==3){
 			fwrite($file,
 				'<br>
                 <small class="text-muted">
-                	<i class="fa fa-retweet fa-fw"></i> Retweeted by <a href="http://twitter.com/'.$aTweet->real_screenname.'" target="blank" class="tweet_screen_name2 screen_name" style="color:rgb(100,100,100)">'.$aTweet->real_screenname.'</a>
-                	<span class="glyphicon glyphicon-send"></span>'.$aTweet->real_sourcename.
-                    '<i class="fa fa-clock-o fa-fw"></i>'.$aTweet->real_created_at.                                 
+                	<i class="fa fa-retweet fa-fw"></i> Retweeted by <a href="http://twitter.com/'.$aTweet->real_screenname.'" target="blank" class="tweet_screen_name2 screen_name" style="color:rgb(100,100,100)">'.$aTweet->real_screenname.
+                    '</a> <span class="glyphicon glyphicon-send"></span>'.$aTweet->real_sourcename.
+                    ' <i class="fa fa-clock-o fa-fw"></i>'.$aTweet->real_created_at.                                 
                 '</small>'
 				);
 			}
@@ -167,7 +167,7 @@ class AjaxFile
                         '</p>
                         <small class="text-muted">
                             <span class="glyphicon glyphicon-send"></span>'.$anOriginalTweet->sourcename.
-                            '<i class="fa fa-clock-o fa-fw"></i>'.$anOriginalTweet->created_at.
+                            ' <i class="fa fa-clock-o fa-fw"></i>'.$anOriginalTweet->created_at.
                         '</small>
                     </div>
                 </li>'

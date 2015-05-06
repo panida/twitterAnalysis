@@ -104,7 +104,7 @@
             <div class="panel panel-green">
                 <div class="panel-heading">
                     <h3 class="panel-title onlythaibold" style="font-size:20px;">
-                    	<i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้องทั้งหมด
+                    	<i class="fa fa-long-arrow-right"></i> ผู้ใช้ที่เกี่ยวข้อง
                     	<span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="แสดงผลเฉพาะ 1,000 คนแรกที่มีผู้ติดตามมากที่สุด หากต้องการดูรายชื่อทั้งหมด สามารถดาวน์โหลดได้จาก ไฟล์ .csv"></span>
                     </h3>
                 </div>

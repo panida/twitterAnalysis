@@ -19,7 +19,9 @@
 
 
 @section('footer')
+
     <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+        <div class="loader"></div>
 		<footer>
             <div class="row">
                 <div class="col-lg-12" style="padding:0;">
@@ -30,6 +32,14 @@
         </footer>
 
     </div>
+
+<script>
+$(function(){ 
+        $("#searchButton").click(function(){
+            $(".loader").show();
+        }); 
+});
+</script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
 <!-- <script src="http://code.highcharts.com/highcharts.js"></script> -->
 <script src="http://code.highcharts.com/highcharts-3d.js"></script>
