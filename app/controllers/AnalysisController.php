@@ -157,7 +157,8 @@ class AnalysisController extends BaseController {
 		$currentSize = 0;
 		$currentGroupInHourInx =0;
 		$sizeOfTweetGroup = sizeof($tweetGroupByHour);
-		while($currentDate->diffInDays($endDate,false) >= 0){
+		$endDate = $endDate->addHour();
+		while($currentDate->diffInDays($endDate,false) > 0){
 			array_push($tweetGroupByDay, array(
 				"dateTime" => clone $currentDate,
 				"year" => $currentDate->year,

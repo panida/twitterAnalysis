@@ -41,6 +41,9 @@
 				        subtitle: {
 				            text: ''
 				        },
+				        exporting: {
+				        	enabled: false
+				        },
 				        xAxis: {
 				            categories: [
 				            	@foreach($totalGroupDetail as $aGroup)

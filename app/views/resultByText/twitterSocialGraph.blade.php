@@ -41,7 +41,7 @@
 						.interpolate("cardinal-closed")
 						.tension(.85);
 
-			var stroke = d3.scale.category20();
+			var stroke = d3.scale.category10();
 
 			var body = d3.select("body");
 
@@ -82,7 +82,19 @@
 									.attr("y", 0)
 									.on("click", clickPlay );
 
-			var slideWidth = 1000,
+			var resetButtonBlackground = tran.append( "rect" )
+											.attr("class", "resetButtonBlackground");
+
+			var resetButtonImg = tran.append( "image" )
+									.attr("class", "resetButtonBlackground")
+									.attr("xlink:href","https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_replay_48px-128.png")
+									.attr("width", "50px")
+									.attr("height", "50px")
+									.attr("x", 50)
+									.attr("y", 0)
+									.on("click", clickReset );
+
+			var slideWidth = 950,
 				slideheight = 30;
 
 			var isPlay = false, intervalId, maxPoint = {{$slidebarLength}};
@@ -99,7 +111,7 @@
 
 			var svg = tran.append("svg")
 							.attr("width", slideWidth+20)
-							.attr("height", 50).attr("x",60).attr("y",10).attr("class","slidebarBound")
+							.attr("height", 50).attr("x",110).attr("y",10).attr("class","slidebarBound")
 							.append("g")
 							.attr("transform", "translate(" + 10 + "," + 0 + ")");
 
@@ -570,6 +582,12 @@
 					intervalId = setInterval(stepAnimationNode,80);
 				}
 				isPlay=!isPlay;
+			}
+
+			function clickReset(){
+				removeAnimationNode(0, currentBrush);
+				handle.attr("cx", x(0));
+				currentBrush = 0;
 			}
 
 			function disableAllLink(){
