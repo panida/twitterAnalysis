@@ -133,6 +133,9 @@ $(function() {
 				navigator: {
 		            margin: 10
 		        },
+		        exporting: {
+		        	enabled: false
+		        },
 				xAxis: {
 					type: 'datetime',
 					title: {
@@ -234,6 +237,9 @@ $(function() {
 				navigator: {
 		            margin: 10
 		        },
+		        exporting: {
+		        	enabled: false
+		        },
 				xAxis: {
 					type: 'datetime',
 					title: {
@@ -331,6 +337,9 @@ $(function() {
 				},
 				navigator: {
 		            margin: 10
+		        },
+		        exporting: {
+		        	enabled: false
 		        },
 		        rangeSelector:{
 					buttons : [{

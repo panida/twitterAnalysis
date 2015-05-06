@@ -25,6 +25,9 @@
 				        subtitle: {
 				            text: ''
 				        },
+				        exporting: {
+				        	enabled: false
+				        },
 				        xAxis: {
 				            categories: [
 				            	@foreach($totalGroupDetail as $aGroup)
@@ -132,6 +135,9 @@
 				        },
 				        subtitle: {
 				            text: ''
+				        },
+				        exporting: {
+				        	enabled: false
 				        },
 				        xAxis: {
 				            categories: ['Tweet', 'Retweet', 'Reply'],
