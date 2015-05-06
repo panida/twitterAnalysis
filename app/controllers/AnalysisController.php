@@ -2226,7 +2226,7 @@ class AnalysisController extends BaseController {
 					'filenameTopRetweeted' => $filenameTopRetweetedList,
 					'topRetweetedLastPage' => floor(count($topRetweetedList)/20),
 					'filenameTopFollower' => $filenameTopFollowerList,
-					'topFollowerLastPage' => floor(count($topFollowerList)/20),
+					'topFollowerLastPage' => floor(count($follower_list)/20),
 				];
 		// $result = $input;
 		// return View::make('blank_page');
