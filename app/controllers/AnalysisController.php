@@ -985,8 +985,8 @@ class AnalysisController extends BaseController {
         		->get();
 
         $testTimeArray["followerList"] = Carbon::now()->diffInSeconds($testStart);
-        $topFollowerList = array_merge(array(),$timelineList);
-        usort($topFollowerList,'AnalysisController::cmpByNumberOfFollowerDesc');
+        //$topFollowerList = array_merge(array(),$timelineList);
+        //usort($topFollowerList,'AnalysisController::cmpByNumberOfFollowerDesc');
    //              	echo "<pre>";
    //   		var_dump($topFollowerList);
 			// echo "</pre>";
@@ -1980,7 +1980,7 @@ class AnalysisController extends BaseController {
 		//-------------------------GenTweetTopRetweetedList-----------------------	
         $filenameTopRetweetedList = AjaxFile::generateTopRetweetedFileSearchByText($timestamp,$topRetweetedList,"w");
 		//-------------------------GenTweetTopFollowerList-----------------------	
-        $filenameTopFollowerList = AjaxFile::generateTopFollowerFile($timestamp,$topFollowerList,"w");
+        $filenameTopFollowerList = AjaxFile::generateTopFollowerFile($timestamp,$follower_list,"w");
 		//-------------------------GenReport-----------------------	
 			
 		$filename = 'report'.$timestamp.'.pdf';
