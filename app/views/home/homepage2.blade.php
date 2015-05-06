@@ -100,7 +100,7 @@
                 </form>
             </header>
         </div>
-        <div class="loader"></div>
+        
         <hr>
 
         <!-- Title -->
@@ -148,7 +148,7 @@
         </div>
         <hr>
         <!-- /.row -->
-
+        <div class="loader"></div>
         
         <style>
         .input-group .form-control{
