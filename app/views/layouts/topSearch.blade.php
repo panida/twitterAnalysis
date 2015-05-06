@@ -126,24 +126,23 @@
     
      <script type="text/javascript">
 
-            $(function() {
-                if({{$countAllTweet}}<=500000){                    
-                    $.post("/twitterAnalysis/generateCSV",
-                    {caseID: "{{$caseID}}",
-                    timestamp:"{{$timestamp}}",
-                    type: "{{$type}}",
-                    searchText:"{{$searchText}}",
-                    startDate:"{{$startDate}}",
-                    endDate:"{{$endDate}}",
-                    filename:"{{$filenameCSV}}" }
-                    ,
-                    function(data, status){
-                        if(status=='success'){
-                            $('#csvLogo').css('color','rgb(10,100,10)');
-                            $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
-                        }
-                    });
-                }
+            $(function() {                  
+                $.post("/twitterAnalysis/generateCSV",
+                {caseID: "{{$caseID}}",
+                timestamp:"{{$timestamp}}",
+                type: "{{$type}}",
+                searchText:"{{$searchText}}",
+                startDate:"{{$startDate}}",
+                endDate:"{{$endDate}}",
+                filename:"{{$filenameCSV}}" }
+                ,
+                function(data, status){
+                    if(status=='success' && {{$countAllTweet}}<=500000){
+                        $('#csvLogo').css('color','rgb(10,100,10)');
+                        $('#csvTag').attr("href","{{ URL::action('ReportController@getDownloadCSV',[$filenameCSV]) }}");
+                    }
+                });
+
                 $("#searchButton").click(function(){
                     $(".loader").show();
                 });

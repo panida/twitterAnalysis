@@ -89,83 +89,84 @@ class ReportController extends BaseController {
 		//------------------Create CSV File---------------------
      	$filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList,"a");
 
-        $file3 = fopen(public_path().'/reportCSV/'.$filenameCSV2,"a");
-        //fputcsv($file3,['Twitter Account','Tweets','Retweets','Replies','Followers']);         
-        foreach ($timelineList as $key => $aTweet) {
-        	if($aTweet->real_activitytypekey==3){
-        		fputcsv($file3,[' '.$aTweet->real_created_at, '@'.$aTweet->real_screenname, @iconv('UTF-8','cp874//IGNORE','RT@'.$aTweet->original_screenname.':'.$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->real_sourcename)]);
-        	}
-        	else{
-        		fputcsv($file3,[' '.$aTweet->original_created_at, '@'.$aTweet->original_screenname, @iconv('UTF-8','cp874//IGNORE',$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->original_sourcename)]);
-        	}
-        }
-        fclose($file3);
-        //--------------------------------------------------------
-        //$filenameCSV = $input['filename'];
-        $tweetResultList2 = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);  
-        $contributorKeyList = $tweetResultList2
-                                ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
-                                ->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
-                                ->select('user_dim.userkey',
-                                    'user_dim.screenname',
-                                    'twitter_analysis_fact.activitytypekey',
-                                    'user_statistics_dim.followers_count',
-                                    DB::raw('count(*) as totalNumber')
-                                    )
-                                ->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
-                                ->orderBy('user_statistics_dim.followers_count','desc')
-                                ->get();
-        $contributorList = array();
-        foreach($contributorKeyList as $aContributorAndType){
-            if(!array_key_exists($aContributorAndType->userkey,$contributorList)){
-                $contributorList[$aContributorAndType->userkey] = [ 'userkey'=>$aContributorAndType->userkey,
-                                                                    'screenname'=>$aContributorAndType->screenname,
-                                                                    'followerCount'=>$aContributorAndType->followers_count,
-                                                                    'tweetCount'=>0,
-                                                                    'retweetCount'=>0,
-                                                                    'replyCount'=>0,
-                                                                    'allActivityCount'=>0
-                                                                    ];
+        if(count($timelineList)<=499000){
+            $file3 = fopen(public_path().'/reportCSV/'.$filenameCSV2,"a");
+            //fputcsv($file3,['Twitter Account','Tweets','Retweets','Replies','Followers']);         
+            foreach ($timelineList as $key => $aTweet) {
+            	if($aTweet->real_activitytypekey==3){
+            		fputcsv($file3,[' '.$aTweet->real_created_at, '@'.$aTweet->real_screenname, @iconv('UTF-8','cp874//IGNORE','RT@'.$aTweet->original_screenname.':'.$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->real_sourcename)]);
+            	}
+            	else{
+            		fputcsv($file3,[' '.$aTweet->original_created_at, '@'.$aTweet->original_screenname, @iconv('UTF-8','cp874//IGNORE',$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->original_sourcename)]);
+            	}
             }
-            if ($aContributorAndType->activitytypekey==3) {
-                $contributorList[$aContributorAndType->userkey]['retweetCount'] = $aContributorAndType->totalNumber;
-                $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+            fclose($file3);
+            //--------------------------------------------------------
+            //$filenameCSV = $input['filename'];
+            $tweetResultList2 = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);  
+            $contributorKeyList = $tweetResultList2
+                                    ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
+                                    ->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
+                                    ->select('user_dim.userkey',
+                                        'user_dim.screenname',
+                                        'twitter_analysis_fact.activitytypekey',
+                                        'user_statistics_dim.followers_count',
+                                        DB::raw('count(*) as totalNumber')
+                                        )
+                                    ->groupBy('user_dim.userkey','user_dim.screenname','twitter_analysis_fact.activitytypekey')
+                                    ->orderBy('user_statistics_dim.followers_count','desc')
+                                    ->get();
+            $contributorList = array();
+            foreach($contributorKeyList as $aContributorAndType){
+                if(!array_key_exists($aContributorAndType->userkey,$contributorList)){
+                    $contributorList[$aContributorAndType->userkey] = [ 'userkey'=>$aContributorAndType->userkey,
+                                                                        'screenname'=>$aContributorAndType->screenname,
+                                                                        'followerCount'=>$aContributorAndType->followers_count,
+                                                                        'tweetCount'=>0,
+                                                                        'retweetCount'=>0,
+                                                                        'replyCount'=>0,
+                                                                        'allActivityCount'=>0
+                                                                        ];
+                }
+                if ($aContributorAndType->activitytypekey==3) {
+                    $contributorList[$aContributorAndType->userkey]['retweetCount'] = $aContributorAndType->totalNumber;
+                    $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+                }
+                else if ($aContributorAndType->activitytypekey==1) {
+                    $contributorList[$aContributorAndType->userkey]['tweetCount'] = $aContributorAndType->totalNumber;
+                    $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+                }
+                else {
+                    $contributorList[$aContributorAndType->userkey]['replyCount'] = $aContributorAndType->totalNumber;
+                    $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+                }               
             }
-            else if ($aContributorAndType->activitytypekey==1) {
-                $contributorList[$aContributorAndType->userkey]['tweetCount'] = $aContributorAndType->totalNumber;
-                $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
+            reset($contributorList);
+            $TwRtRpUserList = array();
+            foreach($contributorList as $aUserStat){            
+                // $TW = ($aUserStat['tweetCount'] > 0);
+                // $RT = ($aUserStat['retweetCount'] > 0);
+                // $RP = ($aUserStat['replyCount'] > 0);
+                // if($TW or $RT or $RP){
+                    array_push($TwRtRpUserList,$aUserStat);
+                //}
             }
-            else {
-                $contributorList[$aContributorAndType->userkey]['replyCount'] = $aContributorAndType->totalNumber;
-                $contributorList[$aContributorAndType->userkey]['allActivityCount'] += $aContributorAndType->totalNumber;
-            }               
+            //$TwRtRpUserList = array();
+            $file2 = fopen(public_path().'/reportCSV/'.$filenameCSV,"a");       
+            fputcsv($file2,[]);
+            fputcsv($file2,[iconv('UTF-8','cp874','2. บุคคลที่เกี่ยวข้องทั้งหมด')]);
+            fputcsv($file2,['Twitter Account','Tweets','Retweets','Replies','Followers']);
+            foreach ($TwRtRpUserList as $key => $aUser) {         
+                 fputcsv($file2,[iconv('UTF-8','cp874','@'.$aUser['screenname']),number_format($aUser['tweetCount']),number_format($aUser['retweetCount']),number_format($aUser['replyCount']),number_format($aUser['followerCount'])]);
+            }
+            fclose($file2);
+            //--------------------MergeFile---------------------
+             $fp1=fopen(public_path().'/reportCSV/'.$filenameCSV,"a+");
+             $filenameCSV = 'report'.$timestamp.'-2.csv';
+            $fp2=file_get_contents(public_path().'/reportCSV/'.$filenameCSV);
+            fwrite($fp1,$fp2);
+            //exec('cat '.public_path().'/reportCSV/'.$filenameCSV.' '.public_path().'/reportCSV/'.'report'.$timestamp.'-2.csv > '.public_path().'/reportCSV/'.$filenameCSV);
         }
-        reset($contributorList);
-        $TwRtRpUserList = array();
-        foreach($contributorList as $aUserStat){            
-            // $TW = ($aUserStat['tweetCount'] > 0);
-            // $RT = ($aUserStat['retweetCount'] > 0);
-            // $RP = ($aUserStat['replyCount'] > 0);
-            // if($TW or $RT or $RP){
-                array_push($TwRtRpUserList,$aUserStat);
-            //}
-        }
-        //$TwRtRpUserList = array();
-        $file2 = fopen(public_path().'/reportCSV/'.$filenameCSV,"a");       
-        fputcsv($file2,[]);
-        fputcsv($file2,[iconv('UTF-8','cp874','2. บุคคลที่เกี่ยวข้องทั้งหมด')]);
-        fputcsv($file2,['Twitter Account','Tweets','Retweets','Replies','Followers']);
-        foreach ($TwRtRpUserList as $key => $aUser) {         
-             fputcsv($file2,[iconv('UTF-8','cp874','@'.$aUser['screenname']),number_format($aUser['tweetCount']),number_format($aUser['retweetCount']),number_format($aUser['replyCount']),number_format($aUser['followerCount'])]);
-        }
-        fclose($file2);
-        //--------------------MergeFile---------------------
-         $fp1=fopen(public_path().'/reportCSV/'.$filenameCSV,"a+");
-         $filenameCSV = 'report'.$timestamp.'-2.csv';
-        $fp2=file_get_contents(public_path().'/reportCSV/'.$filenameCSV);
-        fwrite($fp1,$fp2);
-        //exec('cat '.public_path().'/reportCSV/'.$filenameCSV.' '.public_path().'/reportCSV/'.'report'.$timestamp.'-2.csv > '.public_path().'/reportCSV/'.$filenameCSV);
-        
         return 'finish';
 	}
 
@@ -291,17 +292,19 @@ class ReportController extends BaseController {
         			'date_dim.thedate as thedate')
         		->get();
         $filenameTimeline = AjaxFile::generateTimelineFile($timestamp,$timelineList,"a");
-        $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"a");
-        //fputcsv($file,['-------------------------------Hello World------------------------------ ']);
-        foreach ($timelineList as $key => $aTweet) {
-        	if($aTweet->real_activitytypekey==3){
-        		fputcsv($file,[' '.$aTweet->real_created_at, '@'.$aTweet->real_screenname, @iconv('UTF-8','cp874//IGNORE','RT@'.$aTweet->original_screenname.':'.$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->real_sourcename)]);
-        	}
-        	else{
-        		fputcsv($file,[' '.$aTweet->original_created_at, '@'.$aTweet->original_screenname, @iconv('UTF-8','cp874//IGNORE',$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->original_sourcename)]);
-        	}
-        }
-        fclose($file);        
+        if(count($timelineList)<=499000){
+            $file = fopen(public_path().'/reportCSV/'.$filenameCSV,"a");
+            //fputcsv($file,['-------------------------------Hello World------------------------------ ']);
+            foreach ($timelineList as $key => $aTweet) {
+            	if($aTweet->real_activitytypekey==3){
+            		fputcsv($file,[' '.$aTweet->real_created_at, '@'.$aTweet->real_screenname, @iconv('UTF-8','cp874//IGNORE','RT@'.$aTweet->original_screenname.':'.$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->real_sourcename)]);
+            	}
+            	else{
+            		fputcsv($file,[' '.$aTweet->original_created_at, '@'.$aTweet->original_screenname, @iconv('UTF-8','cp874//IGNORE',$aTweet->original_text), @iconv('UTF-8','cp874//IGNORE',$aTweet->original_sourcename)]);
+            	}
+            }
+            fclose($file);  
+        }      
 		return 'finish';
 	}
 }
