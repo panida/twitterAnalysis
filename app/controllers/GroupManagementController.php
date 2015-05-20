@@ -66,6 +66,7 @@ class GroupManagementController extends BaseController {
 	}
 
 	public function deleteGroup($groupid){
+		ResearchcaseUsergroupMapping::deleteGroup($groupid);
 		GroupUserMapping::where('groupid', '=', $groupid)->delete();
 		UserGroup::find($groupid)->delete();
 		return Redirect::action('GroupManagementController@createGroup')->with('notice', 'ลบกลุ่มสำเร็จ');

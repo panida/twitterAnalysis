@@ -8,5 +8,8 @@ class ResearchcaseUsergroupMapping extends Eloquent
 
 	public $errors;
 
+	public static function deleteGroup($groupid){
+		$affectedRows = ResearchcaseUsergroupMapping::where('groupid', '=', $groupid)->delete();
+	}
 	
 }
