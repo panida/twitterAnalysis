@@ -11,10 +11,10 @@
 
         .thumbnailFunction{
             padding-top: 20px; 
-            height: 280px;
+            height: 320px;
         }
         .thumbnail{
-            margin-bottom: 0px;
+            margin-bottom: 20px;
         }
 
         .hero-feature{
@@ -117,7 +117,7 @@
 
             <div class="col-md-4 col-sm-6 hero-feature">
                 <div class="thumbnail thumbnailFunction">
-                    <img class="top-buffer" src="http://assets3.tweetreach.com/images/home_search.png?1418759198" alt="">
+                    <img class="top-buffer" src="img/twitter.png" alt="">
                     <div class="caption">
                         <h2>ค้นหา</h2>
                         <h4 style="font-family:thaisansneue;">สามารถค้นหาได้ทั้งข้อความ ชื่อผู้ใช้ Hashtag หรือแม้กระทั่ง URL ใช้งานง่าย คล่องตัว</h4>
@@ -127,7 +127,7 @@
 
             <div class="col-md-4 col-sm-6 hero-feature">
                 <div class="thumbnail thumbnailFunction">
-                    <img class="top-buffer" src="http://assets1.tweetreach.com/images/home_analyze.png?1418759198" alt="">
+                    <img class="top-buffer" src="img/magnifier.png" alt="">
                     <div class="caption">
                         <h2>วิเคราะห์</h2>
                         <h4 style="font-family:thaisansneue;">วิเคราะห์ค่าทางสถิติ อัตราการแพร่กระจายของทวีต เครื่องมือที่ใช้ รวมถึงบุคคลที่มีอิทธิพลจากการค้นหาครั้งนั้นๆ</h4>
@@ -137,7 +137,7 @@
 
             <div class="col-md-4 col-sm-6 hero-feature">
                 <div class="thumbnail thumbnailFunction">
-                    <img class="top-buffer" src="http://assets0.tweetreach.com/images/home_report.png?1418759198" alt="">
+                    <img class="top-buffer" src="img/report.png" alt="">
                     <div class="caption">
                         <h2>รายงานผล</h2>
                         <h4 style="font-family:thaisansneue;">แสดงผลด้วยกราฟและแผนภูมิแบบ Interactive ง่ายต่อการเข้าใจ อีกทั้งสามารถ export รายงานออกเป็นไฟล์ pdf ได้อีกด้วย</h4>

@@ -13,8 +13,7 @@
         </h1>
         <p class="onlythaibold" style="font-size:20px;">
             หากพบข้อผิดพลาดของระบบหรือมีข้อสงสัยในการใช้งาน กรุณาติดต่อ<br/>
-            - คุณปิยวัฒน์ (ตุ้ย) Email:plkumjorn@gmail.com<br/>
-            - คุณพนิดา (ชมพู่) Email:cp.panida@gmail.com  
+            - ดร.พีรพล เวทีกูล Email: peerapon.v@chula.ac.th 
         </p>
         
         <hr>
