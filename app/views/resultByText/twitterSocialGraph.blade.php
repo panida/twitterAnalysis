@@ -41,7 +41,27 @@
 						.interpolate("cardinal-closed")
 						.tension(.85);
 
-			var stroke = d3.scale.category10();
+			var colorCategory10 = d3.scale.category10();
+			var colorhash = [];
+			var colorCategory20 = d3.scale.category20();
+			var stroke = function(num){
+				var indexOfGroup = colorhash.indexOf(num);
+				if(indexOfGroup < 0){
+					colorhash.push(num);
+					indexOfGroup = colorhash.length-1;
+					if(indexOfGroup < 10)	return colorCategory10(num);
+					else{
+						colorCategory20("colorTemp"+indexOfGroup);
+						return colorCategory20(num);
+					}
+				}
+				else if(indexOfGroup < 10){
+					return colorCategory10(num);
+				}
+				else{
+					return colorCategory20(num);
+				}
+			}
 
 			var body = d3.select("body");
 

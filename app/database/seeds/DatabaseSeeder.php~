@@ -34,12 +34,5 @@ class UsersTableSeeder extends Seeder {
 		//$user->username = 'guest';
 		//$user->password = Hash::make('guestuser');
 		//$user->save();
-
-		//test
-		$user = new User;
-		$user->username = 'user1';
-		$user->password = Hash::make('password');
-		$user->save();
-
 	}
 }

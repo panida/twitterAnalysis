@@ -21,41 +21,7 @@ class AnalysisController extends BaseController {
 			->orderBy('time_dim.hour','ASC');
 		$tweetGroup = $allTweetQuery->get();
 
-		// $allTweetQuery1 = clone $allTweetQuery;
-		// $allTweetQuery = $allTweetQuery
-		// 	->select(DB::raw('
-		// 		count(*) as num_of_activity,
-		// 		date_dim.date, date_dim.month,
-		// 		date_dim.year,time_dim.hour,
-		// 		activitytypekey'))
-		// 	->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
-		// 	->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'activitytypekey')
-		// 	->orderBy('date_dim.year','ASC')
-		// 	->orderBy('date_dim.month','ASC')
-		// 	->orderBy('date_dim.date','ASC')
-		// 	->orderBy('time_dim.hour','ASC');
-		// $tweetGroup = $allTweetQuery->get();
-
-		// $allTweetQuery1 = $allTweetQuery1
-		// 	->select(DB::raw('
-		// 		count(*) as num_of_activity,
-		// 		date_dim.date, date_dim.month,
-		// 		date_dim.year,time_dim.hour,
-		// 		source_dim.sourcetype'))
-		// 	->join('time_dim', 'twitter_analysis_fact.timekey', '=', 'time_dim.timekey')
-		// 	->join('source_dim', 'twitter_analysis_fact.sourcekey', '=', 'source_dim.sourcekey')
-		// 	->groupBy('date_dim.year', 'date_dim.month', 'date_dim.date','time_dim.hour', 'source_dim.sourcekey')
-		// 	->orderBy('date_dim.year','ASC')
-		// 	->orderBy('date_dim.month','ASC')
-		// 	->orderBy('date_dim.date','ASC')
-		// 	->orderBy('time_dim.hour','ASC');
-		// $tweetGroup1 = $allTweetQuery1->get();
-		//$allTweetByDay = $allTweetByHour->groupBy('date_dim.date', 'date_dim.month', 'date_dim.year');
-		//echo $startDate;
-
 		$testTimeArray["query"] = Carbon::now()->diffInSeconds($testStart);
-
-		//return 1;
 
 		//--------------------------- Hour -----------------------------------------------
 
@@ -583,13 +549,9 @@ class AnalysisController extends BaseController {
 		$timestamp = date('Y-m-d_H-i-s_').rand(1000,9999);
 		$input = Input::all();
 		if(array_key_exists("oldSearchText", $input)){
-			//echo "kill ".$input["oldSearchText"];
 			$results = DB::select(DB::raw('show full processlist'));
-			//var_dump($results);
 			foreach ($results as $result) {
-				//var_dump($result->Info);
 				if(strpos($result->Info,'%'.$input["oldSearchText"].'%')>-1){
-					//echo "kill1";
 					DB::statement('KILL '.$result->Id);
 				}
 			}
@@ -598,28 +560,15 @@ class AnalysisController extends BaseController {
 		$searchText = trim($input['searchText']);
 		$startDate = $input['startDate'];
 		$endDate = $input['endDate'];
-			// 	echo "<pre>";
-   //   		var_dump($searchText);
-			// echo "</pre>";
-			// return View::make('blank_page');
+		$searchTexts = array();
 		if($input['type']=='text'){
-			// $now = memory_get_usage();
-			// $testMem["beforeView"] = $now - $prev;
-			// $testTimeArray["beforeView"] = Carbon::now()->diffInSeconds($testStart);
-			// $prev = $now;
-			// $viewName = TwitterAnalysisFact::createViewByText($searchText,$startDate,$endDate,$caseID);
-			// $now = memory_get_usage();
-			// $testTimeArray["afterView"] = Carbon::now()->diffInSeconds($testStart);
-			// $testMem["afterView"] = $now - $prev;
-			// $prev = $now;
-			$tweetResultList = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);
-			//$tweetResultList = DB::table($viewName);
+			//process text
+			$searchTexts = explode("&&&", $searchText);
+			$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);
 		}
 		else{
 			$tweetResultList = TwitterAnalysisFact::searchByUser($searchText,$startDate,$endDate,$caseID);
 		}
-
-		
 
 		//---mem
 		$now = memory_get_usage();
@@ -639,23 +588,10 @@ class AnalysisController extends BaseController {
 		$tweetHour = array();
 		$datetimeTop1000 = array();
 		AnalysisController::groupTweetForTweetGraph($allTweetQuery,$startDate,$endDate,$tweetMonth,$tweetWeek,$tweetDay,$tweetHour,$datetimeTop1000, $countAllTweet);
-		//var_dump($datetimeTop1000);
-		//return View::make('blank_page');
+		
 		$testTimeArray["groupTweet"] = Carbon::now()->diffInSeconds($testStart);
 		$testTimeArray["beforeprint"] = Carbon::now()->diffInSeconds($testStart);
 
-		// echo "<pre>";
-  //    		var_dump($testTimeArray);
-		// 	echo "</pre>";
-		// 	return View::make('blank_page');
-  //       //------------------------------------------------------
-        
-		// echo "<pre>";
- 	// 	var_dump($testMem);
-		// echo "</pre>";
-
-		// echo memory_get_usage();
-		// return View::make('blank_page');
 		//---mem
 		$now = memory_get_usage();
 		$testMem["Prepare_For_TweetGraph"] = $now - $prev;
@@ -690,9 +626,6 @@ class AnalysisController extends BaseController {
 		$testMem["Prepare_Data_SocialGraph"] = $now - $prev;
 		$prev = $now;
 
-		
-
-		
 		if($countAllTweet==0){
 			$filename = 'report'.$timestamp.'.pdf';
 			$fpdf = new PDF();
@@ -762,16 +695,6 @@ class AnalysisController extends BaseController {
 			return View::make('layouts.notFound',$result);
 		}
 		
-		// echo "<pre>";
-  //    		var_dump($testTimeArray);
-		// 	echo "</pre>";
-		// 	return View::make('blank_page');
-			
-		
-
-        						// ->get();
-  //       var_dump($topFollowerList);
-		// return View::make('blank_page');
 		$tweetResultListTemp = clone $tweetResultList; 
 		$tweetResultList = array();
 		for($i=0;$i<=20;$i++) $tweetResultList[$i] = clone $tweetResultListTemp;   
@@ -1292,7 +1215,7 @@ class AnalysisController extends BaseController {
 		// 										'inner join user_dim user_original on user_original.userkey = twitter_analysis_fact.userkey '.
 		// 										'order by temp.totalRetweet desc limit 1000'));
 
-		$topRetweetedList = DB::select(DB::raw('select tweet_original.text as original_text, tweet_detail_original.created_at as original_created_at, '.
+		$topRetweetedQuery = 'select tweet_original.text as original_text, tweet_detail_original.created_at as original_created_at, '.
 												'source_original.sourcename as original_sourcename, '.
 												'user_original.userkey as original_userkey, user_original.name as original_name, user_original.screenname as original_screenname, '.
 												'user_original.profile_pic_url as original_pic, temp.totalRetweet '.
@@ -1304,8 +1227,13 @@ class AnalysisController extends BaseController {
 													'date_dim.thedate <= "'.$endDate.'" AND '.
 													'twitter_analysis_fact.activitytypekey = 3 AND '.
 													'twitter_analysis_fact.researchcasekey = '.$caseID.' '.  
-													'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND '.
-													"tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".
+													'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
+		foreach ($searchTexts as $asearchText) {
+			$topRetweetedQuery .= "tweet_dim.text LIKE '%".str_replace("'", "''", $asearchText)."%' AND ";
+		}
+		$topRetweetedQuery = substr($topRetweetedQuery, 0, -4);
+
+		$topRetweetedList = DB::select(DB::raw($topRetweetedQuery.
 													'group by tweet_dim.tweetid '.
 													'order by totalRetweet desc limit 1000 '.
 												') temp '.
