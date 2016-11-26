@@ -40,7 +40,7 @@
 		<li class="active"><a href="#statistics" onmouseout="resize()" data-toggle="tab">ค่าสถิติเบื้องต้น</a></li>
 		<li><a href="#speedAndLifeCycle" onmouseout="resize()" data-toggle="tab">กราฟข้อมูลทวีต</a></li>
 		<li><a href="#contributor" onmouseout="resize();valueChanged();" data-toggle="tab">บุคคลที่เกี่ยวข้อง</a></li>
-        <li><a href="#interestingContributor" onmouseout ="resize()" data-toggle="tab">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์</a></li>
+        <li><a href="#interestingContributor" onmouseout="updateChartInterestingCon();" data-toggle="tab">กลุ่มตัวอย่างผู้ใช้ทวิตเตอร์</a></li>
         <li><a href="#twitterSocialGraph" onmouseout="resize()" data-toggle="tab">การแพร่กระจายของทวีต</a></li>
 		<li><a href="#tweetTimeline" onmouseout="resize()" data-toggle="tab">รายการทวีตทั้งหมด</a></li>
 	</ul>
@@ -48,6 +48,15 @@
         function resize()
         {
             $(window).resize();
+        }
+        function updateChartInterestingCon(){
+             $(Highcharts.charts).each(function(i,chart){
+                if(chart["renderTo"].id=="container1"||chart["renderTo"].id=="container2"){
+                    var height = chart.renderTo.clientHeight; 
+                    var width = chart.renderTo.clientWidth; 
+                    chart.setSize(width, height); 
+                }
+              });
         }
     </script>
 

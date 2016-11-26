@@ -8,6 +8,7 @@
                 <ul id="pillMenu" class="nav nav-pills" style="font-family:thaisansneue; font-size:20px;">
 				  	<li class="active"><a href="#time" data-toggle="tab">Timeline</a></li>
 				  	<li><a href="#retweet" data-toggle="tab">Total Retweets</a></li>
+				  	<li><a href="#follower" data-toggle="tab">Total Follower</a></li>
 				</ul>
             </div>
 
@@ -20,9 +21,9 @@
 			                    <h3 class="panel-title onlythaibold" style="font-size:20px;"><i class="fa fa-long-arrow-right"></i> รายการทวีตเรียงตามเวลา</h3>
 			                </div>
 			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
-			                    <ul class="chat">
-									<a id="timelineSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
-			                    </ul>
+			                    <ul class="chat">	
+			                        <a id="timelineSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
+			                    </ul>			                    
 			                    <!-- /.panel .chat-panel -->			                    
 			                </div>
 			            </div>
@@ -46,8 +47,28 @@
 			                </div>
 			            </div>
 			        </div>
-			    </div>			    
+			    </div>
+
 			    
+			    <div class="tab-pane fade" id="follower">
+			    	<div class="col-lg-12 col-md-12 col-sm-12">
+			            <div class="panel panel-green">
+			                <div class="panel-heading">
+			                    <h3 class="panel-title onlythaibold" style="font-size:20px;">
+			                    	<i class="fa fa-long-arrow-right"></i> 
+			                    	รายการทวีตเรียงตามจำนวนผู้ติดตาม
+									<span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="ในกรณีของรีทวีต จำนวน Follower ที่ใช้เรียงจะเป็นของผู้รีทวีต"></span>
+			                    </h3>
+			                </div>
+			                <div class="panel-body" style="max-height: 500px; overflow-y: scroll;">
+			                    <ul class="chat">
+		                        	<a id="topFollowerSeeMore" class="btn btn-default" style="margin-bottom:10px;">See more</a>
+			                    </ul>
+			                    <!-- /.panel .chat-panel -->			                    
+			                </div>
+			            </div>
+			        </div>
+			    </div>
 		    </div>
 			<!--<a class="twitter-timeline"  
 			width="600"
@@ -63,28 +84,41 @@
 	$(function() {
 		var beforeButton = $('<div id="timelinePage0"></div>');
 		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        $("#timelinePage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="timelinePage1"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
 	        $("#timelinePage1").hide();
 		}
 
 		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        $("#topRetweetedPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topRetweetedPage1"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
 	        $("#topRetweetedPage1").hide();
+		}
+
+		beforeButton = $('<div id="topFollowerPage0"></div>');
+		$("#topFollowerSeeMore").before(beforeButton);
+        $("#topFollowerPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
+        if({{$topFollowerLastPage}}==0){
+			$("#topFollowerSeeMore").remove();
+		}
+		else{
+			beforeButton = $('<div id="topFollowerPage1"></div>');
+			$("#topFollowerSeeMore").before(beforeButton);
+	        $("#topFollowerPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
+	        $("#topFollowerPage1").hide();
 		}
 	});
 	var timelinePage = 1;
@@ -97,7 +131,7 @@
 		else{
 			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage"+timelinePage).load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+	        $("#timelinePage"+timelinePage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
         	$("#timelinePage"+timelinePage).hide();
         }
 	    
@@ -112,9 +146,42 @@
 		else{
 			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage"+topRetweetedPage).load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	        $("#topRetweetedPage"+topRetweetedPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
-	    }    
+	    }  
+	    if(topRetweetedPage==30){
+			$.post("/twitterAnalysis/generateAjaxText2",
+                    {caseID: "{{$caseID}}",
+                    timestamp:"{{$timestamp}}",
+                    type: "{{$type}}",
+                    searchText:"{{$searchText}}",
+                    startDate:"{{$startDate}}",
+                    endDate:"{{$endDate}}",
+                    filename:"{{$filenameCSV}}" });
+		}  
     });
-
+    var topFollowerPage = 1;
+	$("#topFollowerSeeMore").click(function(){
+		$("#topFollowerPage"+topFollowerPage).show();
+		topFollowerPage+=1;
+	    if(topFollowerPage>{{$topFollowerLastPage}}){
+			$("#topFollowerSeeMore").remove();
+		}
+		else{
+			var beforeButton = $('<div id="topFollowerPage'+topFollowerPage+'"></div>');
+			$("#topFollowerSeeMore").before(beforeButton);
+	        $("#topFollowerPage"+topFollowerPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
+	    	$("#topFollowerPage"+topFollowerPage).hide();
+	    }  
+	    if(topFollowerPage==30){
+			$.post("/twitterAnalysis/generateAjaxText3",
+                    {caseID: "{{$caseID}}",
+                    timestamp:"{{$timestamp}}",
+                    type: "{{$type}}",
+                    searchText:"{{$searchText}}",
+                    startDate:"{{$startDate}}",
+                    endDate:"{{$endDate}}",
+                    filename:"{{$filenameCSV}}" });
+		}  
+    });
 </script>

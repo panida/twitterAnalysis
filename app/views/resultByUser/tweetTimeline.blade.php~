@@ -63,27 +63,27 @@
 	$(function() {
 		var beforeButton = $('<div id="timelinePage0"></div>');
 		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        $("#timelinePage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="timelinePage1"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
 	        $("#timelinePage1").hide();
 		}
 
 		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        $("#topRetweetedPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topRetweetedPage1"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
 	        $("#topRetweetedPage1").hide();
 		}
 	});
@@ -97,7 +97,7 @@
 		else{
 			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage"+timelinePage).load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+	        $("#timelinePage"+timelinePage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
         	$("#timelinePage"+timelinePage).hide();
         }
 	    
@@ -112,7 +112,7 @@
 		else{
 			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage"+topRetweetedPage).load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	        $("#topRetweetedPage"+topRetweetedPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
 	    }    
     });

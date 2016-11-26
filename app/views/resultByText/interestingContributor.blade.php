@@ -1,6 +1,6 @@
 <div id="page-wrapper">
 	<div class="container-fluid top-buffer">
-		<div class="col-lg-12">
+		<div class="col-lg-12 col-md-12">
 			<div class="panel panel-green">
 				<div class="panel-heading">
 					<h3 class="panel-title onlythaibold" style="font-size:20px;">
@@ -9,13 +9,13 @@
                         <span class="glyphicon glyphicon-info-sign" style="font-size:15px;" aria-hidden="true" title="กราฟแท่งแสดงจำนวนทวีตประเภทต่างๆและจำนวนครั้งการถูกรีทวีตของแต่ละกลุ่มตัวอย่างผู้ใช้ทวิตเตอร์"></span>
                     </h3>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" id="container1_panel">
 					<div id="container1" style="width:auto; height: 450px; margin: 0 auto"></div>			
 				</div>
 			</div>			
 			<script>
-				$(function () {
-				    $('#container1').highcharts({
+				$(document).ready(function() {
+				    container1_chart = $('#container1').highcharts({
 				        chart: {
 				            type: 'column'
 				        },
@@ -108,7 +108,9 @@
 				        }
 				        ]
 				    });
+		            
 				});
+			
 			</script>
 			<br>
 
@@ -125,7 +127,7 @@
 				</div>
 			</div>			
 			<script>
-				$(function () {
+				$(document).ready(function() {
 				    $('#container2').highcharts({
 				        chart: {
 				            type: 'column'

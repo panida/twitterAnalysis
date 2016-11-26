@@ -21,9 +21,9 @@
 					</div>
 					<div id="allActivityGraph" style="margin: 0px 50px 20px 50px;"></div>
 					<input type="text" class = "datepickerGraphStartdate" 
-	                		style = 'left:778px; top:-560px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+	                		style = 'left:818px; top:-560px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
 	                <input type="text" class = "datepickerGraphEnddate" 
-	                		style = 'left:811px; top:-560px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+	                		style = 'left:851px; top:-560px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
 				</div>
 				<div>
 					<div class="row" style="height:40px"><div class="graphName"><h4>ประเภทของการทวีต</h4></div></div>
@@ -38,9 +38,9 @@
 					</div>
 					<div id="eachActivityGraph" style="margin:0px 50px 10px 50px;"></div>
 					<input type="text" class = "datepickerGraphStartdate" 
-	                		style = 'left:778px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px;font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+	                		style = 'left:818px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px;font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
 	                <input type="text" class = "datepickerGraphEnddate" 
-	                		style = 'left:811px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+	                		style = 'left:851px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
 	                </div>
 				<div>
 					 <div class="row" style="height:40px"><div class="graphName"><h4>ประเภทของแอพพลิเคชั่น</h4></div></div>
@@ -55,9 +55,9 @@
 					</div>
 					<div id="applicationGraph" style="margin:0px 50px 10px 50px;"></div>
 					<input type="text" class = "datepickerGraphStartdate" 
-                			style = 'left:778px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px;font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+                			style = 'left:818px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px;font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
                 	<input type="text" class = "datepickerGraphEnddate" 
-                			style = 'left:811px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
+                			style = 'left:851px; top:-550px; position:relative; float:left;  width: 95px; height:22px; font-size:12px; font-family:"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;'/>
                 </div>
 			</div>
 		</div>

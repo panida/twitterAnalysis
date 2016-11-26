@@ -51,7 +51,8 @@ class ReportController extends BaseController {
 		// $filenameCSV = $input['filename'];
         $filenameCSV = 'report'.$timestamp.'.csv';
 		$filenameCSV2 = 'report'.$timestamp.'-2.csv';
-		$tweetResultList = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);
+        $searchTexts = explode("&&&", $searchText);
+		$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);
 		$timelineList = $tweetResultList
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
@@ -103,7 +104,7 @@ class ReportController extends BaseController {
             fclose($file3);
             //--------------------------------------------------------
             //$filenameCSV = $input['filename'];
-            $tweetResultList2 = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);  
+            $tweetResultList2 = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);  
             $contributorKeyList = $tweetResultList2
                                     ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
                                     ->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
@@ -178,8 +179,8 @@ class ReportController extends BaseController {
         $endDate = $input['endDate'];
         $timestamp = $input['timestamp'];
         $filenameCSV = $input['filename'];
-        
-        $topRetweetedList = DB::select(DB::raw('select tweet_original.text as original_text, tweet_detail_original.created_at as original_created_at, '.
+        $searchTexts = explode("&&&", $searchText);
+        $query = 'select tweet_original.text as original_text, tweet_detail_original.created_at as original_created_at, '.
                                                 'source_original.sourcename as original_sourcename, '.
                                                 'user_original.userkey as original_userkey, user_original.name as original_name, user_original.screenname as original_screenname, '.
                                                 'user_original.profile_pic_url as original_pic, temp.totalRetweet '.
@@ -191,8 +192,14 @@ class ReportController extends BaseController {
                                                     'date_dim.thedate <= "'.$endDate.'" AND '.
                                                     'twitter_analysis_fact.activitytypekey = 3 AND '.
                                                     'twitter_analysis_fact.researchcasekey = '.$caseID.' '.  
-                                                    'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND '.
-                                                    "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".
+                                                    'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
+
+        foreach ($searchTexts as $searchText) {
+            $query .= "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' AND ";
+        }
+        $query = substr($query,0,-4);
+        $query .= 
+                                                    // "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".
                                                     'group by tweet_dim.tweetid '.
                                                     'order by totalRetweet desc offset 1000 limit 1000000000'.
                                                 ') temp '.
@@ -201,7 +208,8 @@ class ReportController extends BaseController {
                                                 'inner join tweet_detail_dim tweet_detail_original on tweet_detail_original.tweetdetailkey = twitter_analysis_fact.tweetdetailkey '.
                                                 'inner join source_dim source_original on source_original.sourcekey = twitter_analysis_fact.sourcekey '.
                                                 'inner join user_dim user_original on user_original.userkey = twitter_analysis_fact.userkey '.
-                                                'order by temp.totalRetweet desc'));
+                                                'order by temp.totalRetweet desc';
+        $topRetweetedList = DB::select(DB::raw($query));
         $filenameTopRetweetedList = AjaxFile::generateTopRetweetedFileSearchByText($timestamp,$topRetweetedList,"a");
         return 'finish';
     }
@@ -214,7 +222,8 @@ class ReportController extends BaseController {
         $endDate = $input['endDate'];
         $timestamp = $input['timestamp'];
         $filenameCSV = $input['filename'];
-        $tweetResultList = TwitterAnalysisFact::searchByText($searchText,$startDate,$endDate,$caseID);  
+        $searchTexts = explode("&&&", $searchText);
+        $tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);  
         $follower_list = $tweetResultList
                 ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')                               
                 ->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')

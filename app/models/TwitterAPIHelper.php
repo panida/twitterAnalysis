@@ -7,10 +7,10 @@ class TwitterAPIHelper
 {		
 	public static function getUserInfo($screenName){
 		$tmhOAuth = new tmhOAuth(array(
-			'consumer_key'    => '0LRwCUJKeY7PRmwLsrPYRh6Cm',
-			'consumer_secret' => 'AMrh3UX7C5voB1rXHbsAIm1VtbUi5CDDvgS4jTUCvlDwS4cMEi',
-			'user_token'      => '2578760185-31Fqd6x9DeXfR63n6HsrAAR2Bkrho86ROSZp76V',
-			'user_secret'     => '9n2upQxbaZ5gRhKkOoJFghBdqJVW2KHfIKyZdqIviRLQZ',
+			'consumer_key'    => 'ACbHS7oEb4wSckUhCPpjsFrzU',
+			'consumer_secret' => '3GkuMUmwdjEr15oG3tiLPj2qEOfY7a5gGswzVgLXoNWkL5iLOC',
+			'user_token'      => '2578760185-KL5mTFOspvrJc6wYtxNqj7Tn87G8DbEY1fzFKXK',
+			'user_secret'     => 'Q1Ni0eYnMDilBySCPcNRIRDjvYDcBwtOB4tl7oZANYr0i',
 		));
 		$method = 'https://api.twitter.com/1.1/users/show.json';
 		$params = array(

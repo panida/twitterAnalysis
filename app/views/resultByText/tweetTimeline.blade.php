@@ -84,40 +84,40 @@
 	$(function() {
 		var beforeButton = $('<div id="timelinePage0"></div>');
 		$("#timelineSeeMore").before(beforeButton);
-        $("#timelinePage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
+        $("#timelinePage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP0");
         if({{$timelineLastPage}}==0){
 			$("#timelineSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="timelinePage1"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
+	        $("#timelinePage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP1");
 	        $("#timelinePage1").hide();
 		}
 
 		beforeButton = $('<div id="topRetweetedPage0"></div>');
 		$("#topRetweetedSeeMore").before(beforeButton);
-        $("#topRetweetedPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
+        $("#topRetweetedPage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP0");
         if({{$topRetweetedLastPage}}==0){
 			$("#topRetweetedSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topRetweetedPage1"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
+	        $("#topRetweetedPage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP1");
 	        $("#topRetweetedPage1").hide();
 		}
 
 		beforeButton = $('<div id="topFollowerPage0"></div>');
 		$("#topFollowerSeeMore").before(beforeButton);
-        $("#topFollowerPage0").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
+        $("#topFollowerPage0").load("{{url('/')}}/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP0");
         if({{$topFollowerLastPage}}==0){
 			$("#topFollowerSeeMore").remove();
 		}
 		else{
 			beforeButton = $('<div id="topFollowerPage1"></div>');
 			$("#topFollowerSeeMore").before(beforeButton);
-	        $("#topFollowerPage1").load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
+	        $("#topFollowerPage1").load("{{url('/')}}/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP1");
 	        $("#topFollowerPage1").hide();
 		}
 	});
@@ -131,7 +131,7 @@
 		else{
 			var beforeButton = $('<div id="timelinePage'+timelinePage+'"></div>');
 			$("#timelineSeeMore").before(beforeButton);
-	        $("#timelinePage"+timelinePage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
+	        $("#timelinePage"+timelinePage).load("{{url('/')}}/public/ajaxFile/{{$filenameTimeline}} .timelineP"+timelinePage);
         	$("#timelinePage"+timelinePage).hide();
         }
 	    
@@ -146,11 +146,11 @@
 		else{
 			var beforeButton = $('<div id="topRetweetedPage'+topRetweetedPage+'"></div>');
 			$("#topRetweetedSeeMore").before(beforeButton);
-	        $("#topRetweetedPage"+topRetweetedPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
+	        $("#topRetweetedPage"+topRetweetedPage).load("{{url('/')}}/public/ajaxFile/{{$filenameTopRetweeted}} .topRetweetedP"+topRetweetedPage);
 	    	$("#topRetweetedPage"+topRetweetedPage).hide();
 	    }  
 	    if(topRetweetedPage==30){
-			$.post("/twitterAnalysis/generateAjaxText2",
+			$.post("{{url('/')}}/generateAjaxText2",
                     {caseID: "{{$caseID}}",
                     timestamp:"{{$timestamp}}",
                     type: "{{$type}}",
@@ -170,11 +170,11 @@
 		else{
 			var beforeButton = $('<div id="topFollowerPage'+topFollowerPage+'"></div>');
 			$("#topFollowerSeeMore").before(beforeButton);
-	        $("#topFollowerPage"+topFollowerPage).load("/twitterAnalysis/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
+	        $("#topFollowerPage"+topFollowerPage).load("{{url('/')}}/public/ajaxFile/{{$filenameTopFollower}} .topFollowerP"+topFollowerPage);
 	    	$("#topFollowerPage"+topFollowerPage).hide();
 	    }  
 	    if(topFollowerPage==30){
-			$.post("/twitterAnalysis/generateAjaxText3",
+			$.post("{{url('/')}}/generateAjaxText3",
                     {caseID: "{{$caseID}}",
                     timestamp:"{{$timestamp}}",
                     type: "{{$type}}",

@@ -127,7 +127,7 @@
      <script type="text/javascript">
 
             $(function() {                  
-                $.post("/twitterAnalysis/generateCSV",
+                $.post("{{url('/')}}/generateCSV",
                 {caseID: "{{$caseID}}",
                 timestamp:"{{$timestamp}}",
                 type: "{{$type}}",
@@ -157,7 +157,7 @@
     // $("#tt").click(function(e){
     //     console.log('hey');
     //     e.preventDefault();
-    //     $.post("/twitterAnalysis/generateCSV",
+    //     $.post("{{url('/')}}/generateCSV",
     //         {caseID: "{{$caseID}}",
     //         type: "{{$type}}",
     //         searchText:"{{$searchText}}",

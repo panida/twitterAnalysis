@@ -216,6 +216,7 @@
 
 				net = network(data, getGroup);
 
+				//config force
 				force = d3.layout.force()
 							.nodes(net.nodes)
 							.links(net.links)
@@ -239,7 +240,7 @@
 									//                      (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
 									//        100);
 
-								return (30 *(n1.group != n2.group ? 5 : 1))+30;
+								return (50 *(n1.group != n2.group ? 5 : 1))+30;
 									//return 150;
 							})
 							.linkStrength(function(l, i) {
@@ -318,7 +319,12 @@
 							.attr("class", "node")
 							.attr("x", function(d) { return d.x = Math.max(dr, Math.min(width - legendwidth - dr, d.x)); })
 							.attr("y", function(d) { return d.y = Math.max(dr, Math.min(height - dr, d.y)); });
-				
+				node.append("text")
+						.attr("dx", ".35em")
+						.attr("dy", -10)
+						.text(function(d) { return d.screenname })
+						.style("stroke", "gray")
+						.style("opacity", 0);
 				node.append("circle")
 						//.attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
 						.attr("id",function(d) { return "key" + d.name; })
@@ -329,12 +335,7 @@
 						.on('click', showDetail)
 						.on('mouseover', showTip)
 						.on('mouseout', hideTip);
-				node.append("text")
-						.attr("dx", ".35em")
-						.attr("dy", -10)
-						.text(function(d) { return d.screenname })
-						.style("stroke", "gray")
-						.style("opacity", 0);
+				
 
 				// node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
 				// node.exit().remove();
@@ -412,7 +413,7 @@
 					};
 				}
 
-				//for double-click focus
+				//for click focus
 				for (var i = 0; i < data.nodes.length; i++) {
 					linkedByIndex[i + "," + i] = 1;
 				};
