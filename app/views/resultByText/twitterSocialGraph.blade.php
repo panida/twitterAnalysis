@@ -193,6 +193,16 @@
 				}
 			}
 
+			for(var i=0; i < nodeslen; i++){
+				if(data.nodes[i].group != 0){
+					for(var j = 0 ; j < groupRef.length; j++){
+						if(data.nodes[i].group != groupRef[j].group){
+							data.links.push({source:data.nodes[groupRef[j].index].name, target:data.nodes[i].name, type:0});
+						}
+					}
+				}
+			}
+
 			for (var i=0; i<data.links.length; ++i) {
 				o = data.links[i];
 				o.source = data.nodes[indexNode(o.source)];
