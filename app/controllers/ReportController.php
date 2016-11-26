@@ -45,13 +45,16 @@ class ReportController extends BaseController {
 		$input = Input::all();
 		$caseID = $input['caseID'];
 		$searchText = $input['searchText'];
+        $searchTexts = explode("&&&", $searchText);
+        if($searchTexts[0]=="*ALL*"){
+            $searchTexts=array();
+        }
 		$startDate = $input['startDate'];
 		$endDate = $input['endDate'];
 		$timestamp = $input['timestamp'];
 		// $filenameCSV = $input['filename'];
         $filenameCSV = 'report'.$timestamp.'.csv';
 		$filenameCSV2 = 'report'.$timestamp.'-2.csv';
-        $searchTexts = explode("&&&", $searchText);
 		$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);
 		$timelineList = $tweetResultList
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
@@ -175,11 +178,14 @@ class ReportController extends BaseController {
         $input = Input::all();
         $caseID = $input['caseID'];
         $searchText = $input['searchText'];
+        $searchTexts = explode("&&&", $searchText);
+        if($searchTexts[0]=="*ALL*"){
+            $searchTexts=array();
+        }
         $startDate = $input['startDate'];
         $endDate = $input['endDate'];
         $timestamp = $input['timestamp'];
         $filenameCSV = $input['filename'];
-        $searchTexts = explode("&&&", $searchText);
         $query = 'select tweet_original.text as original_text, tweet_detail_original.created_at as original_created_at, '.
                                                 'source_original.sourcename as original_sourcename, '.
                                                 'user_original.userkey as original_userkey, user_original.name as original_name, user_original.screenname as original_screenname, '.
@@ -218,11 +224,15 @@ class ReportController extends BaseController {
         $input = Input::all();
         $caseID = $input['caseID'];
         $searchText = $input['searchText'];
+        $searchTexts = explode("&&&", $searchText);
+        if($searchTexts[0]=="*ALL*"){
+            $searchTexts=array();
+        }
         $startDate = $input['startDate'];
         $endDate = $input['endDate'];
         $timestamp = $input['timestamp'];
         $filenameCSV = $input['filename'];
-        $searchTexts = explode("&&&", $searchText);
+        
         $tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);  
         $follower_list = $tweetResultList
                 ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')                               
