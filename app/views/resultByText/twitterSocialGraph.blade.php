@@ -254,9 +254,9 @@
 									//return 150;
 							})
 							.linkStrength(function(l, i) {
-								return (l.source.group==l.target.group)?0.9:0.1;
+								return (l.source.group==l.target.group)?0.5:0.1;
 							})
-							.gravity(0.15)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
+							.gravity(0.2)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
 							.charge(0.1)    // ... charge is important to turn single-linked groups to the outside
 							.friction(0.3)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
 							.start();
