@@ -78,14 +78,12 @@ class GroupManagementController extends BaseController {
 	}
 
 	public function addMember($groupid){
-		$flag = "exist";
 		$input = Input::all();
 		$query = UserDim::where('screenname','=',$input['screen_name'])->get();
 		$userkey = -1;
 		$screenname = null;
 		$info = null;
 		if($query->isEmpty()){
-			$flag = "not exist";
 			$info = TwitterAPIHelper::getUserInfo($input['screen_name']);
 			if(!empty($info)){
 				$userkey = UserDim::storeFromTwitterAPI($info['id_str'], $info['name'], 
@@ -102,7 +100,6 @@ class GroupManagementController extends BaseController {
 			}	
 		}
 		else{
-			$flag = "in database";
 			$user = $query->first();
 			$userkey = $user->userkey;
 			$screenname = $user->screenname;
@@ -136,7 +133,7 @@ class GroupManagementController extends BaseController {
 			}
 			
 		}
-		return Redirect::to('/group/'.$groupid)->with('notice', 'aaเพิ่มสมาชิกสำเร็จ'.$flag);
+		return Redirect::to('/group/'.$groupid)->with('notice', 'เพิ่มสมาชิกสำเร็จ');
 	}
 
 	public function addFollowee($job,$args){

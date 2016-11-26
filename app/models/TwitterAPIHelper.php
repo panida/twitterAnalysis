@@ -6,7 +6,7 @@
 class TwitterAPIHelper
 {		
 	public static function getUserInfo($screenName){
-		$tmhOAuth = new tmhOAuth(array(
+		$tmhOAuth = new tmhOAuth(array( //chompoo
 			'consumer_key'    => 'ACbHS7oEb4wSckUhCPpjsFrzU',
 			'consumer_secret' => '3GkuMUmwdjEr15oG3tiLPj2qEOfY7a5gGswzVgLXoNWkL5iLOC',
 			'user_token'      => '2578760185-KL5mTFOspvrJc6wYtxNqj7Tn87G8DbEY1fzFKXK',
