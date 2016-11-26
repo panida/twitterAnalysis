@@ -240,15 +240,15 @@
 									//                      (n2.link_count || (n1.group != n2.group ? n2.group_data.link_count : 0))),
 									//        100);
 
-								return (50 *(n1.group != n2.group ? 10 : 1))+30;
+								return (n1.group != n2.group ? 70 : 20)+30;
 									//return 150;
 							})
 							.linkStrength(function(l, i) {
 								return (l.source.group==l.target.group)?0.9:0.1;
 							})
-							.gravity(1)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
-							.charge(-100)    // ... charge is important to turn single-linked groups to the outside
-							.friction(0.4)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
+							.gravity(0.15)   // gravity+charge tweaked to ensure good 'grouped' view (e.g. green group not smack between blue&orange, ...
+							.charge(0.1)    // ... charge is important to turn single-linked groups to the outside
+							.friction(0.3)   // friction adjusted to get dampened display: less bouncy bouncy ball [Swedish Chef, anyone?]
 							.start();
 
 				buttonWidth = 120;
