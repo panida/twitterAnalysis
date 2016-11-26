@@ -309,14 +309,14 @@
 				    .each(function(d, i) {
 				      var g = d3.select(this);
 				      g.append("rect")
-				        .attr("x", width - legendwidth)
-				        .attr("y", i*25+15)
+				        .attr("x", 5)
+				        .attr("y", i*25+40)
 				        .attr("width", 10)
 				        .attr("height", 10)
 				        .style("fill", function(d) { return stroke(d.groupid); });
 				      g.append("text")
-				        .attr("x", width - legendwidth + 20)
-				        .attr("y", i * 25 + 23)
+				        .attr("x", 5 + 20)
+				        .attr("y", i * 25 + 48)
 				        .attr("height",30)
 				        .attr("width",100)
 				        .text(d.groupname);
