@@ -212,12 +212,13 @@ class ReportController extends BaseController {
                                                     'date_dim.thedate <= "'.$endDate.'" AND '.
                                                     'twitter_analysis_fact.activitytypekey = 3 AND '.
                                                     'twitter_analysis_fact.researchcasekey = '.$caseID.' '.  
-                                                    'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
+                                                    'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ( ';
 
         foreach ($searchTexts as $searchText) {
             $query .= "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".$operation;
         }
-        $query = substr($query,0,-4);
+        $query = substr($query,0,-1*strlen($operation));
+        $query .= " ) ";
         $query .= 
                                                     // "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".
                                                     'group by tweet_dim.tweetid '.
