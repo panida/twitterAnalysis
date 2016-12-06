@@ -565,9 +565,9 @@ class AnalysisController extends BaseController {
 			//process text
 			$operation = " and "; 
 			$searchTexts = explode("&&&", $searchText);
-			if(len($searchTexts)==1){
+			if(count($searchTexts)==1){
 				$searchTexts = explode("|||", $searchText);
-				if(len($searchTexts)>1){
+				if(count($searchTexts)>1){
 					$operation = " or ";
 				}
 			}

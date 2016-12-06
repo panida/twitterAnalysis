@@ -47,9 +47,9 @@ class ReportController extends BaseController {
 		$searchText = $input['searchText'];
         $operation = " and "; 
         $searchTexts = explode("&&&", $searchText);
-        if(len($searchTexts)==1){
+        if(count($searchTexts)==1){
             $searchTexts = explode("|||", $searchText);
-            if(len($searchTexts)>1){
+            if(count($searchTexts)>1){
                 $operation = " or ";
             }
         }
@@ -187,9 +187,9 @@ class ReportController extends BaseController {
         $searchText = $input['searchText'];
         $operation = " and "; 
             $searchTexts = explode("&&&", $searchText);
-            if(len($searchTexts)==1){
+            if(count($searchTexts)==1){
                 $searchTexts = explode("|||", $searchText);
-                if(len($searchTexts)>1){
+                if(count($searchTexts)>1){
                     $operation = " or ";
                 }
             }
@@ -240,9 +240,9 @@ class ReportController extends BaseController {
         $searchText = $input['searchText'];
         $operation = " and "; 
             $searchTexts = explode("&&&", $searchText);
-            if(len($searchTexts)==1){
+            if(count($searchTexts)==1){
                 $searchTexts = explode("|||", $searchText);
-                if(len($searchTexts)>1){
+                if(count($searchTexts)>1){
                     $operation = " or ";
                 }
             }
