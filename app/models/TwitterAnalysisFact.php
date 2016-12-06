@@ -60,7 +60,7 @@ class TwitterAnalysisFact extends Eloquent
 				else{
 					$query = $query->orwhere('tweet_dim.text','LIKE','%'.$searchText.'%');
 				}
-				$iter +=1
+				$iter +=1;
 			}
 		});
 		

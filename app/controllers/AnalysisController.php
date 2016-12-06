@@ -1239,7 +1239,7 @@ class AnalysisController extends BaseController {
 													'twitter_analysis_fact.researchcasekey = '.$caseID.' '.  
 													'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
 		foreach ($searchTexts as $asearchText) {
-			$topRetweetedQuery .= "tweet_dim.text LIKE '%".str_replace("'", "''", $asearchText)."%' AND ";
+			$topRetweetedQuery .= "tweet_dim.text LIKE '%".str_replace("'", "''", $asearchText)."%'".$operation;
 		}
 		$topRetweetedQuery = substr($topRetweetedQuery, 0, -4);
 
