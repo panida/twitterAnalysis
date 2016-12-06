@@ -45,7 +45,14 @@ class ReportController extends BaseController {
 		$input = Input::all();
 		$caseID = $input['caseID'];
 		$searchText = $input['searchText'];
+        $operation = " and "; 
         $searchTexts = explode("&&&", $searchText);
+        if(len($searchTexts)==1){
+            $searchTexts = explode("|||", $searchText);
+            if(len($searchTexts)>1){
+                $operation = " or ";
+            }
+        }
         if($searchTexts[0]=="*ALL*"){
             $searchTexts=array();
         }
@@ -55,7 +62,7 @@ class ReportController extends BaseController {
 		// $filenameCSV = $input['filename'];
         $filenameCSV = 'report'.$timestamp.'.csv';
 		$filenameCSV2 = 'report'.$timestamp.'-2.csv';
-		$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);
+		$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID,$operation);
 		$timelineList = $tweetResultList
         		->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')        		                
         		->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')
@@ -178,7 +185,14 @@ class ReportController extends BaseController {
         $input = Input::all();
         $caseID = $input['caseID'];
         $searchText = $input['searchText'];
-        $searchTexts = explode("&&&", $searchText);
+        $operation = " and "; 
+            $searchTexts = explode("&&&", $searchText);
+            if(len($searchTexts)==1){
+                $searchTexts = explode("|||", $searchText);
+                if(len($searchTexts)>1){
+                    $operation = " or ";
+                }
+            }
         if($searchTexts[0]=="*ALL*"){
             $searchTexts=array();
         }
@@ -201,7 +215,7 @@ class ReportController extends BaseController {
                                                     'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
 
         foreach ($searchTexts as $searchText) {
-            $query .= "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' AND ";
+            $query .= "tweet_dim.text LIKE '%".str_replace("'", "''", $searchText)."%' ".$operation;
         }
         $query = substr($query,0,-4);
         $query .= 
@@ -224,7 +238,14 @@ class ReportController extends BaseController {
         $input = Input::all();
         $caseID = $input['caseID'];
         $searchText = $input['searchText'];
-        $searchTexts = explode("&&&", $searchText);
+        $operation = " and "; 
+            $searchTexts = explode("&&&", $searchText);
+            if(len($searchTexts)==1){
+                $searchTexts = explode("|||", $searchText);
+                if(len($searchTexts)>1){
+                    $operation = " or ";
+                }
+            }
         if($searchTexts[0]=="*ALL*"){
             $searchTexts=array();
         }
@@ -233,7 +254,7 @@ class ReportController extends BaseController {
         $timestamp = $input['timestamp'];
         $filenameCSV = $input['filename'];
         
-        $tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);  
+        $tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID,$operation);  
         $follower_list = $tweetResultList
                 ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')                               
                 ->leftJoin('source_dim','twitter_analysis_fact.sourcekey','=','source_dim.sourcekey')

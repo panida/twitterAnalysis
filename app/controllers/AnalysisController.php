@@ -563,11 +563,18 @@ class AnalysisController extends BaseController {
 		$searchTexts = array();
 		if($input['type']=='text'){
 			//process text
+			$operation = " and "; 
 			$searchTexts = explode("&&&", $searchText);
+			if(len($searchTexts)==1){
+				$searchTexts = explode("|||", $searchText);
+				if(len($searchTexts)>1){
+					$operation = " or ";
+				}
+			}
 			if($searchTexts[0]=="*ALL*"){
 				$searchTexts=array();
 			}
-			$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);
+			$tweetResultList = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID,$operation);
 		}
 		else{
 			$tweetResultList = TwitterAnalysisFact::searchByUser($searchText,$startDate,$endDate,$caseID);

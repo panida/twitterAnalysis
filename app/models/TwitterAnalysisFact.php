@@ -36,7 +36,7 @@ class TwitterAnalysisFact extends Eloquent
 		return $viewName;
 	}
 
-	public static function searchByText($searchTexts,$startDate,$endDate,$caseID){
+	public static function searchByText($searchTexts,$startDate,$endDate,$caseID,$operation){
 		// return DB::table('tweet_dim')
 		// 			->where('tweet_dim.text','LIKE','%'.$searchText.'%')
 		// 			->leftJoin('twitter_analysis_fact','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey')
@@ -51,8 +51,15 @@ class TwitterAnalysisFact extends Eloquent
 							->where('date_dim.thedate','>=',new DateTime($startDate))
 							->where('date_dim.thedate','<=',new DateTime($endDate))
 							->join('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey');
+		$iter = 1;
 		foreach ($searchTexts as $searchText) {
-			$textQueryBuilder = $textQueryBuilder->where('tweet_dim.text','LIKE','%'.$searchText.'%');
+			if($iter==1 or $operation==" and "){
+				$textQueryBuilder = $textQueryBuilder->where('tweet_dim.text','LIKE','%'.$searchText.'%');
+			}
+			else{
+				$textQueryBuilder = $textQueryBuilder->orwhere('tweet_dim.text','LIKE','%'.$searchText.'%');
+			}
+			$iter +=1;
 		}
 		return $textQueryBuilder;
 					
