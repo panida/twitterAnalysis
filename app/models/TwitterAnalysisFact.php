@@ -50,7 +50,7 @@ class TwitterAnalysisFact extends Eloquent
 							->join('date_dim','twitter_analysis_fact.datekey','=','date_dim.datekey')
 							->where('date_dim.thedate','>=',new DateTime($startDate))
 							->where('date_dim.thedate','<=',new DateTime($endDate))
-							->join('tweet_dim',function($join){
+							->join('tweet_dim',function($join) use($searchTexts){
 								$join->on('twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey');
 								$iter = 1;
 								foreach ($searchTexts as $searchText) {
