@@ -50,17 +50,20 @@ class TwitterAnalysisFact extends Eloquent
 							->join('date_dim','twitter_analysis_fact.datekey','=','date_dim.datekey')
 							->where('date_dim.thedate','>=',new DateTime($startDate))
 							->where('date_dim.thedate','<=',new DateTime($endDate))
-							->join('tweet_dim','twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey');
-		$iter = 1;
-		foreach ($searchTexts as $searchText) {
-			if($iter==1 or $operation==" and "){
-				$textQueryBuilder = $textQueryBuilder->where('tweet_dim.text','LIKE','%'.$searchText.'%');
-			}
-			else{
-				$textQueryBuilder = $textQueryBuilder->orwhere('tweet_dim.text','LIKE','%'.$searchText.'%');
-			}
-			$iter +=1;
-		}
+							->join('tweet_dim',function($join){
+								$join->on('twitter_analysis_fact.tweetkey','=','tweet_dim.tweetkey');
+								$iter = 1;
+								foreach ($searchTexts as $searchText) {
+									if($iter==1 or $operation==" and "){
+										$join = $join->where('tweet_dim.text','LIKE','%'.$searchText.'%');
+									}
+									else{
+										$join = $join->orwhere('tweet_dim.text','LIKE','%'.$searchText.'%');
+									}
+									$iter +=1;
+								}
+							});
+		
 		return $textQueryBuilder;
 					
 					
