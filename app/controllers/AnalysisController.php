@@ -1237,11 +1237,13 @@ class AnalysisController extends BaseController {
 													'date_dim.thedate <= "'.$endDate.'" AND '.
 													'twitter_analysis_fact.activitytypekey = 3 AND '.
 													'twitter_analysis_fact.researchcasekey = '.$caseID.' '.  
-													'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ';
+													'inner join tweet_dim on tweet_dim.tweetkey = twitter_analysis_fact.tweetkey AND ( ';
 		foreach ($searchTexts as $asearchText) {
-			$topRetweetedQuery .= "tweet_dim.text LIKE '%".str_replace("'", "''", $asearchText)."%'".$operation;
+			$topRetweetedQuery .= "tweet_dim.text LIKE '%".str_replace("'", "''", $asearchText)."%' ".$operation;
 		}
-		$topRetweetedQuery = substr($topRetweetedQuery, 0, -4);
+		
+		$topRetweetedQuery = substr($topRetweetedQuery, 0, -1*strlen($operation));
+		$topRetweetedQuery .= ' )';
 
 		$topRetweetedList = DB::select(DB::raw($topRetweetedQuery.
 													'group by tweet_dim.tweetid '.
