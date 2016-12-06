@@ -114,7 +114,7 @@ class ReportController extends BaseController {
             fclose($file3);
             //--------------------------------------------------------
             //$filenameCSV = $input['filename'];
-            $tweetResultList2 = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID);  
+            $tweetResultList2 = TwitterAnalysisFact::searchByText($searchTexts,$startDate,$endDate,$caseID,$operation);  
             $contributorKeyList = $tweetResultList2
                                     ->leftJoin('user_dim','twitter_analysis_fact.userkey','=','user_dim.userkey')
                                     ->leftJoin('user_statistics_dim','twitter_analysis_fact.userstatisticskey','=','user_statistics_dim.userstatisticskey')
